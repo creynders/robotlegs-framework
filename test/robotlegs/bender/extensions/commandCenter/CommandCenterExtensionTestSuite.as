@@ -8,6 +8,7 @@
 package robotlegs.bender.extensions.commandCenter
 {
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenterTest;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutorTest;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapperTest;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingListTest;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingTest;
@@ -30,6 +31,8 @@ package robotlegs.bender.extensions.commandCenter
 		public var commandMapperTest:CommandMapperTest;
 
 		public var commandCenterExtension:CommandCenterExtensionTest;
+        
+        public var commandExecutorTest : CommandExecutorTest;
 
 	}
 }
