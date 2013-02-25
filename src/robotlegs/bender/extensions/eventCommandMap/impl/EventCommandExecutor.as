@@ -8,12 +8,17 @@
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
+	
 	import org.swiftsuspenders.Injector;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.framework.impl.applyHooks;
 	import robotlegs.bender.framework.impl.guardsApprove;
+	
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 
 	/**
 	 * @private
@@ -32,7 +37,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		private var _injector:Injector;
 
 		private var _eventClass:Class;
-
+        
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
@@ -69,37 +74,22 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			{
 				return;
 			}
-
-			for (var mapping:ICommandMapping = _mappings.head; mapping; mapping = mapping.next)
-			{
-				var command:Object = null;
-
-				_injector.map(Event).toValue(event);
-				if (eventConstructor != Event)
-					_injector.map(_eventClass || eventConstructor).toValue(event);
-
-				if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector))
-				{
-					const commandClass:Class = mapping.commandClass;
-					command = _injector.instantiateUnmapped(commandClass);
-					if (mapping.hooks.length > 0)
-					{
-						_injector.map(commandClass).toValue(command);
-						applyHooks(mapping.hooks, _injector);
-						_injector.unmap(commandClass);
-					}
-				}
-
-				_injector.unmap(Event);
-				if (eventConstructor != Event)
-					_injector.unmap(_eventClass || eventConstructor);
-
-				if (command)
-				{
-					mapping.fireOnce && _trigger.removeMapping(mapping);
-					command.execute();
-				}
-			}
+            
+            var executor : CommandExecutor = new CommandExecutor( _trigger, _mappings, _injector );
+            
+            executor.beforeGuarding( function() : void{
+                _injector.map(Event).toValue(event);
+                if (eventConstructor != Event)
+                    _injector.map(_eventClass || eventConstructor).toValue(event);
+            } );
+            
+            executor.beforeExecuting( function() : void{
+                _injector.unmap(Event);
+                if (eventConstructor != Event)
+                    _injector.unmap(_eventClass || eventConstructor);
+            } );
+            
+            executor.execute();
 		}
 	}
 }

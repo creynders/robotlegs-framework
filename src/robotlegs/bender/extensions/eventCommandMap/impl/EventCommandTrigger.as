@@ -9,10 +9,13 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
 	import flash.utils.describeType;
+	
 	import org.swiftsuspenders.Injector;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass;
 
 	/**
 	 * @private
@@ -90,8 +93,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			// NOTE: we do this here, and not in the CommandCenter extension,
 			// as it is up to each specific Command Map to decide how commands
 			// should be executed. Some might not require an execute() method.
-			if (describeType(mapping.commandClass).factory.method.(@name == "execute").length() == 0)
-				throw new Error("Command Class must expose an execute method");
+            
+            robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass( mapping.commandClass );
+
 		}
 
 		private function addListener():void
