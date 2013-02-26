@@ -7,6 +7,7 @@
 
 package suites
 {
+	import robotlegs.bender.extensions.ExtensionsStressTestSuite;
 	import robotlegs.bender.framework.FrameworkStressTestSuite;
 
 	[RunWith("org.flexunit.runners.Suite")]
@@ -19,5 +20,6 @@ package suites
 		/*============================================================================*/
 
 		public var framework:FrameworkStressTestSuite;
+        public var extensions : ExtensionsStressTestSuite;
 	}
 }
