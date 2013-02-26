@@ -54,11 +54,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         
         [Test]
         public function test_command_execution_speed_test() : void{
-            createCommandMappingsList( CommandA, 10000 );
+            createCommandMappingsList( CommandA, 100000 ); 
             var start : int = getTimer();
             executor.execute( new Event( 'event' ) );
             var took : int = getTimer() - start;
-            trace( 'test_command_execution_speed_test', took );
+            trace( 'test_command_execution_speed_test', took );//2012-02-26: 2912, 2854, 2759, 2702
         }
         
         private function createCommandMappingsList( commandClass : Class, n : int = 1 ) : void{
