@@ -24,5 +24,7 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * @param mapping The Command Mapping to remove
 		 */
 		function removeMapping(mapping:ICommandMapping):void;
+        
+        function getMappings() : ICommandMappingList;
 	}
 }
