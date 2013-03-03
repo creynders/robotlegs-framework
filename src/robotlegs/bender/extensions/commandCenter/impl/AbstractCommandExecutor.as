@@ -64,6 +64,7 @@ package robotlegs.bender.extensions.commandCenter.impl
                 if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector) )
                 {
                     
+                    mapping.fireOnce && _trigger.removeMapping(mapping);
                     const commandClass:Class = mapping.commandClass;
                     command = _injector.instantiateUnmapped(commandClass);
                     beforeHooking();
@@ -77,7 +78,6 @@ package robotlegs.bender.extensions.commandCenter.impl
                 beforeExecuting();
                 if (command)
                 {
-                    mapping.fireOnce && _trigger.removeMapping(mapping);
                     command.execute();
                     whenExecuted();
                 }
