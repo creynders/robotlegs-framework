@@ -13,6 +13,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass;
@@ -53,7 +54,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			_dispatcher = dispatcher;
 			_type = type;
 			_eventClass = eventClass;
-			_executor = new EventCommandExecutor(this, _mappings, injector, eventClass);
+			_executor = new EventCommandExecutor(this, injector, eventClass);
 		}
 
 		/*============================================================================*/
@@ -83,6 +84,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			return _eventClass + " with selector '" + _type + "'";
 		}
+        
+        public function getMappings():ICommandMappingList
+        {
+            return _mappings;
+        }
+        
 
 		/*============================================================================*/
 		/* Private Functions                                                          */
@@ -107,6 +114,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			_dispatcher.removeEventListener(_type, _executor.execute);
 		}
-	}
+        
+    }
 }
 

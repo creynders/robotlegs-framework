@@ -11,32 +11,25 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	
 	import org.swiftsuspenders.Injector;
 	
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
+	import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
-	import robotlegs.bender.framework.impl.applyHooks;
-	import robotlegs.bender.framework.impl.guardsApprove;
-	
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 
 	/**
 	 * @private
 	 */
-	public class EventCommandExecutor
+	public class EventCommandExecutor extends AbstractCommandExecutor
 	{
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _trigger:ICommandTrigger;
-
-		private var _mappings:CommandMappingList;
-
-		private var _injector:Injector;
-
 		private var _eventClass:Class;
+        
+        private var _eventConstructor : Class;
+        
+        private var _event : Event;
         
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -47,13 +40,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function EventCommandExecutor(
 			trigger:ICommandTrigger,
-			mappings:CommandMappingList,
 			injector:Injector,
 			eventClass:Class)
 		{
-			_trigger = trigger;
-			_mappings = mappings;
-			_injector = injector.createChildInjector();
+            super( trigger, injector.createChildInjector() );
 			_eventClass = eventClass;
 		}
 
@@ -67,29 +57,49 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function execute(event:Event):void
 		{
-			// Note: this class is not nicely factored, but we do need speed here,
-			// so method calls have been inlined.
-			const eventConstructor:Class = event["constructor"] as Class;
-			if (_eventClass && eventConstructor != _eventClass)
+			_eventConstructor = event["constructor"] as Class;
+			if (_eventClass && _eventConstructor != _eventClass)
 			{
+                cleanup();
 				return;
 			}
+            _event = event;
             
-            var executor : CommandExecutor = new CommandExecutor( _trigger, _mappings, _injector );
+            executeCommands();
             
-            executor.beforeGuarding( function() : void{
-                _injector.map(Event).toValue(event);
-                if (eventConstructor != Event)
-                    _injector.map(_eventClass || eventConstructor).toValue(event);
-            } );
-            
-            executor.beforeExecuting( function() : void{
-                _injector.unmap(Event);
-                if (eventConstructor != Event)
-                    _injector.unmap(_eventClass || eventConstructor);
-            } );
-            
-            executor.execute();
+            cleanup();
 		}
-	}
+        
+        /*============================================================================*/
+        /* Protected Functions                                                        */
+        /*============================================================================*/
+        
+        override protected function beforeGuarding():void
+        {
+            _injector.map(Event).toValue(_event);
+            if (_eventConstructor != Event){
+                _injector.map(_eventClass || _eventConstructor).toValue(_event);
+            }
+        }
+        
+        override protected function beforeExecuting():void
+        {
+            _injector.unmap(Event);
+            if (_eventConstructor != Event){
+                _injector.unmap(_eventClass || _eventConstructor);
+            }
+        }
+        
+        /*============================================================================*/
+        /* Private Functions                                                          */
+        /*============================================================================*/
+        
+        private function cleanup():void
+        {
+            _event = null;
+            _eventConstructor = null;
+        }
+        
+       
+    }
 }
