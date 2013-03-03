@@ -7,8 +7,6 @@ package robotlegs.bender.extensions.commandCenter.support
     
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandMappingListIterator;
     
     public class SelfReportingCommandExecutor extends AbstractCommandExecutor{
         public function SelfReportingCommandExecutor(trigger:ICommandTrigger, injector:Injector)

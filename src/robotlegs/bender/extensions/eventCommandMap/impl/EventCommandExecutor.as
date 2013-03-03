@@ -13,8 +13,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingListIterator;
 
 	/**
 	 * @private

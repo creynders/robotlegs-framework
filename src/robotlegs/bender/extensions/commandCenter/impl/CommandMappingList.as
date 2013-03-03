@@ -10,15 +10,18 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import flash.utils.Dictionary;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 
 	/**
 	 * @private
 	 */
-	public class CommandMappingList implements ICommandMappingList
+	public class CommandMappingList implements ICommandMappingList, ICommandMappingIterator
 	{
         
         private var _nodesByMappings : Dictionary = new Dictionary( false );
+        private var _currentNode : CommandMappingNode;
+
 
 		/*============================================================================*/
 		/* Public Properties                                                          */
@@ -29,7 +32,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function get headNode():CommandMappingNode
+		private function get headNode():CommandMappingNode
 		{
 			return _headNode;
 		}
@@ -39,11 +42,42 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function get tailNode():CommandMappingNode
+		private function get tailNode():CommandMappingNode
 		{
 			return _tailNode;
 		}
-
+        
+        public function get head() : ICommandMapping{
+            var mapping : ICommandMapping;
+            if( _headNode ){
+                mapping = _headNode.mapping;
+            }
+            return mapping;
+        }
+        
+        public function get tail() : ICommandMapping{
+            var mapping : ICommandMapping;
+            if( _tailNode ){
+                mapping = _tailNode.mapping;
+            }
+            return mapping;
+        }
+        
+        public function get currentMapping():ICommandMapping
+        {
+            var mapping : ICommandMapping;
+            if( _currentNode ){
+                mapping = _currentNode.mapping;
+            }
+            return mapping;
+        }
+        
+        public function get isDone():Boolean
+        {
+            return _currentNode == tailNode;
+        }
+        
+        
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
@@ -92,6 +126,27 @@ package robotlegs.bender.extensions.commandCenter.impl
             delete _nodesByMappings[ mapping ];
 		}
         
+        public function first():ICommandMapping
+        {
+            var mapping : ICommandMapping;
+            if( headNode ){
+                mapping = headNode.mapping;
+                _currentNode = headNode;
+            }
+            return mapping;
+        }
+        
+        public function next():ICommandMapping
+        {
+            if( _currentNode ){
+                _currentNode = _currentNode.nextNode;
+            }
+            return currentMapping;
+        }
+        
+        /**
+        * @private
+        */
         public function getNext( mapping : ICommandMapping ) : ICommandMapping{
             var next : ICommandMapping;
             var node : CommandMappingNode = _nodesByMappings[ mapping ]
@@ -102,6 +157,9 @@ package robotlegs.bender.extensions.commandCenter.impl
             return next;
         }
         
+        /**
+        * @private
+        */
         public function getPrevious( mapping : ICommandMapping ) : ICommandMapping{
             var previous : ICommandMapping;
             var node : CommandMappingNode = _nodesByMappings[ mapping ]
@@ -112,20 +170,5 @@ package robotlegs.bender.extensions.commandCenter.impl
             return previous;
         }
         
-        public function getHead() : ICommandMapping{
-            var mapping : ICommandMapping;
-            if( _headNode ){
-                mapping = _headNode.mapping;
-            }
-            return mapping;
-        }
-        
-        public function getTail() : ICommandMapping{
-            var mapping : ICommandMapping;
-            if( _tailNode ){
-                mapping = _tailNode.mapping;
-            }
-            return mapping;
-        }
 	}
 }

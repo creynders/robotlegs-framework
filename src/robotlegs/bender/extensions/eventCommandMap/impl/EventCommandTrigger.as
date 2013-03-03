@@ -8,16 +8,13 @@
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
-	import flash.utils.describeType;
 	
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingListIterator;
 	import robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass;
 
 	/**
@@ -69,7 +66,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function addMapping(mapping:ICommandMapping):void
 		{
 			verifyCommandClass(mapping);
-			_mappings.headNode || addListener();
+			_mappings.head || addListener();
 			_mappings.add(mapping);
 		}
 
@@ -79,7 +76,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function removeMapping(mapping:ICommandMapping):void
 		{
 			_mappings.remove(mapping);
-			_mappings.headNode || removeListener();
+			_mappings.head || removeListener();
 		}
 
 		public function toString():String
@@ -89,7 +86,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         
         public function getMappings():ICommandMappingIterator
         {
-            return new CommandMappingListIterator( _mappings );
+            return _mappings;
         }
         
 

@@ -29,7 +29,6 @@ package robotlegs.bender.extensions.commandCenter.impl
         private var reportedExecutions:Array;
         
         private var mappings : CommandMappingList;
-        private var iterator  :CommandMappingListIterator;
         
         [Rule]
         public var mockolateRule : MockolateRule = new MockolateRule();        
@@ -45,8 +44,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         public function before():void
         {
             mappings = new CommandMappingList();
-            iterator = new CommandMappingListIterator( mappings )
-            stub( mockTrigger ).method( 'getMappings' ).returns( iterator );
+            stub( mockTrigger ).method( 'getMappings' ).returns( mappings );
             reportedExecutions = [];
             injector = new Injector();
             injector.map( Injector ).toValue( injector );
