@@ -1,6 +1,7 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
     import mockolate.runner.MockolateRule;
+    import mockolate.stub;
     import mockolate.verify;
     
     import org.hamcrest.assertThat;
@@ -8,13 +9,10 @@ package robotlegs.bender.extensions.commandCenter.impl
     import org.hamcrest.object.equalTo;
     import org.swiftsuspenders.Injector;
     
-    import robotlegs.bender.bundles.mvcs.Command;
-    import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
-    import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
     import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
     import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
+    import robotlegs.bender.extensions.commandCenter.support.SelfReportingCommandExecutor;
     import robotlegs.bender.framework.impl.guardSupport.GrumpyGuard;
     import robotlegs.bender.framework.impl.guardSupport.HappyGuard;
 
@@ -46,13 +44,14 @@ package robotlegs.bender.extensions.commandCenter.impl
         public function before():void
         {
             mappings = new CommandMappingList();
+            stub( mockTrigger ).method( 'getMappings' ).returns( mappings );
             reportedExecutions = [];
             injector = new Injector();
             injector.map( Injector ).toValue( injector );
             injector.map( ICommandTrigger ).toValue( mockTrigger );
             injector.map(Function, "reportingFunction").toValue(reportingFunction);
             injector.map( CommandMappingList ).toValue( mappings );
-            injector.map( ICommandExecutor ).toType( CommandExecutor );
+            injector.map( SelfReportingCommandExecutor ).asSingleton();
             
         }
         
@@ -170,11 +169,11 @@ package robotlegs.bender.extensions.commandCenter.impl
             var afterExecuting : Function = function() : void{
                 reportingFunction( afterExecuting );
             }
-            var executor : ICommandExecutor = injector.getInstance( ICommandExecutor );
-            executor.beforeGuarding( beforeGuarding );
-            executor.beforeHooking( beforeHooking );
-            executor.beforeExecuting( beforeExecuting );
-            executor.afterExecuting( afterExecuting );
+            var executor : SelfReportingCommandExecutor = injector.getInstance( SelfReportingCommandExecutor );
+            executor.beforeGuardingCallback= beforeGuarding;
+            executor.beforeHookingCallback= beforeHooking;
+            executor.beforeExecutingCallback= beforeExecuting;
+            executor.whenExecutedCallback= afterExecuting;
             executor.execute();
             const expectedOrder : Array = [ 
                 beforeGuarding, 
@@ -189,7 +188,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         private function instantiateAndExecute():void{
-            var executor : ICommandExecutor = injector.getInstance( ICommandExecutor );
+            var executor : SelfReportingCommandExecutor = injector.getInstance( SelfReportingCommandExecutor );
             executor.execute();
         }
         

@@ -8,6 +8,7 @@
 package robotlegs.bender.extensions.commandCenter.support
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 
 	public class NullCommandTrigger implements ICommandTrigger
@@ -32,5 +33,9 @@ package robotlegs.bender.extensions.commandCenter.support
 		public function removeMapping(mapping:ICommandMapping):void
 		{
 		}
+        
+        public function getMappings() : ICommandMappingList{
+            return null;
+        }
 	}
 }
