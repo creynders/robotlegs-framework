@@ -8,8 +8,12 @@
 package robotlegs.bender.extensions.messageCommandMap.impl
 {
 	import flash.utils.describeType;
+	
 	import org.swiftsuspenders.Injector;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.framework.api.IMessageDispatcher;
@@ -171,5 +175,11 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 			// This relies on the various return statements above. Be careful.
 			callback && safelyCallBack(callback, null, _message);
 		}
-	}
+        
+        public function getMappings():ICommandMappingIterator
+        {
+            return null;
+        }
+        
+    }
 }

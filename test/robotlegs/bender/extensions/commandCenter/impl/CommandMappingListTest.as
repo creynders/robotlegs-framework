@@ -48,15 +48,15 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Test]
 		public function empty_list_has_no_head():void
 		{
-			assertThat(list.head, nullValue());
+			assertThat(list.headNode, nullValue());
 		}
 
 		[Test]
 		public function add_first_node_sets_list_head_and_tail():void
 		{
 			list.add(mapping1);
-			assertThat(list.head, equalTo(mapping1));
-			assertThat(list.tail, equalTo(mapping1));
+			assertThat(list.getHead(), equalTo(mapping1));
+			assertThat(list.getTail(), equalTo(mapping1));
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			list.add(mapping1);
 			list.add(mapping2);
-			assertThat(list.head, equalTo(mapping1));
+			assertThat(list.getHead(), equalTo(mapping1));
 		}
 
 		[Test]
@@ -72,7 +72,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			list.add(mapping1);
 			list.add(mapping2);
-			assertThat(list.tail, equalTo(mapping2));
+			assertThat(list.getTail(), equalTo(mapping2));
 		}
 
 		[Test]
@@ -81,14 +81,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 			list.add(mapping1);
 			list.add(mapping2);
 			list.add(mapping3);
-			assertThat(list.head, equalTo(mapping1));
-			assertThat(list.tail, equalTo(mapping3));
-			assertThat(mapping1.previous, nullValue());
-			assertThat(mapping1.next, equalTo(mapping2));
-			assertThat(mapping2.previous, equalTo(mapping1));
-			assertThat(mapping2.next, equalTo(mapping3));
-			assertThat(mapping3.previous, equalTo(mapping2));
-			assertThat(mapping3.next, nullValue());
+			assertThat(list.getHead(), equalTo(mapping1));
+			assertThat(list.getTail(), equalTo(mapping3));
+			assertThat( list.getPrevious( mapping1 ), nullValue());
+			assertThat( list.getNext( mapping1 ), equalTo(mapping2));
+			assertThat( list.getPrevious( mapping2 ), equalTo(mapping1));
+			assertThat( list.getNext( mapping2 ), equalTo(mapping3));
+			assertThat( list.getPrevious( mapping3 ), equalTo(mapping2));
+			assertThat( list.getNext( mapping3 ), nullValue());
 		}
 
 		[Test]
@@ -96,8 +96,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			list.add(mapping1);
 			list.remove(mapping1);
-			assertThat(list.head, nullValue());
-			assertThat(list.tail, nullValue());
+			assertThat(list.getHead(), nullValue());
+			assertThat(list.getTail(), nullValue());
 		}
 
 		[Test]
@@ -107,8 +107,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 			list.add(mapping2);
 			list.add(mapping3);
 			list.remove(mapping2);
-			assertThat(list.head, equalTo(mapping1));
-			assertThat(list.tail, equalTo(mapping3));
+			assertThat(list.getHead(), equalTo(mapping1));
+			assertThat(list.getTail(), equalTo(mapping3));
 		}
 
 		[Test]
@@ -117,8 +117,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 			list.add(mapping1);
 			list.add(mapping2);
 			list.remove(mapping1);
-			assertThat(list.head, equalTo(mapping2));
-			assertThat(mapping2.previous, nullValue());
+			assertThat(list.getHead(), equalTo(mapping2));
+			assertThat( list.getPrevious( mapping2 ), nullValue());
 		}
 
 		[Test]
@@ -127,8 +127,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 			list.add(mapping1);
 			list.add(mapping2);
 			list.remove(mapping2);
-			assertThat(list.tail, equalTo(mapping1));
-			assertThat(mapping1.next, nullValue());
+			assertThat(list.getTail(), equalTo(mapping1));
+			assertThat( list.getNext( mapping1 ), nullValue());
 		}
 
 		[Test]
@@ -138,8 +138,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 			list.add(mapping2);
 			list.add(mapping3);
 			list.remove(mapping2);
-			assertThat(mapping1.next, equalTo(mapping3));
-			assertThat(mapping3.previous, equalTo(mapping1));
+			assertThat( list.getNext( mapping1 ), equalTo(mapping3));
+			assertThat( list.getPrevious( mapping3 ), equalTo(mapping1));
 		}
 	}
 }

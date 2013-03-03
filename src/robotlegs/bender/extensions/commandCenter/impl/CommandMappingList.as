@@ -7,6 +7,8 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
+	import flash.utils.Dictionary;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 
@@ -15,29 +17,31 @@ package robotlegs.bender.extensions.commandCenter.impl
 	 */
 	public class CommandMappingList implements ICommandMappingList
 	{
+        
+        private var _nodesByMappings : Dictionary = new Dictionary( false );
 
 		/*============================================================================*/
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-		private var _head:ICommandMapping;
+		private var _headNode:CommandMappingNode;
 
 		/**
 		 * @private
 		 */
-		public function get head():ICommandMapping
+		public function get headNode():CommandMappingNode
 		{
-			return _head;
+			return _headNode;
 		}
 
-		private var _tail:ICommandMapping;
+		private var _tailNode:CommandMappingNode;
 
 		/**
 		 * @private
 		 */
-		public function get tail():ICommandMapping
+		public function get tailNode():CommandMappingNode
 		{
-			return _tail;
+			return _tailNode;
 		}
 
 		/*============================================================================*/
@@ -47,41 +51,81 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function add(node:ICommandMapping):void
+		public function add(mapping:ICommandMapping):void
 		{
-			if (_tail)
+            var node : CommandMappingNode = new CommandMappingNode( mapping );
+            _nodesByMappings[ mapping ] = node;
+			if (_tailNode)
 			{
-				_tail.next = node;
-				node.previous = _tail;
-				_tail = node;
+				_tailNode.nextNode = node;
+				node.previousNode = _tailNode;
+				_tailNode = node;
 			}
 			else
 			{
-				_head = _tail = node;
+				_headNode = _tailNode = node;
 			}
 		}
 
 		/**
 		 * @private
 		 */
-		public function remove(node:ICommandMapping):void
+		public function remove(mapping:ICommandMapping):void
 		{
-			if (node == _head)
+            var node : CommandMappingNode = _nodesByMappings[ mapping ];
+			if (node == _headNode)
 			{
-				_head = _head.next;
+				_headNode = _headNode.nextNode;
 			}
-			if (node == _tail)
+			if (node == _tailNode)
 			{
-				_tail = _tail.previous;
+				_tailNode = _tailNode.previousNode;
 			}
-			if (node.previous)
+			if (node.previousNode)
 			{
-				node.previous.next = node.next;
+				node.previousNode.nextNode = node.nextNode;
 			}
-			if (node.next)
+			if (node.nextNode)
 			{
-				node.next.previous = node.previous;
+				node.nextNode.previousNode = node.previousNode;
 			}
+            delete _nodesByMappings[ mapping ];
 		}
+        
+        public function getNext( mapping : ICommandMapping ) : ICommandMapping{
+            var next : ICommandMapping;
+            var node : CommandMappingNode = _nodesByMappings[ mapping ]
+            if( node && node.nextNode ){
+                next = node.nextNode.mapping;
+            }
+            
+            return next;
+        }
+        
+        public function getPrevious( mapping : ICommandMapping ) : ICommandMapping{
+            var previous : ICommandMapping;
+            var node : CommandMappingNode = _nodesByMappings[ mapping ]
+            if( node && node.previousNode ){
+                previous = node.previousNode.mapping;
+            }
+            
+            return previous;
+        }
+        
+        public function getHead() : ICommandMapping{
+            var mapping : ICommandMapping;
+            if( _headNode ){
+                mapping = _headNode.mapping;
+            }
+            return mapping;
+        }
+        
+        public function getTail() : ICommandMapping{
+            var mapping : ICommandMapping;
+            if( _tailNode ){
+                mapping = _tailNode.mapping;
+            }
+            return mapping;
+        }
 	}
 }

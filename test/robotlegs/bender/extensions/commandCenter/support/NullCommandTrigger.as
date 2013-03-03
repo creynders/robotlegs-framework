@@ -8,6 +8,7 @@
 package robotlegs.bender.extensions.commandCenter.support
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 
@@ -34,7 +35,7 @@ package robotlegs.bender.extensions.commandCenter.support
 		{
 		}
         
-        public function getMappings() : ICommandMappingList{
+        public function getMappings() : ICommandMappingIterator{
             return null;
         }
 	}

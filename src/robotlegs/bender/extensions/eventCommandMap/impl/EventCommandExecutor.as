@@ -14,6 +14,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingListIterator;
 
 	/**
 	 * @private
@@ -43,7 +44,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector:Injector,
 			eventClass:Class)
 		{
-            super( trigger, injector.createChildInjector() );
+            super( trigger, injector );
 			_eventClass = eventClass;
 		}
 
@@ -65,7 +66,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			}
             _event = event;
             
-            executeCommands();
+            executeCommands( _trigger.getMappings() );
             
             cleanup();
 		}

@@ -6,6 +6,7 @@ package robotlegs.bender.extensions.commandCenter.impl
     import org.swiftsuspenders.Injector;
     
     import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+    import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.framework.impl.applyHooks;
@@ -55,9 +56,8 @@ package robotlegs.bender.extensions.commandCenter.impl
          * Constructs and executes mapped Commands
          * @param event The event that triggered this execution
          */
-        protected function executeCommands():void{
-            const mappings : ICommandMappingList = _trigger.getMappings();
-            for (var mapping:ICommandMapping = mappings.head; mapping; mapping = mapping.next)
+        protected function executeCommands( mappings : ICommandMappingIterator ):void{
+            for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
             {
                 var command:Object = null;
                 beforeGuarding();

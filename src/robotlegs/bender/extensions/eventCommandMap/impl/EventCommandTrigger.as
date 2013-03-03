@@ -13,9 +13,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingListIterator;
 	import robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass;
 
 	/**
@@ -54,7 +56,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			_dispatcher = dispatcher;
 			_type = type;
 			_eventClass = eventClass;
-			_executor = new EventCommandExecutor(this, injector, eventClass);
+			_executor = new EventCommandExecutor(this, injector.createChildInjector(), eventClass);
 		}
 
 		/*============================================================================*/
@@ -67,7 +69,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function addMapping(mapping:ICommandMapping):void
 		{
 			verifyCommandClass(mapping);
-			_mappings.head || addListener();
+			_mappings.headNode || addListener();
 			_mappings.add(mapping);
 		}
 
@@ -77,7 +79,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function removeMapping(mapping:ICommandMapping):void
 		{
 			_mappings.remove(mapping);
-			_mappings.head || removeListener();
+			_mappings.headNode || removeListener();
 		}
 
 		public function toString():String
@@ -85,9 +87,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			return _eventClass + " with selector '" + _type + "'";
 		}
         
-        public function getMappings():ICommandMappingList
+        public function getMappings():ICommandMappingIterator
         {
-            return _mappings;
+            return new CommandMappingListIterator( _mappings );
         }
         
 
