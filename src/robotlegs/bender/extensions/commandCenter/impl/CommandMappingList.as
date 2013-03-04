@@ -11,12 +11,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
 
 	/**
 	 * @private
 	 */
-	public class CommandMappingList implements ICommandMappingList, ICommandMappingIterator
+	public class CommandMappingList implements ICommandMappingCollection, ICommandMappingIterator
 	{
         
         private var _nodesByMappings : Dictionary = new Dictionary( false );

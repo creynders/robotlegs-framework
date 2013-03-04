@@ -9,7 +9,7 @@ package robotlegs.bender.extensions.commandCenter.support
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 
 	public class NullCommandTrigger implements ICommandTrigger

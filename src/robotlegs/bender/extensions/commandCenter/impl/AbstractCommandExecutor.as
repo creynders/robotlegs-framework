@@ -6,8 +6,8 @@ package robotlegs.bender.extensions.commandCenter.impl
     import org.swiftsuspenders.Injector;
     
     import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+    import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
-    import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.framework.impl.applyHooks;
     import robotlegs.bender.framework.impl.guardsApprove;
@@ -56,7 +56,7 @@ package robotlegs.bender.extensions.commandCenter.impl
          * Constructs and executes mapped Commands
          * @param event The event that triggered this execution
          */
-        protected function executeCommands( mappings : ICommandMappingIterator ):void{
+        protected function executeCommands( mappings : ICommandMappingIterator ):Boolean{
             for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
             {
                 var command:Object = null;
@@ -78,10 +78,20 @@ package robotlegs.bender.extensions.commandCenter.impl
                 beforeExecuting();
                 if (command)
                 {
-                    command.execute();
+                    var isSynced : Boolean = executeCommand( command );
                     whenExecuted();
+                    if( ! isSynced ){
+                        return false;
+                    }
                 }
             }
+            
+            return true;
+        }
+        
+        protected function executeCommand( command : Object ) : Boolean{
+            command.execute();
+            return true;
         }
         
     }
