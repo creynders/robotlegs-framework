@@ -33,28 +33,39 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         /*============================================================================*/
-        /* Public Functions                                                           */
+        /* Protected Functions                                                        */
         /*============================================================================*/
         
+        /**
+         * TODO: document
+         */
         protected function beforeGuarding():void
         {
         }
         
+        /**
+         * TODO: document
+         */
         protected function beforeHooking():void
         {
         }
         
+        /**
+         * TODO: document
+         */
         protected function beforeExecuting():void
         {
         }
         
+        /**
+         * TODO: document
+         */
         protected function whenExecuted():void
         {
         }
         
         /**
-         * Constructs and executes mapped Commands
-         * @param event The event that triggered this execution
+         * TODO: document
          */
         protected function executeCommands( mappings : ICommandMappingIterator ):Boolean{
             for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
@@ -89,6 +100,9 @@ package robotlegs.bender.extensions.commandCenter.impl
             return true;
         }
         
+        /**
+         * TODO: document
+         */
         protected function executeCommand( command : Object ) : Boolean{
             command.execute();
             return true;

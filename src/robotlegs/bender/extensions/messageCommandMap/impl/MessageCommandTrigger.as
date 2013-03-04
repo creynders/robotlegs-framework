@@ -34,7 +34,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		/*============================================================================*/
 
 
-		private const _mappings:CommandMappingQueue = new CommandMappingQueue();
+		private var _mappings:CommandMappingQueue = new CommandMappingQueue();
 
 		private var _dispatcher:IMessageDispatcher;
 
@@ -85,6 +85,9 @@ package robotlegs.bender.extensions.messageCommandMap.impl
             _mappings.remove( mapping );
 		}
 
+        /**
+         * @inheritDoc
+         */
         public function getMappings():ICommandMappingIterator
         {
             return _mappings;

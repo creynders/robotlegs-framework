@@ -19,34 +19,23 @@ package robotlegs.bender.extensions.commandCenter.impl
 	public class CommandMappingList implements ICommandMappingCollection, ICommandMappingIterator
 	{
         
+        /*============================================================================*/
+        /* Private Properties                                                         */
+        /*============================================================================*/
+        
         private var _nodesByMappings : Dictionary = new Dictionary( false );
         private var _currentNode : CommandMappingNode;
 
-
+        private var _headNode:CommandMappingNode;
+        private var _tailNode:CommandMappingNode;
+        
 		/*============================================================================*/
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-		private var _headNode:CommandMappingNode;
-
-		/**
-		 * @private
-		 */
-		private function get headNode():CommandMappingNode
-		{
-			return _headNode;
-		}
-
-		private var _tailNode:CommandMappingNode;
-
-		/**
-		 * @private
-		 */
-		private function get tailNode():CommandMappingNode
-		{
-			return _tailNode;
-		}
-        
+        /**
+         * TODO: document
+         */
         public function get head() : ICommandMapping{
             var mapping : ICommandMapping;
             if( _headNode ){
@@ -55,6 +44,9 @@ package robotlegs.bender.extensions.commandCenter.impl
             return mapping;
         }
         
+        /**
+         * TODO: document
+         */
         public function get tail() : ICommandMapping{
             var mapping : ICommandMapping;
             if( _tailNode ){
@@ -63,6 +55,9 @@ package robotlegs.bender.extensions.commandCenter.impl
             return mapping;
         }
         
+        /**
+         * @inheritDoc
+         */
         public function get currentMapping():ICommandMapping
         {
             var mapping : ICommandMapping;
@@ -72,9 +67,12 @@ package robotlegs.bender.extensions.commandCenter.impl
             return mapping;
         }
         
+        /**
+         * TODO: document
+         */
         public function get isDone():Boolean
         {
-            return _currentNode == tailNode;
+            return _currentNode == _tailNode;
         }
         
         
@@ -83,7 +81,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		/**
-		 * @private
+		 * @inheritDoc
 		 */
 		public function add(mapping:ICommandMapping):void
 		{
@@ -102,7 +100,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		}
 
 		/**
-		 * @private
+		 * @inheritDoc
 		 */
 		public function remove(mapping:ICommandMapping):void
 		{
@@ -126,16 +124,22 @@ package robotlegs.bender.extensions.commandCenter.impl
             delete _nodesByMappings[ mapping ];
 		}
         
+        /**
+         * @inheritDoc
+         */
         public function first():ICommandMapping
         {
             var mapping : ICommandMapping;
-            if( headNode ){
-                mapping = headNode.mapping;
-                _currentNode = headNode;
+            if( _headNode ){
+                mapping = _headNode.mapping;
+                _currentNode = _headNode;
             }
             return mapping;
         }
-        
+
+        /**
+         * @inheritDoc
+         */
         public function next():ICommandMapping
         {
             if( _currentNode ){
@@ -145,8 +149,9 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         /**
-        * @private
-        */
+         * TODO: only used in testing, drop?
+         * @private
+         */
         public function getNext( mapping : ICommandMapping ) : ICommandMapping{
             var next : ICommandMapping;
             var node : CommandMappingNode = _nodesByMappings[ mapping ]
@@ -158,8 +163,9 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         /**
-        * @private
-        */
+         * TODO: only used in testing, drop?
+         * @private
+         */
         public function getPrevious( mapping : ICommandMapping ) : ICommandMapping{
             var previous : ICommandMapping;
             var node : CommandMappingNode = _nodesByMappings[ mapping ]

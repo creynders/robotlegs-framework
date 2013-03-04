@@ -8,13 +8,14 @@ package robotlegs.bender.extensions.commandCenter.impl
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
     
     public class CommandMappingQueue implements ICommandMappingCollection, ICommandMappingIterator{
-        public function CommandMappingQueue( queue : Vector.<ICommandMapping> = null )
-        {
-            _queue = queue || new Vector.<ICommandMapping>();
-        }
         
-        private var _queue : Vector.<ICommandMapping>;
+        /*============================================================================*/
+        /* Public Properties                                                          */
+        /*============================================================================*/
         
+        /**
+         * @inheritDoc
+         */ 
         public function get isDone():Boolean
         {
             return _queue.length == 0;
@@ -22,20 +23,51 @@ package robotlegs.bender.extensions.commandCenter.impl
         
         private var _currentMapping : ICommandMapping;
         
+        /**
+         * @inheritDoc
+         */ 
         public function get currentMapping():ICommandMapping
         {
             return _currentMapping;
         }
         
+        /**
+         * TODO: document
+         */
         public function get length() : int{
             return _queue.length;
         }
         
+        /*============================================================================*/
+        /* Private Properties                                                         */
+        /*============================================================================*/
+        
+        private var _queue : Vector.<ICommandMapping>;
+        
+        /*============================================================================*/
+        /* Constructor                                                                */
+        /*============================================================================*/
+        
+        public function CommandMappingQueue( queue : Vector.<ICommandMapping> = null )
+        {
+            _queue = queue || new Vector.<ICommandMapping>();
+        }
+        
+        /*============================================================================*/
+        /* Public Functions                                                           */
+        /*============================================================================*/
+        
+        /**
+         * @inheritDoc
+         */ 
         public function add(mapping:ICommandMapping):void
         {
             _queue.push( mapping );
         }
         
+        /**
+         * @inheritDoc
+         */ 
         public function remove(mapping:ICommandMapping):void
         {
             var index : int = _queue.indexOf( mapping );
@@ -44,17 +76,26 @@ package robotlegs.bender.extensions.commandCenter.impl
             }
         }
         
+        /**
+         * @inheritDoc
+         */ 
         public function first():ICommandMapping
         {
             _currentMapping = _queue.shift();
             return currentMapping;
         }
         
+        /**
+         * @inheritDoc
+         */ 
         public function next():ICommandMapping
         {
             return first();
         }
         
+        /**
+         * TODO: document
+         */
         public function clone() : CommandMappingQueue{
             return new CommandMappingQueue( _queue.concat() );
         }

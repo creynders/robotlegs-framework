@@ -13,18 +13,33 @@ package robotlegs.bender.extensions.messageCommandMap.impl
     
     public class MessageCommandExecutor extends AbstractCommandExecutor{
         
+        /*============================================================================*/
+        /* Private Properties                                                         */
+        /*============================================================================*/
+        
         private var _message : Object;
         private var _callback : Function;
         private var _mappings : ICommandMappingIterator;
         
+        /*============================================================================*/
+        /* Constructor                                                                */
+        /*============================================================================*/
+        
+        /**
+         * @private
+         */  
         public function MessageCommandExecutor(trigger:ICommandTrigger, injector:Injector)
         {
             super(trigger, injector);
         }
         
+        /*============================================================================*/
+        /* Public Functions                                                           */
+        /*============================================================================*/
+        
         /**
-        * @private
-        */
+         * TODO: document
+         */
         public function execute( mappings : ICommandMappingIterator, message : Object, callback : Function ) : void{
             _mappings = mappings;
             _message = message;
@@ -40,6 +55,13 @@ package robotlegs.bender.extensions.messageCommandMap.impl
             }
         }
         
+        /*============================================================================*/
+        /* Protected Functions                                                        */
+        /*============================================================================*/
+        
+        /**
+         * @inheritDoc
+         */ 
         override protected function executeCommand(command:Object):Boolean
         {
             var handler : Function = command.execute;

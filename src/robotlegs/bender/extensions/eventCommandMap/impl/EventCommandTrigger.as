@@ -79,15 +79,18 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			_mappings.head || removeListener();
 		}
 
-		public function toString():String
-		{
-			return _eventClass + " with selector '" + _type + "'";
-		}
-        
+        /**
+         * @inheritDoc
+         */
         public function getMappings():ICommandMappingIterator
         {
             return _mappings;
         }
+        
+		public function toString():String
+		{
+			return _eventClass + " with selector '" + _type + "'";
+		}
         
 
 		/*============================================================================*/
@@ -96,10 +99,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private function verifyCommandClass(mapping:ICommandMapping):void
 		{
-			// NOTE: we do this here, and not in the CommandCenter extension,
-			// as it is up to each specific Command Map to decide how commands
-			// should be executed. Some might not require an execute() method.
-            
             robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass( mapping.commandClass );
 
 		}

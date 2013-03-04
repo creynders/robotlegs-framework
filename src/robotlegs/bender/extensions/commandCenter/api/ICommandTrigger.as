@@ -25,6 +25,9 @@ package robotlegs.bender.extensions.commandCenter.api
 		 */
 		function removeMapping(mapping:ICommandMapping):void;
         
+        /**
+        * TODO: document
+        */
         function getMappings() : ICommandMappingIterator;
 	}
 }
