@@ -10,8 +10,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import flash.utils.Dictionary;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 
 	/**
 	 * @private
@@ -55,27 +55,6 @@ package robotlegs.bender.extensions.commandCenter.impl
             return mapping;
         }
         
-        /**
-         * @inheritDoc
-         */
-        public function get currentMapping():ICommandMapping
-        {
-            var mapping : ICommandMapping;
-            if( _currentNode ){
-                mapping = _currentNode.mapping;
-            }
-            return mapping;
-        }
-        
-        /**
-         * TODO: document
-         */
-        public function get isDone():Boolean
-        {
-            return _currentNode == _tailNode;
-        }
-        
-        
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
@@ -95,7 +74,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			else
 			{
-				_headNode = _tailNode = node;
+                var halo : CommandMappingNode = new CommandMappingNode();
+                halo.nextNode = _headNode = _tailNode = node;
+                _currentNode = halo;
 			}
 		}
 
@@ -142,10 +123,19 @@ package robotlegs.bender.extensions.commandCenter.impl
          */
         public function next():ICommandMapping
         {
-            if( _currentNode ){
+            var mapping : ICommandMapping;
+            if( hasNext() ){
                 _currentNode = _currentNode.nextNode;
+                mapping = _currentNode.mapping;
             }
-            return currentMapping;
+            return mapping;
+        }
+        
+        /**
+         * @inheritDoc
+         */
+        public function hasNext() : Boolean{
+            return _currentNode && _currentNode.nextNode;
         }
         
         /**

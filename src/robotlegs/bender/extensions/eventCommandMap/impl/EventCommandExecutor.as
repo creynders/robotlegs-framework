@@ -12,12 +12,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 
 	/**
 	 * @private
 	 */
-	public class EventCommandExecutor extends AbstractCommandExecutor
+	public class EventCommandExecutor extends CommandExecutor
 	{
 
 		/*============================================================================*/
@@ -76,7 +76,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         /**
          * @inheritDoc
          */
-        override protected function beforeGuarding():void
+        override public function beforeGuarding():void
         {
             _injector.map(Event).toValue(_event);
             if (_eventConstructor != Event){
@@ -87,7 +87,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         /**
          * @inheritDoc
          */
-        override protected function beforeExecuting():void
+        override public function beforeExecuting():void
         {
             _injector.unmap(Event);
             if (_eventConstructor != Event){

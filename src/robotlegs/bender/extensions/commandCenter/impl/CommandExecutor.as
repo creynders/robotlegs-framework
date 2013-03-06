@@ -5,6 +5,7 @@ package robotlegs.bender.extensions.commandCenter.impl
      */
     import org.swiftsuspenders.Injector;
     
+    import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
@@ -12,7 +13,7 @@ package robotlegs.bender.extensions.commandCenter.impl
     import robotlegs.bender.framework.impl.applyHooks;
     import robotlegs.bender.framework.impl.guardsApprove;
     
-    public class AbstractCommandExecutor{
+    public class CommandExecutor implements ICommandExecutor{
         
         /*============================================================================*/
         /* Private Properties                                                         */
@@ -26,48 +27,48 @@ package robotlegs.bender.extensions.commandCenter.impl
         /* Constructor                                                                */
         /*============================================================================*/
 
-        public function AbstractCommandExecutor( trigger:ICommandTrigger,
+        public function CommandExecutor( trigger:ICommandTrigger,
                                          injector:Injector ){
             _trigger = trigger;
             _injector = injector;
         }
         
         /*============================================================================*/
-        /* Protected Functions                                                        */
+        /* Public Functions                                                           */
         /*============================================================================*/
         
         /**
-         * TODO: document
+         * @inheritDoc
          */
-        protected function beforeGuarding():void
+        public function beforeGuarding():void
         {
         }
         
         /**
-         * TODO: document
+         * @inheritDoc
          */
-        protected function beforeHooking():void
+        public function beforeHooking():void
         {
         }
         
         /**
-         * TODO: document
+         * @inheritDoc
          */
-        protected function beforeExecuting():void
+        public function beforeExecuting():void
         {
         }
         
         /**
-         * TODO: document
+         * @inheritDoc
          */
-        protected function whenExecuted():void
+        public function whenExecuted():void
         {
         }
         
         /**
-         * TODO: document
+         * @inheritDoc
          */
-        protected function executeCommands( mappings : ICommandMappingIterator ):Boolean{
+        public function executeCommands( mappings : ICommandMappingIterator ):Boolean{
             for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
             {
                 var command:Object = null;
@@ -101,9 +102,9 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         /**
-         * TODO: document
+         * @inheritDoc
          */
-        protected function executeCommand( command : Object ) : Boolean{
+        public function executeCommand( command : Object ) : Boolean{
             command.execute();
             return true;
         }

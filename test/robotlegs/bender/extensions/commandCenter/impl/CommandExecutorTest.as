@@ -12,7 +12,7 @@ package robotlegs.bender.extensions.commandCenter.impl
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
     import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
-    import robotlegs.bender.extensions.commandCenter.support.SelfReportingCommandExecutor;
+    import robotlegs.bender.extensions.commandCenter.support.CallbackCommandExecutor;
     import robotlegs.bender.framework.impl.guardSupport.GrumpyGuard;
     import robotlegs.bender.framework.impl.guardSupport.HappyGuard;
 
@@ -51,7 +51,7 @@ package robotlegs.bender.extensions.commandCenter.impl
             injector.map( ICommandTrigger ).toValue( mockTrigger );
             injector.map(Function, "reportingFunction").toValue(reportingFunction);
             injector.map( CommandMappingList ).toValue( mappings );
-            injector.map( SelfReportingCommandExecutor ).asSingleton();
+            injector.map( CallbackCommandExecutor ).asSingleton();
             
         }
         
@@ -152,7 +152,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         [Test]
-        public function test_callbacks_called_in_order() : void{
+        public function test_phases_called_in_order() : void{
             addMapping( CommandA )
                 .withGuards( GuardA )
                 .withHooks( HookA )
@@ -169,7 +169,7 @@ package robotlegs.bender.extensions.commandCenter.impl
             var afterExecuting : Function = function() : void{
                 reportingFunction( afterExecuting );
             }
-            var executor : SelfReportingCommandExecutor = injector.getInstance( SelfReportingCommandExecutor );
+            var executor : CallbackCommandExecutor = injector.getInstance( CallbackCommandExecutor );
             executor.beforeGuardingCallback= beforeGuarding;
             executor.beforeHookingCallback= beforeHooking;
             executor.beforeExecutingCallback= beforeExecuting;
@@ -188,7 +188,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         private function instantiateAndExecute():void{
-            var executor : SelfReportingCommandExecutor = injector.getInstance( SelfReportingCommandExecutor );
+            var executor : CallbackCommandExecutor = injector.getInstance( CallbackCommandExecutor );
             executor.execute();
         }
         

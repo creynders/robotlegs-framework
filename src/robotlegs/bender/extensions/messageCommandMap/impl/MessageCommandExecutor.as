@@ -8,10 +8,10 @@ package robotlegs.bender.extensions.messageCommandMap.impl
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
+    import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
     import robotlegs.bender.framework.impl.safelyCallBack;
     
-    public class MessageCommandExecutor extends AbstractCommandExecutor{
+    public class MessageCommandExecutor extends CommandExecutor{
         
         /*============================================================================*/
         /* Private Properties                                                         */
@@ -62,7 +62,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
         /**
          * @inheritDoc
          */ 
-        override protected function executeCommand(command:Object):Boolean
+        override public function executeCommand(command:Object):Boolean
         {
             var handler : Function = command.execute;
             if (handler.length == 0) // sync handler: ()
@@ -84,7 +84,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
                     
                     handled = true;
                     
-                    if (error || _mappings.isDone )
+                    if (error || ! _mappings.hasNext() )
                     {
                         _callback && safelyCallBack( _callback, error, _message);
                     }

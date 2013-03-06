@@ -6,7 +6,7 @@ package robotlegs.bender.extensions.commandCenter.impl
      * @author creynder
      */
     public class CommandMappingNode{
-        public function CommandMappingNode( mapping : ICommandMapping )
+        public function CommandMappingNode( mapping : ICommandMapping = null )
         {
             _mapping = mapping;
         }

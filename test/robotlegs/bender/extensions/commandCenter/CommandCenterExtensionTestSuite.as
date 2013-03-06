@@ -27,7 +27,7 @@ package robotlegs.bender.extensions.commandCenter
 		public var commandMappingTest:CommandMappingTest;
 
 		public var commandMappingListTest:CommandMappingListTest;
-
+        
 		public var commandMapperTest:CommandMapperTest;
 
 		public var commandCenterExtension:CommandCenterExtensionTest;

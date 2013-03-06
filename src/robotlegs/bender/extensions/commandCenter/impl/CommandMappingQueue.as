@@ -14,24 +14,6 @@ package robotlegs.bender.extensions.commandCenter.impl
         /*============================================================================*/
         
         /**
-         * @inheritDoc
-         */ 
-        public function get isDone():Boolean
-        {
-            return _queue.length == 0;
-        }
-        
-        private var _currentMapping : ICommandMapping;
-        
-        /**
-         * @inheritDoc
-         */ 
-        public function get currentMapping():ICommandMapping
-        {
-            return _currentMapping;
-        }
-        
-        /**
          * TODO: document
          */
         public function get length() : int{
@@ -71,7 +53,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         public function remove(mapping:ICommandMapping):void
         {
             var index : int = _queue.indexOf( mapping );
-            if( -1 >= index ){
+            if( index > -1 ){
                 _queue.splice( index, 1 );
             }
         }
@@ -81,8 +63,7 @@ package robotlegs.bender.extensions.commandCenter.impl
          */ 
         public function first():ICommandMapping
         {
-            _currentMapping = _queue.shift();
-            return currentMapping;
+            return _queue.shift();
         }
         
         /**
@@ -93,11 +74,22 @@ package robotlegs.bender.extensions.commandCenter.impl
             return first();
         }
         
+        public function hasNext():Boolean
+        {
+            return length>0;
+        }
+        
         /**
          * TODO: document
          */
         public function clone() : CommandMappingQueue{
             return new CommandMappingQueue( _queue.concat() );
         }
+        
+        public function hasMapping( mapping : ICommandMapping ) : Boolean{
+            var index : int = _queue.indexOf( mapping ) 
+            return index > -1;
+        }
+        
     }
 }
