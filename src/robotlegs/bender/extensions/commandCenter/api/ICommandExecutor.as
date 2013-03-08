@@ -7,26 +7,6 @@ package robotlegs.bender.extensions.commandCenter.api
         /**
          * TODO: document
          */
-        function beforeGuarding():void;
-        
-        /**
-         * TODO: document
-         */
-        function beforeHooking():void;
-
-        /**
-         * TODO: document
-         */
-        function beforeExecuting():void;
-        
-        /**
-         * TODO: document
-         */
-        function whenExecuted():void;
-        
-        /**
-         * TODO: document
-         */
         function executeCommands( mappings : ICommandMappingIterator ):Boolean;
         
         /**

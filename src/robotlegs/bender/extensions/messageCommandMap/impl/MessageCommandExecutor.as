@@ -8,10 +8,10 @@ package robotlegs.bender.extensions.messageCommandMap.impl
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
+    import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
     import robotlegs.bender.framework.impl.safelyCallBack;
     
-    public class MessageCommandExecutor extends CommandExecutor{
+    public class MessageCommandExecutor extends AbstractCommandExecutor{
         
         /*============================================================================*/
         /* Private Properties                                                         */
