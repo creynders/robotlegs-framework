@@ -6,9 +6,9 @@ package robotlegs.bender.extensions.commandCenter.support
     import org.swiftsuspenders.Injector;
     
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
+    import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
     
-    public class CallbackCommandExecutor extends CommandExecutor{
+    public class CallbackCommandExecutor extends AbstractCommandExecutor{
         public function CallbackCommandExecutor(trigger:ICommandTrigger, injector:Injector)
         {
             super(trigger, injector);
@@ -23,22 +23,22 @@ package robotlegs.bender.extensions.commandCenter.support
             executeCommands( _trigger.getMappings() );
         }
         
-        override public function beforeExecuting():void
+        override protected function beforeExecuting():void
         {
             beforeExecutingCallback && beforeExecutingCallback();
         }
         
-        override public function beforeGuarding():void
+        override protected function beforeGuarding():void
         {
             beforeGuardingCallback && beforeGuardingCallback();
         }
         
-        override public function beforeHooking():void
+        override protected function beforeHooking():void
         {
             beforeHookingCallback && beforeHookingCallback();
         }
         
-        override public function whenExecuted():void
+        override protected function whenExecuted():void
         {
             whenExecutedCallback && whenExecutedCallback();
         }
