@@ -7,8 +7,8 @@ package robotlegs.bender.rewrite.priorityEventCommandMap.impl
     
     import org.swiftsuspenders.Injector;
     
-    import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
     import robotlegs.bender.rewrite.commandcenter.api.ICommandCenter;
+    import robotlegs.bender.rewrite.commandcenter.api.ICommandExecutor;
     import robotlegs.bender.rewrite.commandcenter.api.ICommandMapper;
     import robotlegs.bender.rewrite.commandcenter.api.ICommandTrigger;
     import robotlegs.bender.rewrite.eventCommandMap.impl.EventCommandMap;

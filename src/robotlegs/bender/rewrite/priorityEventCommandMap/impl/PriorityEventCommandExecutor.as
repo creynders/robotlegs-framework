@@ -5,8 +5,8 @@ package robotlegs.bender.rewrite.priorityEventCommandMap.impl
      */
     import org.swiftsuspenders.Injector;
     
-    import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
+    import robotlegs.bender.rewrite.commandcenter.api.ICommandExecutor;
     import robotlegs.bender.rewrite.commandcenter.api.ICommandTrigger;
     
     public class PriorityEventCommandExecutor implements ICommandExecutor{
@@ -14,22 +14,6 @@ package robotlegs.bender.rewrite.priorityEventCommandMap.impl
                                                                 injector:Injector,
                                                                 eventClass:Class)
 
-        {
-        }
-        
-        public function beforeGuarding():void
-        {
-        }
-        
-        public function beforeHooking():void
-        {
-        }
-        
-        public function beforeExecuting():void
-        {
-        }
-        
-        public function whenExecuted():void
         {
         }
         
