@@ -8,7 +8,9 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import flash.utils.Dictionary;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
@@ -25,11 +27,11 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private const _mappings:Dictionary = new Dictionary();
-
 		private var _trigger:ICommandTrigger;
 
 		private var _logger:ILogger;
+        
+        private var _factory : ICommandMappingFactory 
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -40,9 +42,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 * @param trigger Trigger
 		 * @param logger Logger
 		 */
-		public function CommandMapper(trigger:ICommandTrigger, logger:ILogger = null)
+		public function CommandMapper(trigger:ICommandTrigger, factory : ICommandMappingFactory, logger:ILogger = null)
 		{
 			_trigger = trigger;
+            _factory = factory;
 			_logger = logger;
 		}
 
@@ -55,10 +58,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function toCommand(commandClass:Class):ICommandMappingConfig
 		{
-			const mapping:ICommandMapping = _mappings[commandClass];
-			return mapping
-				? overwriteMapping(mapping)
-				: createMapping(commandClass);
+            var mapping : ICommandMapping = _trigger.getMappingFor( commandClass );
+            if( mapping ){
+                overwriteMapping( mapping )
+            }else{
+                mapping = createMapping( commandClass );
+            }
+            return mapping;
 		}
 
 		/**
@@ -66,7 +72,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function fromCommand(commandClass:Class):void
 		{
-			const mapping:ICommandMapping = _mappings[commandClass];
+			const mapping:ICommandMapping = _trigger.getMappingFor( commandClass );
 			mapping && deleteMapping(mapping);
 		}
 
@@ -75,7 +81,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function fromAll():void
 		{
-			for each (var mapping:ICommandMapping in _mappings)
+			for each (var mapping:ICommandMapping in _trigger.getMappings() )
 			{
 				deleteMapping(mapping);
 			}
@@ -85,23 +91,21 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private function createMapping(commandClass:Class):CommandMapping
+		private function createMapping(commandClass:Class):ICommandMapping
 		{
-			const mapping:CommandMapping = new CommandMapping(commandClass);
+            var mapping : ICommandMapping = _factory.createMapping( commandClass );
 			_trigger.addMapping(mapping);
-			_mappings[commandClass] = mapping;
 			_logger && _logger.debug('{0} mapped to {1}', [_trigger, mapping]);
-			return mapping;
+            return mapping;
 		}
 
 		private function deleteMapping(mapping:ICommandMapping):void
 		{
 			_trigger.removeMapping(mapping);
-			delete _mappings[mapping.commandClass];
 			_logger && _logger.debug('{0} unmapped from {1}', [_trigger, mapping]);
 		}
 
-		private function overwriteMapping(mapping:ICommandMapping):ICommandMappingConfig
+		private function overwriteMapping(mapping:ICommandMapping):ICommandMapping
 		{
 			_logger && _logger.warn('{0} already mapped to {1}\n' +
 				'If you have overridden this mapping intentionally you can use "unmap()" ' +

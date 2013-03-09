@@ -12,8 +12,8 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingQueue;
@@ -117,5 +117,11 @@ package robotlegs.bender.extensions.messageCommandMap.impl
             _executor.execute( _mappings.clone(), message, callback );
 		}
 
+        public function getMappingFor(commandClass:Class):ICommandMapping
+        {
+            // TODO:
+            return null;
+        }
+        
     }
 }

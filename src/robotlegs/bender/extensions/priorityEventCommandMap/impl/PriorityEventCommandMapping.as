@@ -1,4 +1,4 @@
-package robotlegs.bender.rewrite.priorityEventCommandMap.impl
+package robotlegs.bender.extensions.priorityEventCommandMap.impl
 {
     import robotlegs.bender.rewrite.commandcenter.impl.CommandMapping;
 

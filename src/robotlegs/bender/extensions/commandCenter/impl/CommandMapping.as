@@ -29,7 +29,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			return _commandClass;
 		}
-
+        
+        public function set commandClass(value:Class):void
+        {
+            _commandClass = value;
+        }
+        
+        
 		private var _guards:Array = [];
 
 		/**

@@ -9,9 +9,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 {
 	import mockolate.received;
 	import mockolate.runner.MockolateRule;
+	
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.object.instanceOf;
+	
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand2;
@@ -32,6 +35,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		[Mock]
 		public var logger:ILogger;
+        
+        [Mock]
+        public var componentFactory : ICommandMappingFactory;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -46,7 +52,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Before]
 		public function before():void
 		{
-			mapper = new CommandMapper(trigger, logger);
+			mapper = new CommandMapper(trigger, componentFactory, logger);
 		}
 
 		/*============================================================================*/

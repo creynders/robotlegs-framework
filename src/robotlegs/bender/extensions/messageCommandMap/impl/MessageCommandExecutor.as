@@ -5,7 +5,6 @@ package robotlegs.bender.extensions.messageCommandMap.impl
      */
     import org.swiftsuspenders.Injector;
     
-    import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;

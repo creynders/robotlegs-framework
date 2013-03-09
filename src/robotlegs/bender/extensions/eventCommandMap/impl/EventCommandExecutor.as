@@ -11,13 +11,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	
 	import org.swiftsuspenders.Injector;
 	
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
 
 	/**
 	 * @private
 	 */
-	public class EventCommandExecutor extends AbstractCommandExecutor
+	public class EventCommandExecutor extends AbstractCommandExecutor implements ICommandExecutor
 	{
 
 		/*============================================================================*/

@@ -8,18 +8,24 @@
 package robotlegs.bender.extensions.messageCommandMap.impl
 {
 	import flash.utils.Dictionary;
+	
 	import org.swiftsuspenders.Injector;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.messageCommandMap.api.IMessageCommandMap;
 	import robotlegs.bender.framework.api.IMessageDispatcher;
 
 	/**
 	 * @private
 	 */
-	public class MessageCommandMap implements IMessageCommandMap
+	public class MessageCommandMap implements IMessageCommandMap, ICommandMappingFactory
 	{
 
 		/*============================================================================*/
@@ -60,10 +66,13 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		 */
 		public function map(message:Object):ICommandMapper
 		{
-			const trigger:ICommandTrigger =
-				_triggers[message] ||=
-				createTrigger(message);
-			return _commandCenter.map(trigger);
+            var trigger : ICommandTrigger = _commandCenter.getTrigger( message );
+            if( ! trigger ){
+                trigger = createTrigger( message );
+                _commandCenter.map( trigger, message );
+            }
+            
+            return createMapper( trigger );
 		}
 
 		/**
@@ -71,14 +80,14 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		 */
 		public function unmap(message:Object):ICommandUnmapper
 		{
-			return _commandCenter.unmap(getTrigger(message));
+            return null;
 		}
 
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private function createTrigger(message:Object):ICommandTrigger
+		public function createTrigger(message:Object):ICommandTrigger
 		{
 			return new MessageCommandTrigger(_injector, _dispatcher, message);
 		}
@@ -87,5 +96,12 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		{
 			return _triggers[message];
 		}
+        public function createMapping( commandClass : Class ) : ICommandMapping{
+            return new CommandMapping( commandClass );
+        }
+        public function createMapper( trigger : ICommandTrigger ):ICommandMapper
+        {
+            return new CommandMapper( trigger, this );
+        }
 	}
 }

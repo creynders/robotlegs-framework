@@ -1,6 +1,6 @@
-package robotlegs.bender.rewrite.priorityEventCommandMap.api
+package robotlegs.bender.extensions.priorityEventCommandMap.api
 {
-    import robotlegs.bender.rewrite.priorityEventCommandMap.impl.PriorityEventCommandMapper;
+    import robotlegs.bender.extensions.priorityEventCommandMap.impl.PriorityEventCommandMapper;
 
     /**
      * @author creynder

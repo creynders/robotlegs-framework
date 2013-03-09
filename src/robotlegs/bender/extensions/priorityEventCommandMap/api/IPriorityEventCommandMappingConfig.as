@@ -1,4 +1,4 @@
-package robotlegs.bender.rewrite.priorityEventCommandMap.api
+package robotlegs.bender.extensions.priorityEventCommandMap.api
 {
     /**
      * @author creynder

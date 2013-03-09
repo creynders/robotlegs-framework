@@ -8,6 +8,7 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import flash.utils.Dictionary;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
@@ -38,9 +39,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private const _mappers:Dictionary = new Dictionary();
+		private const _triggersByKey:Dictionary = new Dictionary();
 
-		private const NULL_UNMAPPER:ICommandUnmapper = new NullCommandUnmapper();
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
@@ -49,18 +49,23 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function map(trigger:ICommandTrigger):ICommandMapper
+		public function map(trigger:ICommandTrigger, key : *):void
 		{
-			return _mappers[trigger]
-				|| (_mappers[trigger] = new CommandMapper(trigger, _logger));
+            _triggersByKey[ key ] = trigger;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function unmap(trigger:ICommandTrigger):ICommandUnmapper
+		public function unmap(key:*):void
 		{
-			return _mappers[trigger] || NULL_UNMAPPER;
+			delete _triggersByKey[ key ];
 		}
-	}
+        
+        public function getTrigger(key:*):ICommandTrigger
+        {
+            return _triggersByKey[ key ];
+        }
+        
+    }
 }

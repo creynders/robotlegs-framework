@@ -7,12 +7,15 @@
 
 package robotlegs.bender.extensions.commandCenter.api
 {
+    import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
 
 	/**
 	 * Represents a command mapping
 	 */
-	public interface ICommandMapping
+	public interface ICommandMapping extends ICommandMappingConfig
 	{
+        function set commandClass( value : Class) : void; 
+        
 		/**
 		 * The concrete Command Class for this mapping
 		 */
