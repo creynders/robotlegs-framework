@@ -49,42 +49,42 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Test]
 		public function mapping_stores_Guards():void
 		{
-			mapping.withGuards(1, 2, 3);
+			mapping.addGuards(1, 2, 3);
 			assertThat(mapping.guards, array(1, 2, 3));
 		}
 
 		[Test]
 		public function mapping_stores_GuardsArray():void
 		{
-			mapping.withGuards([1, 2, 3]);
+			mapping.addGuards([1, 2, 3]);
 			assertThat(mapping.guards, array(1, 2, 3));
 		}
 
 		[Test]
 		public function mapping_stores_Hooks():void
 		{
-			mapping.withHooks(1, 2, 3);
+			mapping.addHooks(1, 2, 3);
 			assertThat(mapping.hooks, array(1, 2, 3));
 		}
 
 		[Test]
 		public function mapping_stores_HooksArray():void
 		{
-			mapping.withHooks([1, 2, 3]);
+			mapping.addHooks([1, 2, 3]);
 			assertThat(mapping.hooks, array(1, 2, 3));
 		}
 
 		[Test]
 		public function mapping_stores_FireOnce():void
 		{
-			mapping.once();
+			mapping.setFireOnce( true );
 			assertThat(mapping.fireOnce, isTrue());
 		}
 
 		[Test]
 		public function mapping_stores_FireOnce_when_false():void
 		{
-			mapping.once(false);
+			mapping.setFireOnce(false);
 			assertThat(mapping.fireOnce, isFalse());
 		}
 	}

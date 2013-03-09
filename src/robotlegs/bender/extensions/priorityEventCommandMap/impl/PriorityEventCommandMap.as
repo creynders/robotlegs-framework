@@ -3,17 +3,15 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
     /**
      * @author creynder
      */
+    import flash.events.IEventDispatcher;
     import flash.utils.Dictionary;
     
     import org.swiftsuspenders.Injector;
     
     import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
-    import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
     import robotlegs.bender.extensions.eventCommandMap.impl.EventCommandMap;
     import robotlegs.bender.extensions.eventCommandMap.impl.EventCommandTrigger;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMap;
@@ -21,11 +19,12 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
     
     
     public class PriorityEventCommandMap implements IPriorityEventCommandMap, ICommandMappingFactory{
-        public function PriorityEventCommandMap( injector : Injector )
+        public function PriorityEventCommandMap( injector : Injector, dispatcher : IEventDispatcher, commandCenter : ICommandCenter )
         {
             _injector = injector;
+            _dispatcher = dispatcher;
             
-            _ecm = new EventCommandMap( injector );
+            _ecm = new EventCommandMap( injector, dispatcher, commandCenter );
         }
         
         private var _injector : Injector;
@@ -34,8 +33,9 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
         private var _commandCenter:ICommandCenter;
         
        
-       private var _ecm : EventCommandMap
+        private var _ecm : EventCommandMap
         
+        private var _dispatcher:IEventDispatcher;
         public function map(type:String, eventClass:Class = null):IPriorityEventCommandMapper{
             var key : String = getKey( type, eventClass );
             var trigger : ICommandTrigger = _commandCenter.getTrigger( key );
@@ -46,28 +46,23 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
             return createMapper( trigger );
         }
         
-        protected function createBuilder( trigger : ICommandTrigger ):PriorityEventCommandMapper
-        {
-            return new PriorityEventCommandMapper( trigger, this );
-        }
-        
         private function createTrigger(type:String, eventClass:Class = null):ICommandTrigger
         {
-            return new EventCommandTrigger(type, eventClass);
+            return new EventCommandTrigger( _injector, _dispatcher, type, eventClass);
         }
         
         private function getKey( type:String, eventClass:Class = null ) : String{
             return type + eventClass;
         }
-        public function createMapper( trigger : ICommandTrigger ):ICommandMapper
+        public function createMapper( trigger : ICommandTrigger ):IPriorityEventCommandMapper
         {
             return new PriorityEventCommandMapper( trigger, this );
         }
         
         
-        public function createMapping():ICommandMapping
+        public function createMapping( commandClass :Class ):ICommandMapping
         {
-            return PriorityEventCommandMapping();
+            return PriorityEventCommandMapping( commandClass );
         }
         
     }

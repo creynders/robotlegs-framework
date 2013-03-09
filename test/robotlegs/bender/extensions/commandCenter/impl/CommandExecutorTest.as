@@ -9,6 +9,7 @@ package robotlegs.bender.extensions.commandCenter.impl
     import org.hamcrest.object.equalTo;
     import org.swiftsuspenders.Injector;
     
+    import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
     import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
@@ -86,45 +87,45 @@ package robotlegs.bender.extensions.commandCenter.impl
                 hookCount++;
             };
 
-            commandExecutionCountWithHooks( hook, hook, hook );
+            commandExecutionCountaddHooks( hook, hook, hook );
             assertThat( hookCount, equalTo( 3 ) );
         }        
         
         [Test]
         public function test_command_executes_when_the_guard_allows():void
         {
-            assertThat(commandExecutionCountWithGuards(HappyGuard), equalTo(1));
+            assertThat(commandExecutionCountaddGuards(HappyGuard), equalTo(1));
         }
         
         [Test]
         public function test_command_executes_when_all_guards_allow():void
         {
-            assertThat(commandExecutionCountWithGuards(HappyGuard, HappyGuard), equalTo(1));
+            assertThat(commandExecutionCountaddGuards(HappyGuard, HappyGuard), equalTo(1));
         }
         
         [Test]
         public function test_command_does_not_execute_when_the_guard_denies():void
         {
-            assertThat(commandExecutionCountWithGuards(GrumpyGuard), equalTo(0));
+            assertThat(commandExecutionCountaddGuards(GrumpyGuard), equalTo(0));
         }
         
         [Test]
         public function test_command_does_not_execute_when_all_guards_deny():void
         {
-            assertThat(commandExecutionCountWithGuards(GrumpyGuard, GrumpyGuard ), equalTo(0));
+            assertThat(commandExecutionCountaddGuards(GrumpyGuard, GrumpyGuard ), equalTo(0));
         }
         
         [Test]
         public function test_command_does_not_execute_when_any_guards_denies():void
         {
-            assertThat(commandExecutionCountWithGuards(HappyGuard, GrumpyGuard), equalTo(0));
+            assertThat(commandExecutionCountaddGuards(HappyGuard, GrumpyGuard), equalTo(0));
         }
         
         [Test]
         public function test_execution_sequence_is_guard_command_guard_command_with_multiple_mappings():void
         {
-            addMapping( CommandA ).withGuards( GuardA );
-            addMapping( CommandB ).withGuards( GuardB );
+            addMapping( CommandA ).addGuards( GuardA );
+            addMapping( CommandB ).addGuards( GuardB );
             const expectedOrder:Array = [GuardA, CommandA, GuardB, CommandB];
             instantiateAndExecute();
             assertThat(reportedExecutions, array(expectedOrder));
@@ -133,8 +134,8 @@ package robotlegs.bender.extensions.commandCenter.impl
         [Test]
         public function test_execution_sequence_is_guard_hook_command() : void{
             addMapping( CommandA )
-                .withGuards( GuardA )
-                .withHooks( HookA );
+                .addGuards( GuardA )
+                .addHooks( HookA );
             const expectedOrder : Array = [ GuardA, HookA, CommandA ];
             instantiateAndExecute();
             assertThat(reportedExecutions, array(expectedOrder));
@@ -143,7 +144,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         [Test]
         public function test_allowed_commands_get_executed_after_denied_command() : void{
             addMapping( CommandA )
-                .withGuards( GrumpyGuard )
+                .addGuards( GrumpyGuard )
             ;
             addMapping( CommandB );
             const expectedOrder : Array = [ CommandB ];
@@ -154,8 +155,8 @@ package robotlegs.bender.extensions.commandCenter.impl
         [Test]
         public function test_phases_called_in_order() : void{
             addMapping( CommandA )
-                .withGuards( GuardA )
-                .withHooks( HookA )
+                .addGuards( GuardA )
+                .addHooks( HookA )
             ;
             var beforeGuarding : Function = function() : void{
                 reportingFunction( beforeGuarding );
@@ -192,7 +193,7 @@ package robotlegs.bender.extensions.commandCenter.impl
             executor.execute();
         }
         
-        private function addMapping(commandClass:Class ):ICommandMappingConfig
+        private function addMapping(commandClass:Class ):ICommandMapping
         {
             
             var mapping : CommandMapping = new CommandMapping( commandClass );
@@ -204,11 +205,11 @@ package robotlegs.bender.extensions.commandCenter.impl
             return commandExecutionCount( totalEvents, true );
         }
         
-        private function commandExecutionCountWithGuards( ...guards ) : uint{
+        private function commandExecutionCountaddGuards( ...guards ) : uint{
             return commandExecutionCount( 1, false, guards );
         }
         
-        private function commandExecutionCountWithHooks( ...hooks ) : uint{
+        private function commandExecutionCountaddHooks( ...hooks ) : uint{
             return commandExecutionCount( 1, false, null, hooks );
         }
         
@@ -221,10 +222,10 @@ package robotlegs.bender.extensions.commandCenter.impl
             });
             while (totalEvents--)
             {
-                var mapping : ICommandMappingConfig = addMapping( CallbackCommand );
-                mapping.once( oneShot );
-                guards && mapping.withGuards.apply( mapping, guards );
-                hooks && mapping.withHooks.apply( mapping, hooks );
+                var mapping : ICommandMapping = addMapping( CallbackCommand );
+                mapping.setFireOnce( oneShot );
+                guards && mapping.addGuards.apply( mapping, guards );
+                hooks && mapping.addHooks.apply( mapping, hooks );
             }
             
             instantiateAndExecute();

@@ -8,12 +8,10 @@
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
-	import flash.utils.Dictionary;
 	
 	import org.swiftsuspenders.Injector;
 	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;

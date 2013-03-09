@@ -12,10 +12,8 @@ package robotlegs.bender.extensions.commandCenter.api
 	/**
 	 * Represents a command mapping
 	 */
-	public interface ICommandMapping extends ICommandMappingConfig
+	public interface ICommandMapping
 	{
-        function set commandClass( value : Class) : void; 
-        
 		/**
 		 * The concrete Command Class for this mapping
 		 */
@@ -35,6 +33,14 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * Unmaps a Command after a successful execution
 		 */
 		function get fireOnce():Boolean;
+        
+        function setCommandClass( commandClass : Class )  :ICommandMapping;
+        
+        function addGuards( ...guards ) : ICommandMapping;
+        
+        function addHooks( ...hooks ) : ICommandMapping;
+        
+        function setFireOnce( value : Boolean ) : ICommandMapping;
 
 	}
 }

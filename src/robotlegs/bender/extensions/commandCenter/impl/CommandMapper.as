@@ -7,8 +7,6 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	import flash.utils.Dictionary;
-	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -20,7 +18,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	/**
 	 * @private
 	 */
-	public class CommandMapper implements ICommandMapper, ICommandUnmapper
+	public class CommandMapper implements ICommandMapper, ICommandMappingConfig, ICommandUnmapper
 	{
 
 		/*============================================================================*/
@@ -31,7 +29,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _logger:ILogger;
         
-        private var _factory : ICommandMappingFactory 
+        private var _factory : ICommandMappingFactory;
+        
+        private var _mapping : ICommandMapping;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -64,7 +64,8 @@ package robotlegs.bender.extensions.commandCenter.impl
             }else{
                 mapping = createMapping( commandClass );
             }
-            return mapping;
+            _mapping = mapping;
+            return this;
 		}
 
 		/**
@@ -114,5 +115,27 @@ package robotlegs.bender.extensions.commandCenter.impl
 			deleteMapping(mapping);
 			return createMapping(mapping.commandClass);
 		}
-	}
+        
+        public function once(value:Boolean=true):ICommandMappingConfig
+        {
+            _mapping.setFireOnce( value );
+            return this;
+        }
+        
+        public function withGuards(...guards):ICommandMappingConfig
+        {
+            _mapping.addGuards( guards );
+            return this;
+        }
+        
+        public function withHooks(...hooks):ICommandMappingConfig
+        {
+            _mapping.addHooks( hooks );
+            return this;
+        }
+        
+        public function get mapping() : ICommandMapping{
+            return _mapping;
+        }
+    }
 }

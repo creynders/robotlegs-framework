@@ -13,7 +13,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	/**
 	 * @private
 	 */
-	public class CommandMapping implements ICommandMapping, ICommandMappingConfig
+	public class CommandMapping implements ICommandMapping
 	{
 
 		/*============================================================================*/
@@ -22,6 +22,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _commandClass:Class;
 
+
 		/**
 		 * @inheritDoc
 		 */
@@ -29,11 +30,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			return _commandClass;
 		}
-        
-        public function set commandClass(value:Class):void
-        {
-            _commandClass = value;
-        }
         
         
 		private var _guards:Array = [];
@@ -86,29 +82,35 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function withGuards(... guards):ICommandMappingConfig
+		public function addGuards(... guards):ICommandMapping
 		{
 			_guards = _guards.concat.apply(null, guards);
-			return this;
+            return this;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function withHooks(... hooks):ICommandMappingConfig
+		public function addHooks(... hooks):ICommandMapping
 		{
 			_hooks = _hooks.concat.apply(null, hooks);
-			return this;
+            return this;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function once(value:Boolean = true):ICommandMappingConfig
+		public function setFireOnce( value : Boolean ) : ICommandMapping
 		{
 			_fireOnce = value;
-			return this;
+            return this;
 		}
+        
+        public function setCommandClass(value:Class):ICommandMapping{
+            _commandClass = value;
+            return this;
+        }
+        
 
 		public function toString():String
 		{
