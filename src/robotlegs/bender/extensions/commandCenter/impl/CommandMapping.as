@@ -106,6 +106,9 @@ package robotlegs.bender.extensions.commandCenter.impl
             return this;
 		}
         
+        /**
+         * @inheritDoc
+         */
         public function setCommandClass(value:Class):ICommandMapping{
             _commandClass = value;
             return this;

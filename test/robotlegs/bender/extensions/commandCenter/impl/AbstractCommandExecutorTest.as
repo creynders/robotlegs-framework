@@ -20,7 +20,7 @@ package robotlegs.bender.extensions.commandCenter.impl
     /**
      * @author creynder
      */
-    public class CommandExecutorTest{
+    public class AbstractCommandExecutorTest{
         /*============================================================================*/
         /* Private Properties                                                         */
         /*============================================================================*/
@@ -74,7 +74,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
 
         [Test]
-        public function test_fireOnce_command_executes_calls_trigger_removeMapping():void
+        public function test_fireOnce_command_calls_trigger_removeMapping():void
         {
             assertThat( commandExecutionCountFireOnce() );
             verify( mockTrigger ).method( 'removeMapping' ).once();

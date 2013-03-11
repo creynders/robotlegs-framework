@@ -94,6 +94,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
             return _mappingsList;
         }
         
+        /**
+         * @inheritDoc
+         */
+        public function getMappingFor(commandClass:Class):ICommandMapping
+        {
+            return _mappingsByCommandClass[ commandClass ];
+        }
+        
 		public function toString():String
 		{
 			return _eventClass + " with selector '" + _type + "'";
@@ -119,11 +127,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			_dispatcher.removeEventListener(_type, _executor.execute);
 		}
-        
-        public function getMappingFor(commandClass:Class):ICommandMapping
-        {
-            return _mappingsByCommandClass[ commandClass ];
-        }
         
     }
 }

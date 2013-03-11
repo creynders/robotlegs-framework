@@ -6,6 +6,9 @@ package robotlegs.bender.extensions.commandCenter.api
      * @author creynder
      */
     public interface ICommandMappingFactory{
+        /**
+         * TODO: document
+         */
         function createMapping( commandClass : Class ) : ICommandMapping;
     }
 }

@@ -34,7 +34,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
         /**
-         * TODO: document
+         * @private
          */
         public function get head() : ICommandMapping{
             var mapping : ICommandMapping;
@@ -45,7 +45,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         }
         
         /**
-         * TODO: document
+         * @private
          */
         public function get tail() : ICommandMapping{
             var mapping : ICommandMapping;

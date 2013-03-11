@@ -30,16 +30,16 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	{
 
 		/*============================================================================*/
-		/* Private Properties                                                         */
+		/* Protected Properties                                                       */
 		/*============================================================================*/
 
-        private const NULL_UNMAPPER:ICommandUnmapper = new NullCommandUnmapper();
+        protected const NULL_UNMAPPER:ICommandUnmapper = new NullCommandUnmapper();
         
-        private var _injector:Injector;
+        protected var _injector:Injector;
 
-		private var _dispatcher:IEventDispatcher;
+		protected var _dispatcher:IEventDispatcher;
 
-		private var _commandCenter:ICommandCenter;
+		protected var _commandCenter:ICommandCenter;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -92,6 +92,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
             return unmapper;
 		}
 
+        /**
+         * @inheritDoc
+         */
         public function createMapping( commandClass : Class ) : ICommandMapping{
             return new CommandMapping( commandClass );
         }

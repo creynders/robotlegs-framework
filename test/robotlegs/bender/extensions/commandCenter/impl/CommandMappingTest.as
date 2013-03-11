@@ -41,48 +41,48 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function mapping_stores_Command():void
+		public function test_mapping_stores_Command():void
 		{
 			assertThat(mapping.commandClass, equalTo(commandClass));
 		}
 
 		[Test]
-		public function mapping_stores_Guards():void
+		public function test_mapping_stores_Guards():void
 		{
 			mapping.addGuards(1, 2, 3);
 			assertThat(mapping.guards, array(1, 2, 3));
 		}
 
 		[Test]
-		public function mapping_stores_GuardsArray():void
+		public function test_mapping_stores_GuardsArray():void
 		{
 			mapping.addGuards([1, 2, 3]);
 			assertThat(mapping.guards, array(1, 2, 3));
 		}
 
 		[Test]
-		public function mapping_stores_Hooks():void
+		public function test_mapping_stores_Hooks():void
 		{
 			mapping.addHooks(1, 2, 3);
 			assertThat(mapping.hooks, array(1, 2, 3));
 		}
 
 		[Test]
-		public function mapping_stores_HooksArray():void
+		public function test_mapping_stores_HooksArray():void
 		{
 			mapping.addHooks([1, 2, 3]);
 			assertThat(mapping.hooks, array(1, 2, 3));
 		}
 
 		[Test]
-		public function mapping_stores_FireOnce():void
+		public function test_mapping_stores_FireOnce():void
 		{
 			mapping.setFireOnce( true );
 			assertThat(mapping.fireOnce, isTrue());
 		}
 
 		[Test]
-		public function mapping_stores_FireOnce_when_false():void
+		public function test_mapping_stores_FireOnce_when_false():void
 		{
 			mapping.setFireOnce(false);
 			assertThat(mapping.fireOnce, isFalse());

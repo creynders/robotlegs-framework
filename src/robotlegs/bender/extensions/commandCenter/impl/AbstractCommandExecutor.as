@@ -16,7 +16,7 @@ package robotlegs.bender.extensions.commandCenter.impl
     public class AbstractCommandExecutor implements ICommandExecutor{
         
         /*============================================================================*/
-        /* Private Properties                                                         */
+        /* Protected Properties                                                       */
         /*============================================================================*/
        
         protected var _trigger:ICommandTrigger;
@@ -27,6 +27,9 @@ package robotlegs.bender.extensions.commandCenter.impl
         /* Constructor                                                                */
         /*============================================================================*/
 
+        /**
+         * @private
+         */
         public function AbstractCommandExecutor( trigger:ICommandTrigger,
                                          injector:Injector ){
             _trigger = trigger;
@@ -35,35 +38,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         
         /*============================================================================*/
         /* Public Functions                                                           */
-        /*============================================================================*/
-        
-        /**
-         * @inheritDoc
-         */
-        protected function beforeGuarding():void
-        {
-        }
-        
-        /**
-         * @inheritDoc
-         */
-        protected function beforeHooking():void
-        {
-        }
-        
-        /**
-         * @inheritDoc
-         */
-        protected function beforeExecuting():void
-        {
-        }
-        
-        /**
-         * @inheritDoc
-         */
-        protected function whenExecuted():void
-        {
-        }
+        /*============================================================================*/  
         
         /**
          * @inheritDoc
@@ -108,6 +83,39 @@ package robotlegs.bender.extensions.commandCenter.impl
             command.execute();
             return true;
         }
+        
+       /*============================================================================*/
+        /* Protected Functions                                                        */
+        /*============================================================================*/
+        
+        /**
+         * @inheritDoc
+         */
+        protected function beforeGuarding():void
+        {
+        }
+        
+        /**
+         * @inheritDoc
+         */
+        protected function beforeHooking():void
+        {
+        }
+        
+        /**
+         * @inheritDoc
+         */
+        protected function beforeExecuting():void
+        {
+        }
+        
+        /**
+         * @inheritDoc
+         */
+        protected function whenExecuted():void
+        {
+        }
+        
         
     }
 }

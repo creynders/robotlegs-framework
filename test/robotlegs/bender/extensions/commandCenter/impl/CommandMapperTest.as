@@ -65,7 +65,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function toCommand_registers_mappingConfig_with_trigger():void
+		public function test_toCommand_registers_mappingConfig_with_trigger():void
 		{
             const mapping : ICommandMapping = new CommandMapping( NullCommand );
             expect( componentFactory.createMapping( NullCommand ) ).returns( mapping );
@@ -74,7 +74,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		}
 
 		[Test]
-		public function fromCommand_passes_retrieved_mapping_to_trigger_for_removal():void
+		public function test_fromCommand_passes_retrieved_mapping_to_trigger_for_removal():void
 		{
             const mapping : ICommandMapping = new CommandMapping( NullCommand );
             expect( trigger.getMappingFor( arg( NullCommand ) ) ).returns( mapping );
@@ -83,7 +83,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		}
 
 		[Test]
-		public function fromAll_removes_all_mappingConfigs_from_trigger():void
+		public function test_fromAll_removes_all_mappingConfigs_from_trigger():void
 		{
 			const mapping1:ICommandMapping = new CommandMapping( NullCommand );
 			const mapping2:ICommandMapping = new CommandMapping( NullCommand2 );
@@ -97,7 +97,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		}
 
 		[Test]
-		public function toCommand_unregisters_old_mappingConfig_and_registers_new_one_when_overwritten():void
+		public function test_toCommand_unregisters_old_mappingConfig_and_registers_new_one_when_overwritten():void
 		{
             const mapping1 : ICommandMapping = new CommandMapping( NullCommand );
             const mapping2 : ICommandMapping = new CommandMapping( NullCommand );
@@ -109,7 +109,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		}
 
 		[Test]
-		public function toCommand_warns_when_overwritten():void
+		public function test_toCommand_warns_when_overwritten():void
 		{
             const mapping : ICommandMapping = new CommandMapping( NullCommand );
             expect( trigger.getMappingFor( NullCommand ) ).returns( mapping );

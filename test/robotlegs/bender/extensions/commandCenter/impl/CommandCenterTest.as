@@ -51,14 +51,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function map_stores_trigger():void
+		public function test_map_stores_trigger():void
 		{
             commandCenter.map( trigger, this );
             assertThat( commandCenter.getTrigger( this ), equalTo( trigger ) );
 		}
 
 		[Test]
-		public function unmap_removes_trigger():void
+		public function test_unmap_removes_trigger():void
 		{
             commandCenter.map( trigger, this );
             commandCenter.unmap( this );
@@ -67,12 +67,12 @@ package robotlegs.bender.extensions.commandCenter.impl
         
         [Test]
         public function test_map_behaviour_when_key_already_used() : void{
-            // TODO:
+            // TODO: determine what to do
         }
         
         [Test]
         public function test_unmap_when_key_not_found() : void{
-            // TODO:
+            // TODO: determine what to do
         }
 
 	}

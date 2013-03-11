@@ -16,19 +16,21 @@ package robotlegs.bender.extensions.commandCenter.api
 	public interface ICommandCenter
 	{
 		/**
-		 * Maps a trigger
+		 * Maps a trigger to a key
 		 * @param trigger The trigger to map
-		 * @return Command Mapper
+         * @param key The key to map the trigger to
 		 */
 		function map(trigger:ICommandTrigger, key : *):void;
 
 		/**
-		 * Unmaps a trigger
-		 * @param trigger The trigger to unmap
-		 * @return Command Unmapper
+		 * Unmaps a trigger mapped to the key
+		 * @param key The key to the trigger to unmap
 		 */
 		function unmap( key : * ):void;
         
+        /**
+         * TODO: document
+         */
         function getTrigger( key : * ) : ICommandTrigger;
 	}
 }

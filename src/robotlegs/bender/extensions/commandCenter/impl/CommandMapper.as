@@ -22,7 +22,18 @@ package robotlegs.bender.extensions.commandCenter.impl
 	public class CommandMapper implements ICommandMapper, ICommandMappingConfig, ICommandUnmapper
 	{
 
-		/*============================================================================*/
+        /*============================================================================*/
+        /* Public Properties                                                          */
+        /*============================================================================*/
+
+        /**
+         * @private
+         */
+        public function get mapping() : ICommandMapping{
+            return _mapping;
+        }
+        
+        /*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
@@ -90,6 +101,33 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 		}
 
+        /**
+         * @inheritDoc
+         */
+        public function once(value:Boolean=true):ICommandMappingConfig
+        {
+            _mapping.setFireOnce( value );
+            return this;
+        }
+        
+        /**
+         * @inheritDoc
+         */
+        public function withGuards(...guards):ICommandMappingConfig
+        {
+            _mapping.addGuards.apply( null, guards );
+            return this;
+        }
+        
+        /**
+         * @inheritDoc
+         */
+        public function withHooks(...hooks):ICommandMappingConfig
+        {
+            _mapping.addHooks.apply( null, hooks );
+            return this;
+        }
+        
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
@@ -118,26 +156,5 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return createMapping(mapping.commandClass);
 		}
         
-        public function once(value:Boolean=true):ICommandMappingConfig
-        {
-            _mapping.setFireOnce( value );
-            return this;
-        }
-        
-        public function withGuards(...guards):ICommandMappingConfig
-        {
-            _mapping.addGuards.apply( null, guards );
-            return this;
-        }
-        
-        public function withHooks(...hooks):ICommandMappingConfig
-        {
-            _mapping.addHooks.apply( null, hooks );
-            return this;
-        }
-        
-        public function get mapping() : ICommandMapping{
-            return _mapping;
-        }
     }
 }

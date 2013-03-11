@@ -63,25 +63,25 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		[Test]
-		public function command_executes_successfully():void
+		public function test_command_executes_successfully():void
 		{
 			assertThat(commandExecutionCount(1), equalTo(1));
 		}
 
 		[Test]
-		public function command_executes_repeatedly():void
+		public function test_command_executes_repeatedly():void
 		{
 			assertThat(commandExecutionCount(5), equalTo(5));
 		}
 
 		[Test]
-		public function fireOnce_command_executes_once():void
+		public function test_fireOnce_command_executes_once():void
 		{
 			assertThat(oneshotCommandExecutionCount(5), equalTo(1));
 		}
 
 		[Test]
-		public function event_is_injected_into_command():void
+		public function test_event_is_injected_into_command():void
 		{
 			var injectedEvent:Event = null;
 			injector.map(Function, 'executeCallback').toValue(function(command:EventInjectedCallbackCommand):void
@@ -96,7 +96,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function specified_typed_event_is_injected_into_command():void
+		public function test_specified_typed_event_is_injected_into_command():void
 		{
 			var injectedEvent:SupportEvent = null;
 			injector.map(Function, 'executeCallback').toValue(function(command:SupportEventTriggeredSelfReportingCallbackCommand):void
@@ -111,7 +111,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function unspecified_typed_event_is_injected_into_command():void
+		public function test_unspecified_typed_event_is_injected_into_command():void
 		{
 			var injectedEvent:SupportEvent = null;
 			injector.map(Function, 'executeCallback').toValue(function(command:SupportEventTriggeredSelfReportingCallbackCommand):void
@@ -126,7 +126,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function command_does_not_execute_when_incorrect_eventType_dispatched():void
+		public function test_command_does_not_execute_when_incorrect_eventType_dispatched():void
 		{
 			var executeCount:uint = 0;
 			injector.map(Function, 'executeCallback').toValue(function():void
@@ -139,7 +139,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function command_does_not_execute_when_incorrect_eventClass_dispatched():void
+		public function test_command_does_not_execute_when_incorrect_eventClass_dispatched():void
 		{
 			var executeCount:uint = 0;
 			injector.map(Function, 'executeCallback').toValue(function():void
@@ -152,7 +152,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function command_does_not_execute_after_event_unmapped():void
+		public function test_command_does_not_execute_after_event_unmapped():void
 		{
 			var executeCount:uint = 0;
 			injector.map(Function, 'executeCallback').toValue(function():void
@@ -166,7 +166,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function oneshot_mappings_should_not_bork_stacked_mappings():void
+		public function test_oneshot_mappings_should_not_bork_stacked_mappings():void
 		{
 			var executeCount:uint = 0;
 			injector.map(Function, 'executeCallback').toValue(function():void
@@ -180,7 +180,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function one_shot_command_should_not_cause_infinite_loop_when_dispatching_to_self():void
+		public function test_one_shot_command_should_not_cause_infinite_loop_when_dispatching_to_self():void
 		{
 			injector.map(Function, 'executeCallback').toValue(function():void
 			{
@@ -192,7 +192,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function commands_should_not_stomp_over_event_mappings():void
+		public function test_commands_should_not_stomp_over_event_mappings():void
 		{
 			injector.map(Function, 'executeCallback').toValue(function():void
 			{
@@ -205,7 +205,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function commands_are_executed_in_order():void
+		public function test_commands_are_executed_in_order():void
 		{
 			var commands:Array = [];
 			injector.map(Function, 'executeCallback').toValue(function(command:Object):void
@@ -219,13 +219,13 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function hooks_are_called():void
+		public function test_hooks_are_called():void
 		{
 			assertThat(hookCallCount(SelfReportingCallbackHook, SelfReportingCallbackHook), equalTo(2));
 		}
 
 		[Test]
-		public function command_is_injected_into_hook():void
+		public function test_command_is_injected_into_hook():void
 		{
 			var executedCommand:SelfReportingCallbackCommand = null;
 			var injectedCommand:SelfReportingCallbackCommand = null;
@@ -244,37 +244,37 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function command_executes_when_the_guard_allows():void
+		public function test_command_executes_when_the_guard_allows():void
 		{
 			assertThat(commandExecutionCountWithGuards(HappyGuard), equalTo(1));
 		}
 
 		[Test]
-		public function command_executes_when_all_guards_allow():void
+		public function test_command_executes_when_all_guards_allow():void
 		{
 			assertThat(commandExecutionCountWithGuards(HappyGuard, HappyGuard), equalTo(1));
 		}
 
 		[Test]
-		public function command_does_not_execute_when_the_guard_denies():void
+		public function test_command_does_not_execute_when_the_guard_denies():void
 		{
 			assertThat(commandExecutionCountWithGuards(GrumpyGuard), equalTo(0));
 		}
 
 		[Test]
-		public function command_does_not_execute_when_any_guards_denies():void
+		public function test_command_does_not_execute_when_any_guards_denies():void
 		{
 			assertThat(commandExecutionCountWithGuards(HappyGuard, GrumpyGuard), equalTo(0));
 		}
 
 		[Test]
-		public function command_does_not_execute_when_all_guards_deny():void
+		public function test_command_does_not_execute_when_all_guards_deny():void
 		{
 			assertThat(commandExecutionCountWithGuards(GrumpyGuard, GrumpyGuard), equalTo(0));
 		}
 
 		[Test]
-		public function event_is_injected_into_guard():void
+		public function test_event_is_injected_into_guard():void
 		{
 			var injectedEvent:Event = null;
 			injector.map(Function, 'approveCallback').toValue(function(guard:EventInjectedCallbackGuard):void
@@ -291,7 +291,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function cascading_events_do_not_throw_unmap_errors():void
+		public function test_cascading_events_do_not_throw_unmap_errors():void
 		{
 			injector.map(IEventDispatcher).toValue(dispatcher);
 			injector.map(IEventCommandMap).toValue(eventCommandMap);
@@ -302,7 +302,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function execution_sequence_is_guard_command_guard_command_for_multiple_mappings_to_same_event():void
+		public function test_execution_sequence_is_guard_command_guard_command_for_multiple_mappings_to_same_event():void
 		{
 			eventCommandMap.map(SupportEvent.TYPE1).toCommand(CommandA).withGuards(GuardA);
 			eventCommandMap.map(SupportEvent.TYPE1).toCommand(CommandB).withGuards(GuardB);
@@ -312,7 +312,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function previously_constructed_command_does_not_slip_through_the_loop():void
+		public function test_previously_constructed_command_does_not_slip_through_the_loop():void
 		{
 			eventCommandMap.map(SupportEvent.TYPE1).toCommand(CommandA).withGuards(HappyGuard);
 			eventCommandMap.map(SupportEvent.TYPE1).toCommand(CommandB).withGuards(GrumpyGuard);

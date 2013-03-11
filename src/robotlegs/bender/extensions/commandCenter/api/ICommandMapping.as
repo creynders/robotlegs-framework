@@ -34,12 +34,24 @@ package robotlegs.bender.extensions.commandCenter.api
 		 */
 		function get fireOnce():Boolean;
         
+        /**
+         * TODO: document
+         */
         function setCommandClass( commandClass : Class )  :ICommandMapping;
         
+        /**
+         * TODO: document 
+         */
         function addGuards( ...guards ) : ICommandMapping;
         
+        /**
+         * TODO: document
+         */
         function addHooks( ...hooks ) : ICommandMapping;
         
+        /**
+         * TODO: document
+         */
         function setFireOnce( value : Boolean ) : ICommandMapping;
 
 	}

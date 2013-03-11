@@ -49,7 +49,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		[Test(expects="Error")]
-		public function mapping_nonCommandClass_throws_error():void
+		public function test_mapping_nonCommandClass_throws_error():void
 		{
 			// NOTE: we do this here, not in the CommandCenter itself
 			// Some triggers don't require an execute() method
@@ -57,14 +57,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function adding_the_first_mapping_adds_a_listener():void
+		public function test_adding_the_first_mapping_adds_a_listener():void
 		{
 			trigger.addMapping(new CommandMapping(NullCommand));
 			assertThat(dispatcher, received().method('addEventListener').once());
 		}
 
 		[Test]
-		public function adding_another_mapping_does_not_add_listener_again():void
+		public function test_adding_another_mapping_does_not_add_listener_again():void
 		{
 			trigger.addMapping(new CommandMapping(NullCommand));
 			trigger.addMapping(new CommandMapping(NullCommand));
@@ -72,7 +72,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function removing_the_last_mapping_removes_the_listener():void
+		public function test_removing_the_last_mapping_removes_the_listener():void
 		{
 			const mapping:CommandMapping = new CommandMapping(NullCommand);
 			trigger.addMapping(mapping);
@@ -81,7 +81,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function removing_a_mapping_does_NOT_remove_the_listener_when_other_mappings_still_exist():void
+		public function test_removing_a_mapping_does_NOT_remove_the_listener_when_other_mappings_still_exist():void
 		{
 			const mapping:CommandMapping = new CommandMapping(NullCommand);
 			trigger.addMapping(mapping);
