@@ -12,6 +12,11 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
      * @author creynder
      */
     public class PriorityEventCommandTrigger implements ICommandTrigger{
+        
+        /*============================================================================*/
+        /* Constructor                                                                */
+        /*============================================================================*/
+        
         public function PriorityEventCommandTrigger(			injector:Injector,
                                                                 dispatcher:IEventDispatcher,
                                                                 type:String,
@@ -19,6 +24,11 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
 
         {
         }
+        
+        /*============================================================================*/
+        /* Public Functions                                                           */
+        /*============================================================================*/
+        
         
         public function addMapping(mapping:ICommandMapping):void
         {

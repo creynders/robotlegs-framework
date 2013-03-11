@@ -11,13 +11,25 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
      */
     public class PriorityEventCommandMapping implements IPriorityEventCommandMapping{
         
+        /*============================================================================*/
+        /* Private Properties                                                         */
+        /*============================================================================*/
+        
         private var _baseMapping : CommandMapping;
         private var _priority : int = 0;
+        
+        /*============================================================================*/
+        /* Constructor                                                                */
+        /*============================================================================*/
         
         public function PriorityEventCommandMapping( commandClass : Class )
         {
             _baseMapping = new CommandMapping( commandClass );
         }
+        
+        /*============================================================================*/
+        /* Public Functions                                                           */
+        /*============================================================================*/
         
         public function addGuards(...guards):ICommandMapping
         {

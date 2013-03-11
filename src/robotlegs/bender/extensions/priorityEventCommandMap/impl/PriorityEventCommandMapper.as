@@ -11,15 +11,30 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
      * @author creynder
      */
     public class PriorityEventCommandMapper implements IPriorityEventCommandMapper, IPriorityEventCommandMappingConfig{
+        
+        /*============================================================================*/
+        /* Private Functions                                                          */
+        /*============================================================================*/
+        
         private var _baseMapper:CommandMapper;
+        
+        private function get mapping():IPriorityEventCommandMapping{
+            return _baseMapper.mapping as IPriorityEventCommandMapping;
+        }
+        
+        /*============================================================================*/
+        /* Constructor                                                                */
+        /*============================================================================*/
+        
         public function PriorityEventCommandMapper( trigger : ICommandTrigger, mappingFactory : ICommandMappingFactory )
         {
             _baseMapper = new CommandMapper( trigger, mappingFactory );
         }
         
-        private function get mapping():IPriorityEventCommandMapping{
-            return _baseMapper.mapping as IPriorityEventCommandMapping;
-        }
+        /*============================================================================*/
+        /* Public Functions                                                           */
+        /*============================================================================*/
+        
         
         public function toCommand(commandClass:Class):IPriorityEventCommandMappingConfig{
             _baseMapper.toCommand( commandClass );
