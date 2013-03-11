@@ -17,8 +17,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
+	import robotlegs.bender.extensions.commandCenter.impl.NullCommandUnmapper;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 
 	/**
@@ -31,7 +33,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _injector:Injector;
+        private const NULL_UNMAPPER:ICommandUnmapper = new NullCommandUnmapper();
+        
+        private var _injector:Injector;
 
 		private var _dispatcher:IEventDispatcher;
 
@@ -47,11 +51,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function EventCommandMap(
 			injector:Injector,
 			dispatcher:IEventDispatcher,
-			commandCenter:ICommandCenter)
+			commandCenter:ICommandCenter = null)
 		{
 			_injector = injector;
 			_dispatcher = dispatcher;
-			_commandCenter = commandCenter;
+			_commandCenter = commandCenter || new CommandCenter();
 		}
 
 		/*============================================================================*/
@@ -77,28 +81,36 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function unmap(type:String, eventClass:Class = null):ICommandUnmapper
 		{
-            return null;
+            var key : String = getKey( type, eventClass );
+            var trigger : ICommandTrigger = _commandCenter.getTrigger( key );
+            var unmapper : ICommandUnmapper;
+            if( trigger ){
+                unmapper = createMapper( trigger );
+            }else{
+                unmapper = NULL_UNMAPPER;
+            }
+            return unmapper;
 		}
 
+        public function createMapping( commandClass : Class ) : ICommandMapping{
+            return new CommandMapping( commandClass );
+        }
+        
 		/*============================================================================*/
 		/* Protected Functions                                                        */
 		/*============================================================================*/
 
-        public function createTrigger(type:String, eventClass:Class = null):ICommandTrigger
+        protected function createTrigger(type:String, eventClass:Class = null):ICommandTrigger
 		{
             var trigger : EventCommandTrigger = new EventCommandTrigger(_injector, _dispatcher, type, eventClass);
             return trigger;
 		}
 
-        public function createMapper( trigger : ICommandTrigger ):ICommandMapper
+        protected function createMapper( trigger : ICommandTrigger ):CommandMapper
         {
             return new CommandMapper( trigger, this );
         }
         
-        
-        public function createMapping( commandClass : Class ) : ICommandMapping{
-            return new CommandMapping( commandClass );
-        }
         
         /*============================================================================*/
         /* Private Functions                                                          */

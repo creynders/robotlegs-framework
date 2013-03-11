@@ -10,6 +10,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
+	import org.hamcrest.object.nullValue;
+	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
@@ -49,32 +51,29 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function map_creates_mapper():void
+		public function map_stores_trigger():void
 		{
-            //TODO:
-			//assertThat(commandCenter.map(trigger), instanceOf(ICommandMapper));
+            commandCenter.map( trigger, this );
+            assertThat( commandCenter.getTrigger( this ), equalTo( trigger ) );
 		}
 
 		[Test]
-		public function map_to_identical_trigger_returns_existing_mapper():void
+		public function unmap_removes_trigger():void
 		{
-            //TODO:
-//			const mapper:ICommandMapper = commandCenter.map(trigger);
-//			assertThat(commandCenter.map(trigger), equalTo(mapper));
+            commandCenter.map( trigger, this );
+            commandCenter.unmap( this );
+            assertThat( commandCenter.getTrigger( this ), nullValue() );
 		}
-
-		[Test]
-		public function unmap_returns_unmapper():void
-		{
+        
+        [Test]
+        public function test_map_behaviour_when_key_already_used() : void{
             // TODO:
-//			const mapper:ICommandMapper = commandCenter.map(trigger);
-//			assertThat(commandCenter.unmap(trigger), equalTo(mapper));
-		}
+        }
+        
+        [Test]
+        public function test_unmap_when_key_not_found() : void{
+            // TODO:
+        }
 
-		[Test]
-		public function unmap_politely_returns_NullUnmapper():void
-		{
-			assertThat(commandCenter.unmap(trigger), instanceOf(NullCommandUnmapper));
-		}
 	}
 }

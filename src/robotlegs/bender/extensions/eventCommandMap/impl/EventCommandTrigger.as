@@ -83,6 +83,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
             delete _mappingsByCommandClass[ mapping.commandClass ];
 			_mappingsList.remove(mapping);
 			_mappingsList.head || removeListener();
+            //TODO: determine whether to unmap trigger from commandcenter when mappings.length == 0
 		}
 
         /**

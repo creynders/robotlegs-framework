@@ -48,7 +48,7 @@ package robotlegs.bender.extensions
 
 		public var mediatorMapExtension:MediatorMapExtensionTestSuite;
 
-		public var messageCommandMapExtension:MessageCommandMapExtensionTestSuite;
+		//public var messageCommandMapExtension:MessageCommandMapExtensionTestSuite;
 
 		public var messageDispatcherExtension:MessageDispatcherExtensionTestSuite;
 

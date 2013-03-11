@@ -51,6 +51,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function map(trigger:ICommandTrigger, key : *):void
 		{
+            //TODO: determine what to do if already exists
             _triggersByKey[ key ] = trigger;
 		}
 
@@ -59,9 +60,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function unmap(key:*):void
 		{
+            //TOOD: determine what to do when not found
 			delete _triggersByKey[ key ];
 		}
         
+        /**
+         * @inheritDoc
+         */
         public function getTrigger(key:*):ICommandTrigger
         {
             return _triggersByKey[ key ];

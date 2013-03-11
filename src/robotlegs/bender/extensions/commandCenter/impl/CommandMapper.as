@@ -9,6 +9,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
@@ -82,7 +83,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function fromAll():void
 		{
-			for each (var mapping:ICommandMapping in _trigger.getMappings() )
+            var mappings : ICommandMappingIterator = _trigger.getMappings();
+            for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
 			{
 				deleteMapping(mapping);
 			}
@@ -124,13 +126,13 @@ package robotlegs.bender.extensions.commandCenter.impl
         
         public function withGuards(...guards):ICommandMappingConfig
         {
-            _mapping.addGuards( guards );
+            _mapping.addGuards.apply( null, guards );
             return this;
         }
         
         public function withHooks(...hooks):ICommandMappingConfig
         {
-            _mapping.addHooks( hooks );
+            _mapping.addHooks.apply( null, hooks );
             return this;
         }
         

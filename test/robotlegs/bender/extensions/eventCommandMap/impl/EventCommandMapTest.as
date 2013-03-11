@@ -9,12 +9,15 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	
 	import org.hamcrest.assertThat;
 	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 	import org.swiftsuspenders.Injector;
+	
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
@@ -50,13 +53,13 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			assertThat(eventCommandMap.map(SupportEvent.TYPE1, SupportEvent), instanceOf(ICommandMapper));
 		}
+        
+        [Test]
+        public function map_returns_new_mapper_when_identical_type_and_event() : void{
+            mapper = eventCommandMap.map(SupportEvent.TYPE1, SupportEvent);
+            assertThat(eventCommandMap.map(SupportEvent.TYPE1, SupportEvent), not(equalTo(mapper)));
+        }
 
-		[Test]
-		public function map_to_identical_Type_and_Event_returns_same_mapper():void
-		{
-			mapper = eventCommandMap.map(SupportEvent.TYPE1, SupportEvent);
-			assertThat(eventCommandMap.map(SupportEvent.TYPE1, SupportEvent), equalTo(mapper));
-		}
 
 		[Test]
 		public function map_to_identical_Type_but_different_Event_returns_different_mapper():void
@@ -73,10 +76,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function unmap_returns_mapper():void
+		public function unmap_returns_unmapper():void
 		{
 			mapper = eventCommandMap.map(SupportEvent.TYPE1, SupportEvent);
-			assertThat(eventCommandMap.unmap(SupportEvent.TYPE1, SupportEvent), equalTo(mapper));
+			assertThat(mapper, instanceOf( ICommandUnmapper ) );
 		}
 
 		[Test]
