@@ -25,6 +25,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         private var _currentNode : CommandMapping;
 
         private var _headNode:CommandMapping;
+        
         private var _tailNode:CommandMapping;
         
 		/*============================================================================*/

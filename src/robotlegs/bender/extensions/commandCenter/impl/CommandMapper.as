@@ -10,12 +10,10 @@ package robotlegs.bender.extensions.commandCenter.impl
      * @author creynder
      */
     public class CommandMapper{
-        /**
-         * @private
-         */
-        public function get mapping() : ICommandMapping{
-            return _mapping;
-        }
+
+        /*============================================================================*/
+        /* Private Properties                                                         */
+        /*============================================================================*/
         
         private var _trigger:ICommandTrigger;
         
@@ -23,8 +21,13 @@ package robotlegs.bender.extensions.commandCenter.impl
         
         private var _factory : ICommandMappingFactory;
         
-        private var _mapping : ICommandMapping;
+        /*============================================================================*/
+        /* Constructor                                                                */
+        /*============================================================================*/
         
+        /**
+         * @private
+         */
         public function CommandMapper(trigger:ICommandTrigger, factory : ICommandMappingFactory, logger:ILogger = null)
         {
             _trigger = trigger;
@@ -32,21 +35,34 @@ package robotlegs.bender.extensions.commandCenter.impl
             _logger = logger;
         }
         
-        public function mapCommand( commandClass : Class ) : void{
+        /*============================================================================*/
+        /* Public Functions                                                           */
+        /*============================================================================*/
+      
+        /**
+         * TODO: document
+         */
+        public function mapCommand( commandClass : Class ) : ICommandMapping{
             var mapping : ICommandMapping = _trigger.getMappingFor( commandClass );
             if( mapping ){
                 overwriteMapping( mapping )
             }else{
                 mapping = createMapping( commandClass );
             }
-            _mapping = mapping;
+            return mapping;
         }
         
+        /**
+         * TODO: document
+         */
         public function unmapCommand( commandClass : Class ) : void{
             const mapping:ICommandMapping = _trigger.getMappingFor( commandClass );
             mapping && deleteMapping(mapping);
         }
         
+        /**
+         * TODO: document
+         */
         public function unmapAll() : void{
             var mappings : ICommandMappingCollection = _trigger.getMappings();
             for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
@@ -55,7 +71,9 @@ package robotlegs.bender.extensions.commandCenter.impl
             }
         }
         
-        
+        /**
+         * TODO: document
+         */
         protected function createMapping(commandClass:Class):ICommandMapping
         {
             var mapping : ICommandMapping = _factory.createMapping( commandClass );
@@ -64,12 +82,18 @@ package robotlegs.bender.extensions.commandCenter.impl
             return mapping;
         }
         
+        /**
+         * TODO: document
+         */
         protected function deleteMapping(mapping:ICommandMapping):void
         {
             _trigger.removeMapping(mapping);
             _logger && _logger.debug('{0} unmapped from {1}', [_trigger, mapping]);
         }
         
+        /**
+         * TODO: document
+         */
         protected function overwriteMapping(mapping:ICommandMapping):ICommandMapping
         {
             _logger && _logger.warn('{0} already mapped to {1}\n' +
