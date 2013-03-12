@@ -14,33 +14,27 @@ package robotlegs.bender.extensions.commandCenter.support
             super(trigger, injector);
         }
         
-        public var beforeExecutingCallback : Function;
-        public var beforeGuardingCallback : Function;
-        public var beforeHookingCallback : Function;
-        public var whenExecutedCallback : Function;
+        public var unmapPayloadCallback : Function;
+        public var mapPayloadCallback : Function;
+        public var whenCommandExecutedCallback : Function;
         
         public function execute() : void{
             executeCommands( _trigger.getMappings() );
         }
         
-        override protected function beforeExecuting():void
+        override protected function unmapPayload():void
         {
-            beforeExecutingCallback && beforeExecutingCallback();
+            unmapPayloadCallback && unmapPayloadCallback();
         }
         
-        override protected function beforeGuarding():void
+        override protected function mapPayload():void
         {
-            beforeGuardingCallback && beforeGuardingCallback();
+            mapPayloadCallback && mapPayloadCallback();
         }
         
-        override protected function beforeHooking():void
+        override protected function whenCommandExecuted():void
         {
-            beforeHookingCallback && beforeHookingCallback();
-        }
-        
-        override protected function whenExecuted():void
-        {
-            whenExecutedCallback && whenExecutedCallback();
+            whenCommandExecutedCallback && whenCommandExecutedCallback();
         }
         
         

@@ -76,7 +76,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         /**
          * @inheritDoc
          */
-        override protected function beforeGuarding():void
+        override protected function mapPayload():void
         {
             _injector.map(Event).toValue(_event);
             if (_eventConstructor != Event){
@@ -87,7 +87,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         /**
          * @inheritDoc
          */
-        override protected function beforeExecuting():void
+        override protected function unmapPayload():void
         {
             _injector.unmap(Event);
             if (_eventConstructor != Event){

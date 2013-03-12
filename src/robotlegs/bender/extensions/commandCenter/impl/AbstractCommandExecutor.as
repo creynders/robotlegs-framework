@@ -46,45 +46,38 @@ package robotlegs.bender.extensions.commandCenter.impl
         /**
          * @inheritDoc
          */
-        public function executeCommands( mappings : ICommandMappingCollection ):Boolean{
+        public function executeCommands( mappings : ICommandMappingCollection ):void{
             for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
             {
-                var command:Object = null;
-                beforeGuarding();
-                if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector) )
-                {
-                    
-                    mapping.fireOnce && _trigger.removeMapping(mapping);
-                    const commandClass:Class = mapping.commandClass;
-                    command = _injector.instantiateUnmapped(commandClass);
-                    beforeHooking();
-                    if (mapping.hooks.length > 0)
-                    {
-                        _injector.map(commandClass).toValue(command);
-                        applyHooks(mapping.hooks, _injector);
-                        _injector.unmap(commandClass);
-                    }
-                }
-                beforeExecuting();
-                if (command)
-                {
-                    var isSynced : Boolean = executeCommand( command );
-                    whenExecuted();
-                    if( ! isSynced ){
-                        return false;
-                    }
-                }
+                executeCommand( mapping );
             }
-            
-            return true;
         }
         
         /**
          * @inheritDoc
          */
-        public function executeCommand( command : Object ) : Boolean{
-            command.execute();
-            return true;
+        public function executeCommand( mapping : ICommandMapping ) : void{
+            var command:Object = null;
+            mapPayload();
+            if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector) )
+            {
+                
+                mapping.fireOnce && _trigger.removeMapping(mapping);
+                const commandClass:Class = mapping.commandClass;
+                command = _injector.instantiateUnmapped(commandClass);
+                if (mapping.hooks.length > 0)
+                {
+                    _injector.map(commandClass).toValue(command);
+                    applyHooks(mapping.hooks, _injector);
+                    _injector.unmap(commandClass);
+                }
+            }
+            unmapPayload();
+            if (command)
+            {
+                command.execute();
+                whenCommandExecuted();
+            }
         }
         
        /*============================================================================*/
@@ -92,30 +85,23 @@ package robotlegs.bender.extensions.commandCenter.impl
         /*============================================================================*/
         
         /**
-         * @inheritDoc
+         * TODO: document
          */
-        protected function beforeGuarding():void
+        protected function mapPayload():void
         {
         }
         
         /**
-         * @inheritDoc
+         * TODO: document
          */
-        protected function beforeHooking():void
+        protected function unmapPayload():void
         {
         }
         
         /**
-         * @inheritDoc
+         * TODO: document
          */
-        protected function beforeExecuting():void
-        {
-        }
-        
-        /**
-         * @inheritDoc
-         */
-        protected function whenExecuted():void
+        protected function whenCommandExecuted():void
         {
         }
         
