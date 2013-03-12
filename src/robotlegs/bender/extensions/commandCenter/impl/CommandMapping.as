@@ -19,33 +19,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-        private var _nextNode : CommandMapping;
-        
-        /**
-         * @private
-         */
-        public function get nextNode():CommandMapping{
-            return _nextNode;
-        }
-        
-        public function set nextNode(value:CommandMapping):void{
-            _nextNode = value;
-        }
-        
-        private var _previousNode : CommandMapping;
-        
-        /**
-         * @private
-         */
-        public function get previousNode():CommandMapping{
-            return _previousNode;
-        }
-        
-        public function set previousNode(value:CommandMapping):void{
-            _previousNode = value;
-        }
-        
-        
 		private var _commandClass:Class;
 
 		/**
