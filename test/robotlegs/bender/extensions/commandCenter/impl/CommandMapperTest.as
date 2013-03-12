@@ -48,7 +48,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var mapper:CommandMapper;
+		private var mapper:CommandMappingBuilder;
 
 		/*============================================================================*/
 		/* Test Setup and Teardown                                                    */
@@ -57,7 +57,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Before]
 		public function before():void
 		{
-			mapper = new CommandMapper(trigger, componentFactory, logger);
+			mapper = new CommandMappingBuilder(trigger, componentFactory, logger);
 		}
 
 		/*============================================================================*/

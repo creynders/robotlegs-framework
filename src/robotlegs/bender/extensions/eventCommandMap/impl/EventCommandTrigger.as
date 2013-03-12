@@ -12,9 +12,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	
 	import org.swiftsuspenders.Injector;
 	
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass;
@@ -89,7 +88,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
         /**
          * @inheritDoc
          */
-        public function getMappings():ICommandMappingIterator
+        public function getMappings():ICommandMappingCollection
         {
             return _mappingsList;
         }

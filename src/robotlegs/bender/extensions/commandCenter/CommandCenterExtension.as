@@ -28,6 +28,7 @@ package robotlegs.bender.extensions.commandCenter
 		 */
 		public function extend(context:IContext):void
 		{
+            //TODO: remove or map as class, depending on creation policy TBD in clients
 			context.injector.map(ICommandCenter).toSingleton(CommandCenter);
 			// TODO: Investigate SwiftSuspenders circular dependency handling
 			// Place a [PostConstruct] tag above the logger setter

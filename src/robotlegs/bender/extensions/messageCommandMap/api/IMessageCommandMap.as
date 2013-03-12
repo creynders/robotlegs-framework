@@ -7,7 +7,7 @@
 
 package robotlegs.bender.extensions.messageCommandMap.api
 {
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 
 	/**
@@ -20,7 +20,7 @@ package robotlegs.bender.extensions.messageCommandMap.api
 		 * @param message The message
 		 * @return Command Mapper
 		 */
-		function map(message:Object):ICommandMapper;
+		function map(message:Object):ICommandMappingBuilder;
 
 		/**
 		 * Unmaps a mappings from a message based trigger

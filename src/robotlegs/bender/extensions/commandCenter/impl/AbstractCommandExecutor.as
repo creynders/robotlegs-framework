@@ -5,15 +5,18 @@ package robotlegs.bender.extensions.commandCenter.impl
      */
     import org.swiftsuspenders.Injector;
     
-    import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
-    import robotlegs.bender.extensions.commandCenter.api.ICommandMappingIterator;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.framework.impl.applyHooks;
     import robotlegs.bender.framework.impl.guardsApprove;
     
-    public class AbstractCommandExecutor implements ICommandExecutor{
+    /**
+     * 
+     * @author creynder
+     * 
+     */
+    public class AbstractCommandExecutor{
         
         /*============================================================================*/
         /* Protected Properties                                                       */
@@ -43,7 +46,7 @@ package robotlegs.bender.extensions.commandCenter.impl
         /**
          * @inheritDoc
          */
-        public function executeCommands( mappings : ICommandMappingIterator ):Boolean{
+        public function executeCommands( mappings : ICommandMappingCollection ):Boolean{
             for (var mapping:ICommandMapping = mappings.first(); mapping; mapping = mappings.next() )
             {
                 var command:Object = null;

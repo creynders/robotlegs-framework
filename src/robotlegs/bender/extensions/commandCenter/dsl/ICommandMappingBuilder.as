@@ -11,7 +11,7 @@ package robotlegs.bender.extensions.commandCenter.dsl
 	/**
 	 * Maps Commands to triggers
 	 */
-	public interface ICommandMapper
+	public interface ICommandMappingBuilder
 	{
 		/**
 		 * Creates a command mapping

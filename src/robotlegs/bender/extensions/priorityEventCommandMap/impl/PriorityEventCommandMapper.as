@@ -2,7 +2,7 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
 {
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
+    import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMapper;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMapping;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMappingConfig;
@@ -16,7 +16,7 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
         /* Private Functions                                                          */
         /*============================================================================*/
         
-        private var _baseMapper:CommandMapper;
+        private var _baseMapper:CommandMappingBuilder;
         
         private function get mapping():IPriorityEventCommandMapping{
             return _baseMapper.mapping as IPriorityEventCommandMapping;
@@ -28,7 +28,7 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
         
         public function PriorityEventCommandMapper( trigger : ICommandTrigger, mappingFactory : ICommandMappingFactory )
         {
-            _baseMapper = new CommandMapper( trigger, mappingFactory );
+            _baseMapper = new CommandMappingBuilder( trigger, mappingFactory );
         }
         
         /*============================================================================*/

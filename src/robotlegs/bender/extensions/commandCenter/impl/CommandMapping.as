@@ -8,7 +8,6 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
 
 	/**
 	 * @private
@@ -20,8 +19,34 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
+        private var _nextNode : CommandMapping;
+        
+        /**
+         * @private
+         */
+        public function get nextNode():CommandMapping{
+            return _nextNode;
+        }
+        
+        public function set nextNode(value:CommandMapping):void{
+            _nextNode = value;
+        }
+        
+        private var _previousNode : CommandMapping;
+        
+        /**
+         * @private
+         */
+        public function get previousNode():CommandMapping{
+            return _previousNode;
+        }
+        
+        public function set previousNode(value:CommandMapping):void{
+            _previousNode = value;
+        }
+        
+        
 		private var _commandClass:Class;
-
 
 		/**
 		 * @inheritDoc
@@ -82,18 +107,18 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function addGuards(... guards):ICommandMapping
+		public function addGuards( ...guards ):ICommandMapping
 		{
-			_guards = _guards.concat.apply(null, guards);
+            _guards = _guards.concat.apply(null, guards);
             return this;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function addHooks(... hooks):ICommandMapping
+		public function addHooks( ...hooks ):ICommandMapping
 		{
-			_hooks = _hooks.concat.apply(null, hooks);
+			_hooks = _hooks.concat.apply( null, hooks);
             return this;
 		}
 

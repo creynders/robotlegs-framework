@@ -7,7 +7,7 @@
 
 package robotlegs.bender.extensions.commandCenter.api
 {
-    import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
+    
 
 	/**
 	 * Represents a command mapping

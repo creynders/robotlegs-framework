@@ -12,7 +12,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.messageCommandMap.api.IMessageCommandMap;
 	import robotlegs.bender.framework.impl.MessageDispatcher;
@@ -54,7 +54,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		[Test]
 		public function map_creates_mapper():void
 		{
-			assertThat(messageCommandMap.map(message), instanceOf(ICommandMapper));
+			assertThat(messageCommandMap.map(message), instanceOf(ICommandMappingBuilder));
 		}
 
 		[Test]

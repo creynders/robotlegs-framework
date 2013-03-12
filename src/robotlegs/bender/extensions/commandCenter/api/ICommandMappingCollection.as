@@ -15,5 +15,20 @@ package robotlegs.bender.extensions.commandCenter.api
          */
         function remove( mapping:ICommandMapping):void;
         
+        /**
+         * TODO: document
+         */
+        function first() : ICommandMapping;
+        
+        /**
+         * TODO: document
+         */
+        function next() : ICommandMapping;
+        
+        /**
+         * TODO: document
+         */
+        function hasNext() : Boolean;
+        
     }
 }

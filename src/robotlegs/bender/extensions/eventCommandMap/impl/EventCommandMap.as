@@ -15,10 +15,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.commandCenter.impl.NullCommandUnmapper;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
@@ -65,7 +65,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function map(type:String, eventClass:Class = null):ICommandMapper
+		public function map(type:String, eventClass:Class = null):ICommandMappingBuilder
 		{
             var key : String = getKey( type, eventClass );
             var trigger : ICommandTrigger = _commandCenter.getTrigger( key );
@@ -73,7 +73,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
                 trigger = createTrigger( type, eventClass );
                 _commandCenter.map( trigger, key );
             }
-            return createMapper( trigger );
+            return createBuilder( trigger );
 		}
 
 		/**
@@ -85,7 +85,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
             var trigger : ICommandTrigger = _commandCenter.getTrigger( key );
             var unmapper : ICommandUnmapper;
             if( trigger ){
-                unmapper = createMapper( trigger );
+                unmapper = createBuilder( trigger );
             }else{
                 unmapper = NULL_UNMAPPER;
             }
@@ -109,9 +109,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
             return trigger;
 		}
 
-        protected function createMapper( trigger : ICommandTrigger ):CommandMapper
+        protected function createBuilder( trigger : ICommandTrigger ):CommandMappingBuilder
         {
-            return new CommandMapper( trigger, this );
+            return new CommandMappingBuilder( trigger, this );
         }
         
         

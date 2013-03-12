@@ -28,7 +28,7 @@ package robotlegs.bender.extensions.commandCenter.api
         /**
         * TODO: document
         */
-        function getMappings() : ICommandMappingIterator;
+        function getMappings() : ICommandMappingCollection;
         
         /**
          * TODO: document

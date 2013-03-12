@@ -1,6 +1,6 @@
 package robotlegs.bender.extensions.commandCenter.api
 {
-    import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
+    import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
 
     /**
      * @author creynder

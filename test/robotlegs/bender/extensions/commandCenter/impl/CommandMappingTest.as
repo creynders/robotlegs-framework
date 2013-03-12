@@ -45,32 +45,32 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			assertThat(mapping.commandClass, equalTo(commandClass));
 		}
-
-		[Test]
-		public function test_mapping_stores_Guards():void
-		{
-			mapping.addGuards(1, 2, 3);
-			assertThat(mapping.guards, array(1, 2, 3));
-		}
+        
+        [Test]
+        public function test_mapping_stores_Guards():void
+        {
+            mapping.addGuards( 1, 2, 3 );
+            assertThat(mapping.guards, array(1, 2, 3));
+        }
 
 		[Test]
 		public function test_mapping_stores_GuardsArray():void
 		{
-			mapping.addGuards([1, 2, 3]);
+			mapping.addGuards( [1, 2, 3 ] );
 			assertThat(mapping.guards, array(1, 2, 3));
 		}
-
-		[Test]
-		public function test_mapping_stores_Hooks():void
-		{
-			mapping.addHooks(1, 2, 3);
-			assertThat(mapping.hooks, array(1, 2, 3));
-		}
+        
+        [Test]
+        public function test_mapping_stores_Hooks():void
+        {
+            mapping.addHooks( 1, 2, 3 );
+            assertThat(mapping.hooks, array(1, 2, 3));
+        }
 
 		[Test]
 		public function test_mapping_stores_HooksArray():void
 		{
-			mapping.addHooks([1, 2, 3]);
+			mapping.addHooks( [1, 2, 3] );
 			assertThat(mapping.hooks, array(1, 2, 3));
 		}
 
