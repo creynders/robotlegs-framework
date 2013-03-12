@@ -22,28 +22,38 @@ package robotlegs.bender.extensions.commandCenter.impl
         /* Private Properties                                                         */
         /*============================================================================*/
         
-        private var _currentNode : CommandMapping;
-
-        private var _headNode:CommandMapping;
+        private var _nodesByMappings : Dictionary = new Dictionary( false );
         
-        private var _tailNode:CommandMapping;
+        private var _currentNode : CommandMappingNode;
+
+        private var _headNode:CommandMappingNode;
+        
+        private var _tailNode:CommandMappingNode;
         
 		/*============================================================================*/
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
         /**
-         * @private
+         * TODO: document
          */
         public function get head() : ICommandMapping{
-            return _headNode;
+            var mapping : ICommandMapping;
+            if( _headNode ){
+                mapping = _headNode.mapping;
+            }
+            return mapping;
         }
         
         /**
-         * @private
+         * TODO: document
          */
         public function get tail() : ICommandMapping{
-            return _tailNode;
+            var mapping : ICommandMapping;
+            if( _tailNode ){
+                mapping = _tailNode.mapping;
+            }
+            return mapping;
         }
         
 		/*============================================================================*/
@@ -55,7 +65,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function add(mapping:ICommandMapping):void
 		{
-            var node : CommandMapping = mapping as CommandMapping;
+            var node : CommandMappingNode = new CommandMappingNode( mapping );
+            _nodesByMappings[ mapping ] = node;
 			if (_tailNode)
 			{
 				_tailNode.nextNode = node;
@@ -64,7 +75,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			else
 			{
-                var halo : CommandMapping = new CommandMapping( null );
+                var halo : CommandMappingNode = new CommandMappingNode();
                 halo.nextNode = _headNode = _tailNode = node;
                 _currentNode = halo;
 			}
@@ -75,7 +86,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function remove(mapping:ICommandMapping):void
 		{
-            var node : CommandMapping = mapping as CommandMapping;
+            var node : CommandMappingNode = _nodesByMappings[ mapping ];
 			if (node == _headNode)
 			{
 				_headNode = _headNode.nextNode;
@@ -92,6 +103,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			{
 				node.nextNode.previousNode = node.previousNode;
 			}
+            delete _nodesByMappings[ mapping ];
 		}
         
         /**
@@ -99,7 +111,12 @@ package robotlegs.bender.extensions.commandCenter.impl
          */
         public function first():ICommandMapping
         {
-            return _currentNode = _headNode;
+            var mapping : ICommandMapping;
+            if( _headNode ){
+                mapping = _headNode.mapping;
+                _currentNode = _headNode;
+            }
+            return mapping;
         }
 
         /**
@@ -107,7 +124,12 @@ package robotlegs.bender.extensions.commandCenter.impl
          */
         public function next():ICommandMapping
         {
-            return _currentNode &&= _currentNode.nextNode;
+            var mapping : ICommandMapping;
+            if( hasNext() ){
+                _currentNode = _currentNode.nextNode;
+                mapping = _currentNode.mapping;
+            }
+            return mapping;
         }
         
         /**
@@ -122,7 +144,13 @@ package robotlegs.bender.extensions.commandCenter.impl
          * @private
          */
         public function getNext( mapping : ICommandMapping ) : ICommandMapping{
-            return ( mapping as CommandMapping ).nextNode;
+            var next : ICommandMapping;
+            var node : CommandMappingNode = _nodesByMappings[ mapping ]
+            if( node && node.nextNode ){
+                next = node.nextNode.mapping;
+            }
+            
+            return next;
         }
         
         /**
@@ -130,7 +158,13 @@ package robotlegs.bender.extensions.commandCenter.impl
          * @private
          */
         public function getPrevious( mapping : ICommandMapping ) : ICommandMapping{
-            return ( mapping as CommandMapping ).previousNode;
+            var previous : ICommandMapping;
+            var node : CommandMappingNode = _nodesByMappings[ mapping ]
+            if( node && node.previousNode ){
+                previous = node.previousNode.mapping;
+            }
+            
+            return previous;
         }
         
 	}
