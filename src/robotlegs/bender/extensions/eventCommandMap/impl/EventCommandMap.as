@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
 // 
 //  NOTICE: You are permitted to use, modify, and distribute this file 
 //  in accordance with the terms of the license agreement accompanying it. 
@@ -8,9 +8,7 @@
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
-	
 	import org.swiftsuspenders.Injector;
-	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
@@ -18,8 +16,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
 	import robotlegs.bender.extensions.commandCenter.impl.NullCommandUnmapper;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 
@@ -33,9 +31,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Protected Properties                                                       */
 		/*============================================================================*/
 
-        protected const NULL_UNMAPPER:ICommandUnmapper = new NullCommandUnmapper();
-        
-        protected var _injector:Injector;
+		protected const NULL_UNMAPPER:ICommandUnmapper = new NullCommandUnmapper();
+
+		protected var _injector:Injector;
 
 		protected var _dispatcher:IEventDispatcher;
 
@@ -67,13 +65,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function map(type:String, eventClass:Class = null):ICommandMappingBuilder
 		{
-            var key : String = getKey( type, eventClass );
-            var trigger : ICommandTrigger = _commandCenter.getTrigger( key );
-            if( ! trigger ){
-                trigger = createTrigger( type, eventClass );
-                _commandCenter.map( trigger, key );
-            }
-            return createBuilder( trigger );
+			var key:String = getKey(type, eventClass);
+			var trigger:ICommandTrigger = _commandCenter.getTrigger(key);
+			if (!trigger)
+			{
+				trigger = createTrigger(type, eventClass);
+				_commandCenter.map(trigger, key);
+			}
+			return createBuilder(trigger);
 		}
 
 		/**
@@ -81,47 +80,49 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function unmap(type:String, eventClass:Class = null):ICommandUnmapper
 		{
-            var key : String = getKey( type, eventClass );
-            var trigger : ICommandTrigger = _commandCenter.getTrigger( key );
-            var unmapper : ICommandUnmapper;
-            if( trigger ){
-                unmapper = createBuilder( trigger );
-            }else{
-                unmapper = NULL_UNMAPPER;
-            }
-            return unmapper;
+			var key:String = getKey(type, eventClass);
+			var trigger:ICommandTrigger = _commandCenter.getTrigger(key);
+			var unmapper:ICommandUnmapper;
+			if (trigger)
+			{
+				unmapper = createBuilder(trigger);
+			}
+			else
+			{
+				unmapper = NULL_UNMAPPER;
+			}
+			return unmapper;
 		}
 
-        /**
-         * @inheritDoc
-         */
-        public function createMapping( commandClass : Class ) : ICommandMapping{
-            return new CommandMapping( commandClass );
-        }
-        
+		/**
+		 * @inheritDoc
+		 */
+		public function createMapping(commandClass:Class):ICommandMapping
+		{
+			return new CommandMapping(commandClass);
+		}
+
 		/*============================================================================*/
 		/* Protected Functions                                                        */
 		/*============================================================================*/
 
-        protected function createTrigger(type:String, eventClass:Class = null):ICommandTrigger
+		protected function createTrigger(type:String, eventClass:Class = null):ICommandTrigger
 		{
-            var trigger : EventCommandTrigger = new EventCommandTrigger(_injector, _dispatcher, type, eventClass);
-            return trigger;
+			return new EventCommandTrigger(_injector, _dispatcher, type, eventClass);
 		}
 
-        protected function createBuilder( trigger : ICommandTrigger ):CommandMappingBuilder
-        {
-            return new CommandMappingBuilder( trigger, this );
-        }
-        
-        
-        /*============================================================================*/
-        /* Private Functions                                                          */
-        /*============================================================================*/
-        
-        private function getKey( type:String, eventClass:Class = null ) : String{
-            return type + eventClass;
-        }
-        
+		protected function createBuilder(trigger:ICommandTrigger):CommandMappingBuilder
+		{
+			return new CommandMappingBuilder(trigger, this);
+		}
+
+		/*============================================================================*/
+		/* Private Functions                                                          */
+		/*============================================================================*/
+
+		private function getKey(type:String, eventClass:Class = null):String
+		{
+			return type + eventClass;
+		}
 	}
 }

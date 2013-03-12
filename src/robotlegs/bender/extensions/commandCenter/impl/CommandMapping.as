@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
 // 
 //  NOTICE: You are permitted to use, modify, and distribute this file 
 //  in accordance with the terms of the license agreement accompanying it. 
@@ -28,8 +28,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			return _commandClass;
 		}
-        
-        
+
 		private var _guards:Array = [];
 
 		/**
@@ -80,38 +79,38 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function addGuards( ...guards ):ICommandMapping
+		public function addGuards(... guards):ICommandMapping
 		{
-            _guards = _guards.concat.apply(null, guards);
-            return this;
+			_guards = _guards.concat.apply(null, guards);
+			return this;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function addHooks( ...hooks ):ICommandMapping
+		public function addHooks(... hooks):ICommandMapping
 		{
-			_hooks = _hooks.concat.apply( null, hooks);
-            return this;
+			_hooks = _hooks.concat.apply(null, hooks);
+			return this;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function setFireOnce( value : Boolean ) : ICommandMapping
+		public function setFireOnce(value:Boolean):ICommandMapping
 		{
 			_fireOnce = value;
-            return this;
+			return this;
 		}
-        
-        /**
-         * @inheritDoc
-         */
-        public function setCommandClass(value:Class):ICommandMapping{
-            _commandClass = value;
-            return this;
-        }
-        
+
+		/**
+		 * @inheritDoc
+		 */
+		public function setCommandClass(value:Class):ICommandMapping
+		{
+			_commandClass = value;
+			return this;
+		}
 
 		public function toString():String
 		{

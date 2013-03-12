@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
 // 
 //  NOTICE: You are permitted to use, modify, and distribute this file 
 //  in accordance with the terms of the license agreement accompanying it. 
@@ -9,9 +9,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-	
 	import org.swiftsuspenders.Injector;
-	
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -28,8 +26,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-        private const _mappingsByCommandClass : Dictionary = new Dictionary();
-        
+		private const _mappingsByCommandClass:Dictionary = new Dictionary();
+
 		private const _mappingsList:CommandMappingList = new CommandMappingList();
 
 		private var _dispatcher:IEventDispatcher;
@@ -56,7 +54,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			_dispatcher = dispatcher;
 			_type = type;
 			_eventClass = eventClass;
-            _executor = new EventCommandExecutor( this, injector, eventClass );
+			_executor = new EventCommandExecutor(this, injector, eventClass);
 		}
 
 		/*============================================================================*/
@@ -69,7 +67,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function addMapping(mapping:ICommandMapping):void
 		{
 			verifyCommandClass(mapping);
-            _mappingsByCommandClass[ mapping.commandClass ] = mapping;
+			_mappingsByCommandClass[mapping.commandClass] = mapping;
 			_mappingsList.head || addListener();
 			_mappingsList.add(mapping);
 		}
@@ -79,33 +77,32 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function removeMapping(mapping:ICommandMapping):void
 		{
-            delete _mappingsByCommandClass[ mapping.commandClass ];
+			delete _mappingsByCommandClass[mapping.commandClass];
 			_mappingsList.remove(mapping);
 			_mappingsList.head || removeListener();
-            //TODO: determine whether to unmap trigger from commandcenter when mappings.length == 0
+			//TODO: determine whether to unmap trigger from commandcenter when mappings.length == 0
 		}
 
-        /**
-         * @inheritDoc
-         */
-        public function getMappings():ICommandMappingCollection
-        {
-            return _mappingsList;
-        }
-        
-        /**
-         * @inheritDoc
-         */
-        public function getMappingFor(commandClass:Class):ICommandMapping
-        {
-            return _mappingsByCommandClass[ commandClass ];
-        }
-        
+		/**
+		 * @inheritDoc
+		 */
+		public function getMappings():ICommandMappingCollection
+		{
+			return _mappingsList;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function getMappingFor(commandClass:Class):ICommandMapping
+		{
+			return _mappingsByCommandClass[commandClass];
+		}
+
 		public function toString():String
 		{
 			return _eventClass + " with selector '" + _type + "'";
 		}
-        
 
 		/*============================================================================*/
 		/* Private Functions                                                          */
@@ -113,7 +110,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private function verifyCommandClass(mapping:ICommandMapping):void
 		{
-            robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass( mapping.commandClass );
+			robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass(mapping.commandClass);
 
 		}
 
@@ -126,7 +123,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			_dispatcher.removeEventListener(_type, _executor.execute);
 		}
-        
-    }
+	}
 }
 

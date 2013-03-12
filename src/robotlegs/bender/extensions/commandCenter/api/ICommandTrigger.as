@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
 // 
 //  NOTICE: You are permitted to use, modify, and distribute this file 
 //  in accordance with the terms of the license agreement accompanying it. 
@@ -24,15 +24,15 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * @param mapping The Command Mapping to remove
 		 */
 		function removeMapping(mapping:ICommandMapping):void;
-        
-        /**
-        * TODO: document
-        */
-        function getMappings() : ICommandMappingCollection;
-        
-        /**
-         * TODO: document
-         */
-        function getMappingFor( commandClass : Class ) : ICommandMapping;
+
+		/**
+		* TODO: document
+		*/
+		function getMappings():ICommandMappingCollection;
+
+		/**
+		 * TODO: document
+		 */
+		function getMappingFor(commandClass:Class):ICommandMapping;
 	}
 }

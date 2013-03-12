@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
 // 
 //  NOTICE: You are permitted to use, modify, and distribute this file 
 //  in accordance with the terms of the license agreement accompanying it. 
@@ -7,7 +7,6 @@
 
 package robotlegs.bender.extensions.commandCenter.api
 {
-    
 
 	/**
 	 * Represents a command mapping
@@ -33,26 +32,25 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * Unmaps a Command after a successful execution
 		 */
 		function get fireOnce():Boolean;
-        
-        /**
-         * TODO: document
-         */
-        function setCommandClass( commandClass : Class )  :ICommandMapping;
-        
-        /**
-         * TODO: document 
-         */
-        function addGuards( ...guards ) : ICommandMapping;
-        
-        /**
-         * TODO: document
-         */
-        function addHooks( ...hooks ) : ICommandMapping;
-        
-        /**
-         * TODO: document
-         */
-        function setFireOnce( value : Boolean ) : ICommandMapping;
 
+		/**
+		 * TODO: document
+		 */
+		function setCommandClass(commandClass:Class):ICommandMapping;
+
+		/**
+		 * TODO: document
+		 */
+		function addGuards(... guards):ICommandMapping;
+
+		/**
+		 * TODO: document
+		 */
+		function addHooks(... hooks):ICommandMapping;
+
+		/**
+		 * TODO: document
+		 */
+		function setFireOnce(value:Boolean):ICommandMapping;
 	}
 }
