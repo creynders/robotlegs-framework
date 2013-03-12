@@ -6,41 +6,35 @@ package robotlegs.bender.extensions.commandCenter.support
     import org.swiftsuspenders.Injector;
     
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
+    import robotlegs.bender.extensions.commandCenter.impl.AbstractCommandExecutor;
     
-    public class CallbackCommandExecutor extends CommandExecutor{
+    public class CallbackCommandExecutor extends AbstractCommandExecutor{
         public function CallbackCommandExecutor(trigger:ICommandTrigger, injector:Injector)
         {
             super(trigger, injector);
         }
         
-        public var beforeExecutingCallback : Function;
-        public var beforeGuardingCallback : Function;
-        public var beforeHookingCallback : Function;
-        public var whenExecutedCallback : Function;
+        public var unmapPayloadCallback : Function;
+        public var mapPayloadCallback : Function;
+        public var whenCommandExecutedCallback : Function;
         
         public function execute() : void{
             executeCommands( _trigger.getMappings() );
         }
         
-        override public function beforeExecuting():void
+        override protected function unmapPayload():void
         {
-            beforeExecutingCallback && beforeExecutingCallback();
+            unmapPayloadCallback && unmapPayloadCallback();
         }
         
-        override public function beforeGuarding():void
+        override protected function mapPayload():void
         {
-            beforeGuardingCallback && beforeGuardingCallback();
+            mapPayloadCallback && mapPayloadCallback();
         }
         
-        override public function beforeHooking():void
+        override protected function whenCommandExecuted():void
         {
-            beforeHookingCallback && beforeHookingCallback();
-        }
-        
-        override public function whenExecuted():void
-        {
-            whenExecutedCallback && whenExecutedCallback();
+            whenCommandExecutedCallback && whenCommandExecutedCallback();
         }
         
         

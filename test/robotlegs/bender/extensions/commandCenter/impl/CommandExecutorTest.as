@@ -160,9 +160,6 @@ package robotlegs.bender.extensions.commandCenter.impl
             var beforeGuarding : Function = function() : void{
                 reportingFunction( beforeGuarding );
             }
-            var beforeHooking : Function = function() : void{
-                reportingFunction( beforeHooking );
-            }
             var beforeExecuting : Function = function() : void{
                 reportingFunction( beforeExecuting );
             }
@@ -170,15 +167,13 @@ package robotlegs.bender.extensions.commandCenter.impl
                 reportingFunction( afterExecuting );
             }
             var executor : CallbackCommandExecutor = injector.getInstance( CallbackCommandExecutor );
-            executor.beforeGuardingCallback= beforeGuarding;
-            executor.beforeHookingCallback= beforeHooking;
-            executor.beforeExecutingCallback= beforeExecuting;
-            executor.whenExecutedCallback= afterExecuting;
+            executor.mapPayloadCallback= beforeGuarding;
+            executor.unmapPayloadCallback= beforeExecuting;
+            executor.whenCommandExecutedCallback= afterExecuting;
             executor.execute();
             const expectedOrder : Array = [ 
                 beforeGuarding, 
                 GuardA, 
-                beforeHooking, 
                 HookA, 
                 beforeExecuting, 
                 CommandA, 
