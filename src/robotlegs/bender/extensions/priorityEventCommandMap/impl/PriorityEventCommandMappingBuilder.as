@@ -43,13 +43,13 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
 
         public function withGuards(...guards):IPriorityEventCommandMappingConfig
         {
-            _mapping.withGuards.apply( null, guards );
+            _mapping.addGuards.apply( null, guards );
             return this;
         }
 
         public function withHooks(...hooks):IPriorityEventCommandMappingConfig
         {
-            _mapping.withHooks.apply( null, hooks );
+            _mapping.addHooks.apply( null, hooks );
             return this;
         }
 

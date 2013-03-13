@@ -31,27 +31,27 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
         /* Public Functions                                                           */
         /*============================================================================*/
 
-        public function withGuards(...guards):ICommandMapping
+        public function addGuards(...guards):ICommandMapping
         {
-            _baseMapping.withGuards( guards );
+            _baseMapping.addGuards( guards );
             return this;
         }
 
-        public function withHooks(...hooks):ICommandMapping
+        public function addHooks(...hooks):ICommandMapping
         {
-            _baseMapping.withHooks( hooks );
+            _baseMapping.addHooks( hooks );
             return this;
         }
 
-        public function toCommand(commandClass:Class):ICommandMapping
+        public function setCommandClass(commandClass:Class):ICommandMapping
         {
-            _baseMapping.toCommand( commandClass );
+            _baseMapping.setCommandClass( commandClass );
             return this;
         }
 
-        public function once(value:Boolean):ICommandMapping
+        public function setFireOnce(value:Boolean):ICommandMapping
         {
-            _baseMapping.once( value );
+            _baseMapping.setFireOnce( value );
             return this;
         }
 
