@@ -1,69 +1,63 @@
 package robotlegs.bender.extensions.priorityEventCommandMap.impl
 {
+    import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
+    import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
     import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
-    import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMapper;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMapping;
+    import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMappingBuilder;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMappingConfig;
+    import robotlegs.bender.framework.api.ILogger;
 
     /**
      * @author creynder
      */
-    public class PriorityEventCommandMapper implements IPriorityEventCommandMapper, IPriorityEventCommandMappingConfig{
-        
+    public class PriorityEventCommandMappingBuilder implements IPriorityEventCommandMappingBuilder, IPriorityEventCommandMappingConfig{
+
         /*============================================================================*/
         /* Private Functions                                                          */
         /*============================================================================*/
-        
-        private var _baseMapper:CommandMappingBuilder;
-        
-        private function get mapping():IPriorityEventCommandMapping{
-            return _baseMapper.mapping as IPriorityEventCommandMapping;
-        }
-        
+
+        private var _baseMapper:CommandMapper;
+		private var _mapping : IPriorityEventCommandMapping;
+
         /*============================================================================*/
         /* Constructor                                                                */
         /*============================================================================*/
-        
-        public function PriorityEventCommandMapper( trigger : ICommandTrigger, mappingFactory : ICommandMappingFactory )
+
+        public function PriorityEventCommandMappingBuilder( mapper : CommandMapper, logger : ILogger = null )
         {
-            _baseMapper = new CommandMappingBuilder( trigger, mappingFactory );
+			_baseMapper = mapper;
         }
-        
+
         /*============================================================================*/
         /* Public Functions                                                           */
         /*============================================================================*/
-        
-        
+
+
         public function toCommand(commandClass:Class):IPriorityEventCommandMappingConfig{
-            _baseMapper.toCommand( commandClass );
+            _mapping = ( _baseMapper.mapCommand( commandClass ) as IPriorityEventCommandMapping);
             return this;
         }
-        
-        public function once(value:Boolean=true):IPriorityEventCommandMappingConfig
-        {
-            _baseMapper.once( value );
-            return this;
-        }
-        
+
         public function withGuards(...guards):IPriorityEventCommandMappingConfig
         {
-            _baseMapper.withGuards( guards );
+            _mapping.withGuards.apply( null, guards );
             return this;
         }
-        
+
         public function withHooks(...hooks):IPriorityEventCommandMappingConfig
         {
-            _baseMapper.withHooks( hooks );
+            _mapping.withHooks.apply( null, hooks );
             return this;
         }
-        
+
         public function withPriority(priority:int=0):IPriorityEventCommandMappingConfig
         {
-            mapping.setPriority( priority );
+            _mapping.setPriority( priority );
             return this;
         }
-        
+
     }
 }
