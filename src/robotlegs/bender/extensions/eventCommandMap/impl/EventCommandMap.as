@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
@@ -49,11 +49,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function EventCommandMap(
 			injector:Injector,
 			dispatcher:IEventDispatcher,
-			commandCenter:ICommandCenter = null)
+			commandCenter:ICommandCenter)
 		{
 			_injector = injector;
 			_dispatcher = dispatcher;
-			_commandCenter = commandCenter || new CommandCenter();
+			_commandCenter = commandCenter;
 		}
 
 		/*============================================================================*/

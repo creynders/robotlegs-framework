@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter
@@ -28,8 +28,7 @@ package robotlegs.bender.extensions.commandCenter
 		 */
 		public function extend(context:IContext):void
 		{
-			//TODO: remove or map as class, depending on creation policy TBD in clients
-			context.injector.map(ICommandCenter).toSingleton(CommandCenter);
+			context.injector.map(ICommandCenter).toType(CommandCenter);
 			// TODO: Investigate SwiftSuspenders circular dependency handling
 			// Place a [PostConstruct] tag above the logger setter
 			// in CommandCenter to see what I mean
