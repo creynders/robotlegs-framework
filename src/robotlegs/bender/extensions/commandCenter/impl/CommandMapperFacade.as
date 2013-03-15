@@ -14,12 +14,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.framework.api.ILogger;
 
-	public class CommandMappingBuilder implements ICommandMappingBuilder, ICommandMappingConfig, ICommandUnmapper
+	public class CommandMapperFacade implements ICommandMapper, ICommandMappingConfig, ICommandUnmapper
 	{
 
 		/*============================================================================*/
@@ -37,7 +37,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function CommandMappingBuilder(trigger:ICommandTrigger, factory:ICommandMappingFactory, logger:ILogger = null)
+		public function CommandMapperFacade(trigger:ICommandTrigger, factory:ICommandMappingFactory, logger:ILogger = null)
 		{
 			_mapper = new CommandMapper(trigger, factory, logger);
 		}

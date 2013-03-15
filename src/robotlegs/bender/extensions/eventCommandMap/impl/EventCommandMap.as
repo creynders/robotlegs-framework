@@ -13,11 +13,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapperFacade;
 	import robotlegs.bender.extensions.commandCenter.impl.NullCommandUnmapper;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 
@@ -63,7 +63,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function map(type:String, eventClass:Class = null):ICommandMappingBuilder
+		public function map(type:String, eventClass:Class = null):ICommandMapper
 		{
 			var key:String = getKey(type, eventClass);
 			var trigger:ICommandTrigger = _commandCenter.getTrigger(key);
@@ -72,7 +72,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 				trigger = createTrigger(type, eventClass);
 				_commandCenter.map(trigger, key);
 			}
-			return createBuilder(trigger);
+			return createFacade(trigger);
 		}
 
 		/**
@@ -85,7 +85,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			var unmapper:ICommandUnmapper;
 			if (trigger)
 			{
-				unmapper = createBuilder(trigger);
+				unmapper = createFacade(trigger);
 			}
 			else
 			{
@@ -111,9 +111,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			return new EventCommandTrigger(_injector, _dispatcher, type, eventClass);
 		}
 
-		protected function createBuilder(trigger:ICommandTrigger):CommandMappingBuilder
+		protected function createFacade(trigger:ICommandTrigger):CommandMapperFacade
 		{
-			return new CommandMappingBuilder(trigger, this);
+			return new CommandMapperFacade(trigger, this);
 		}
 
 		/*============================================================================*/

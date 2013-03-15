@@ -4,7 +4,7 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
     import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
     import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
     import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
-    import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
+    import robotlegs.bender.extensions.commandCenter.impl.CommandMapperFacade;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMapping;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMappingBuilder;
     import robotlegs.bender.extensions.priorityEventCommandMap.api.IPriorityEventCommandMappingConfig;

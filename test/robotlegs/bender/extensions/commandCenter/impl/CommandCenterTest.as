@@ -13,7 +13,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import org.hamcrest.object.nullValue;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommandTrigger;
 
 	public class CommandCenterTest

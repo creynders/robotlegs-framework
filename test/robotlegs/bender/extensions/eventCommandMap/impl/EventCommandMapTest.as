@@ -14,7 +14,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
@@ -30,7 +30,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var eventCommandMap:IEventCommandMap;
 
-		private var mapper:ICommandMappingBuilder;
+		private var mapper:ICommandMapper;
 
 		/*============================================================================*/
 		/* Test Setup and Teardown                                                    */
@@ -49,7 +49,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		[Test]
 		public function test_map_creates_mapper():void
 		{
-			assertThat(eventCommandMap.map(SupportEvent.TYPE1, SupportEvent), instanceOf(ICommandMappingBuilder));
+			assertThat(eventCommandMap.map(SupportEvent.TYPE1, SupportEvent), instanceOf(ICommandMapper));
 		}
 
 		[Test]

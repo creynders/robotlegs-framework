@@ -15,9 +15,9 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingBuilder;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapperFacade;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.messageCommandMap.api.IMessageCommandMap;
 	import robotlegs.bender.framework.api.IMessageDispatcher;
@@ -64,7 +64,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function map(message:Object):ICommandMappingBuilder
+		public function map(message:Object):ICommandMapper
 		{
             var trigger : ICommandTrigger = _commandCenter.getTrigger( message );
             if( ! trigger ){
@@ -99,9 +99,9 @@ package robotlegs.bender.extensions.messageCommandMap.impl
         public function createMapping( commandClass : Class ) : ICommandMapping{
             return new CommandMapping( commandClass );
         }
-        public function createMapper( trigger : ICommandTrigger ):ICommandMappingBuilder
+        public function createMapper( trigger : ICommandTrigger ):ICommandMapper
         {
-            return new CommandMappingBuilder( trigger, this );
+            return new CommandMapperFacade( trigger, this );
         }
 	}
 }
