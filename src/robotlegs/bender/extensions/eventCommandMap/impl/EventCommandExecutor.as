@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
@@ -40,7 +40,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector:Injector,
 			eventClass:Class)
 		{
-			super(trigger, injector);
+			super(trigger, injector.createChildInjector() );
 			_eventClass = eventClass;
 		}
 
