@@ -1,20 +1,21 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
+
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass;
 
 	/**
 	 * @private
@@ -66,7 +67,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function addMapping(mapping:ICommandMapping):void
 		{
-			verifyCommandClass(mapping);
 			_mappingsByCommandClass[mapping.commandClass] = mapping;
 			_mappingsList.head || addListener();
 			_mappingsList.add(mapping);
@@ -107,12 +107,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
-
-		private function verifyCommandClass(mapping:ICommandMapping):void
-		{
-			robotlegs.bender.extensions.commandCenter.impl.verifyCommandClass(mapping.commandClass);
-
-		}
 
 		private function addListener():void
 		{
