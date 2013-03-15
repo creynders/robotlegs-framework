@@ -58,7 +58,7 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
 				_commandCenter.map(trigger, key);
 			}
 			var mapper : CommandMapper = createMapper( trigger );
-			return createBuilder(mapper);
+			return createFacade(mapper);
         }
 
         public function createMapping( commandClass :Class ):ICommandMapping
@@ -75,7 +75,7 @@ package robotlegs.bender.extensions.priorityEventCommandMap.impl
             return new PriorityEventCommandTrigger( _injector, _dispatcher, type, eventClass);
         }
 
-        private function createBuilder( mapper : CommandMapper ):PriorityEventCommandMappingBuilder
+        private function createFacade( mapper : CommandMapper ):PriorityEventCommandMappingBuilder
         {
             return new PriorityEventCommandMappingBuilder( mapper );
         }
