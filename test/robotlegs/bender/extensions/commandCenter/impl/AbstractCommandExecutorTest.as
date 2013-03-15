@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter.impl
@@ -10,10 +10,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
 	import mockolate.verify;
+
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.object.equalTo;
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
@@ -75,6 +77,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function test_self():void
 		{
 			assertThat(true, equalTo(true));
+		}
+
+		[Test]
+		public function test_command_without_execute_method_is_still_constructed():void
+		{
+			addMapping( CommandWithoutExecute );
+			instantiateAndExecute();
+			assertThat( reportedExecutions, array( [ CommandWithoutExecute ] ) );
 		}
 
 		[Test]
@@ -401,5 +411,25 @@ class CommandB
 	public function execute():void
 	{
 		reportingFunc && reportingFunc(CommandB);
+	}
+}
+class CommandWithoutExecute
+{
+
+	/*============================================================================*/
+	/* Public Properties                                                          */
+	/*============================================================================*/
+
+	[Inject(name="reportingFunction")]
+	public var reportingFunc:Function;
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	[PostConstruct]
+	public function init():void
+	{
+		reportingFunc(CommandWithoutExecute);
 	}
 }
