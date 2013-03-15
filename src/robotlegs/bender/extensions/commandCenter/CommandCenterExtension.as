@@ -29,13 +29,6 @@ package robotlegs.bender.extensions.commandCenter
 		public function extend(context:IContext):void
 		{
 			context.injector.map(ICommandCenter).toType(CommandCenter);
-			// TODO: Investigate SwiftSuspenders circular dependency handling
-			// Place a [PostConstruct] tag above the logger setter
-			// in CommandCenter to see what I mean
-			context.whenInitializing(function():void {
-				const commandCenter:CommandCenter = context.injector.getInstance(ICommandCenter);
-				commandCenter.logger = context.getLogger(commandCenter);
-			});
 		}
 	}
 }
