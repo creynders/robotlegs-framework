@@ -48,14 +48,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Tests                                                                      */
 		/*============================================================================*/
 
-		[Test(expects="Error")]
-		public function test_mapping_nonCommandClass_throws_error():void
-		{
-			// NOTE: we do this here, not in the CommandCenter itself
-			// Some triggers don't require an execute() method
-			trigger.addMapping(new CommandMapping(Object));
-		}
-
 		[Test]
 		public function test_adding_the_first_mapping_adds_a_listener():void
 		{

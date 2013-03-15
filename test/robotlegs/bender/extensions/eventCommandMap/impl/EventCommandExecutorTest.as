@@ -63,6 +63,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		[Test]
+		public function test_command_without_execute_method_is_still_constructed():void
+		{
+			eventCommandMap.map(SupportEvent.TYPE1).toCommand(CommandWithoutExecute);
+			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
+			assertThat(reportedExecutions, array(CommandWithoutExecute));
+		}
+
+		[Test]
 		public function test_command_executes_successfully():void
 		{
 			assertThat(commandExecutionCount(1), equalTo(1));
@@ -512,5 +520,26 @@ class CommandB
 	public function execute():void
 	{
 		reportingFunc && reportingFunc(CommandB);
+	}
+}
+
+class CommandWithoutExecute
+{
+
+	/*============================================================================*/
+	/* Public Properties                                                          */
+	/*============================================================================*/
+
+	[Inject(name="reportingFunction")]
+	public var reportingFunc:Function;
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	[PostConstruct]
+	public function init():void
+	{
+		reportingFunc(CommandWithoutExecute);
 	}
 }
