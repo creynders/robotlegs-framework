@@ -14,12 +14,19 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import robotlegs.bender.framework.api.ILogger;
 
 	/**
-	 * @author creynder
+	 * TODO: document
 	 */
 	public class CommandMapper
 	{
 
+		/*============================================================================*/
+		/* Public Properties                                                          */
+		/*============================================================================*/
+
 		private var _logger:ILogger;
+		/**
+		 * @private
+		 */
 		[PostConstruct]
 		public function set logger(value:ILogger):void{
 			_logger = value;

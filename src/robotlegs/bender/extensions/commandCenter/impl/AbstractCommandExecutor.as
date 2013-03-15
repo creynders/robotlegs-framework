@@ -7,9 +7,6 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	/**
-	 * @author creynder
-	 */
 	import org.swiftsuspenders.Injector;
 
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
@@ -19,9 +16,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import robotlegs.bender.framework.impl.guardsApprove;
 
 	/**
-	 *
-	 * @author creynder
-	 *
+	 * TODO: document
 	 */
 	public class AbstractCommandExecutor
 	{
