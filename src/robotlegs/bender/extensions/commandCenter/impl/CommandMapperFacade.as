@@ -36,9 +36,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function CommandMapperFacade(trigger:ICommandTrigger, factory:ICommandMappingFactory, logger:ILogger = null)
+		public function CommandMapperFacade(mapper : CommandMapper)
 		{
-			_mapper = new CommandMapper(trigger, factory, logger);
+			_mapper = mapper;
 		}
 
 		/*============================================================================*/

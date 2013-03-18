@@ -8,7 +8,9 @@
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
+
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
@@ -16,8 +18,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapperFacade;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.commandCenter.impl.NullCommandUnmapper;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 
@@ -113,7 +116,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		protected function createFacade(trigger:ICommandTrigger):CommandMapperFacade
 		{
-			return new CommandMapperFacade(trigger, this);
+			var mapper : CommandMapper = new CommandMapper( trigger, this );
+			return new CommandMapperFacade( mapper );
 		}
 
 		/*============================================================================*/

@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter.impl
@@ -12,10 +12,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import mockolate.received;
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
+
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.core.anything;
 	import org.hamcrest.object.instanceOf;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -46,7 +48,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var mapper:CommandMapperFacade;
+		private var mapper:CommandMapper;
 
 		/*============================================================================*/
 		/* Test Setup and Teardown                                                    */
@@ -55,7 +57,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Before]
 		public function before():void
 		{
-			mapper = new CommandMapperFacade(trigger, componentFactory, logger);
+			mapper = new CommandMapper( trigger, componentFactory, logger );
 		}
 
 		/*============================================================================*/
@@ -67,7 +69,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			const mapping:ICommandMapping = new CommandMapping(NullCommand);
 			expect(componentFactory.createMapping(NullCommand)).returns(mapping);
-			mapper.toCommand(NullCommand);
+			mapper.mapCommand(NullCommand);
 			assertThat(trigger, received().method('addMapping').arg(mapping).once());
 		}
 
@@ -76,7 +78,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			const mapping:ICommandMapping = new CommandMapping(NullCommand);
 			expect(trigger.getMappingFor(arg(NullCommand))).returns(mapping);
-			mapper.fromCommand(NullCommand);
+			mapper.unmapCommand(NullCommand);
 			assertThat(trigger, received().method('removeMapping').arg(mapping).once());
 		}
 
@@ -89,7 +91,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			list.add(mapping1);
 			list.add(mapping2);
 			expect(trigger.getMappings()).returns(list);
-			mapper.fromAll();
+			mapper.unmapAll();
 			assertThat(trigger, received().method('removeMapping').arg(mapping1).once());
 			assertThat(trigger, received().method('removeMapping').arg(mapping2).once());
 		}
@@ -101,7 +103,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			const mapping2:ICommandMapping = new CommandMapping(NullCommand);
 			expect(trigger.getMappingFor(NullCommand)).returns(mapping1);
 			expect(componentFactory.createMapping(NullCommand)).returns(mapping2);
-			mapper.toCommand(NullCommand);
+			mapper.mapCommand(NullCommand);
 			assertThat(trigger, received().method('removeMapping').arg(mapping1).once());
 			assertThat(trigger, received().method('addMapping').arg(mapping2).once());
 		}
@@ -111,7 +113,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			const mapping:ICommandMapping = new CommandMapping(NullCommand);
 			expect(trigger.getMappingFor(NullCommand)).returns(mapping);
-			mapper.toCommand(NullCommand);
+			mapper.mapCommand(NullCommand);
 			assertThat(logger, received().method('warn')
 				.args(instanceOf(String), array(trigger, mapping)).once());
 		}
