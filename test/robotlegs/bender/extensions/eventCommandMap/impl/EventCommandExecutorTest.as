@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
@@ -297,6 +297,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			dispatcher.dispatchEvent(event);
 			assertThat(injectedEvent, equalTo(event));
 		}
+
+		/**
+		 * TODO: test event is injected into hook
+		 */
 
 		[Test]
 		public function test_cascading_events_do_not_throw_unmap_errors():void
