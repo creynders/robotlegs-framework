@@ -10,10 +10,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.object.equalTo;
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
@@ -29,7 +31,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.framework.impl.guardSupport.GrumpyGuard;
 	import robotlegs.bender.framework.impl.guardSupport.HappyGuard;
 
-	public class EventCommandExecutorTest
+	public class EventCommandMapIntegrationTest
 	{
 
 		/*============================================================================*/
