@@ -10,11 +10,13 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document and rename [!]
 		 */
-		function registerTrigger( trigger : * ):void;
+		function registerTrigger( trigger : ICommandTrigger ):void;
 
 		/**
 		 * TODO: document and rename [!]
 		 */
-		function unregisterTrigger( trigger : * ):void;
+		function unregisterTrigger( trigger : ICommandTrigger ):void;
+
+		function createMapping( trigger : ICommandTrigger, commandClass : Class ):ICommandMapping;
 	}
 }

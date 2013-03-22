@@ -25,7 +25,12 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function getMappings( trigger : * ) : Vector.<ICommandMapping>;
+		function getMappings( trigger : ICommandTrigger ) : Vector.<ICommandMapping>;
+
+		/**
+		 * TODO: document
+		 */
+		function executeCommand( mapping : ICommandMapping, hooks: ICommandExecutionHooks ) : void;
 
 		/**
 		 * TODO: document
@@ -35,17 +40,17 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function map( mapping:ICommandMapping ) : void;
+		function map( trigger : ICommandTrigger, commandClass : Class ) : ICommandMapping;
 
 		/**
 		 * TODO: document
 		 */
-		function unmap( mapping:ICommandMapping ) : void;
+		function unmap( trigger : ICommandTrigger, commandClass : Class ) : void;
 
 		/**
 		 * TODO: document
 		 */
-		function unmapAll( trigger : * ) : void;
+		function unmapAll( trigger : ICommandTrigger ) : void;
 
 	}
 }

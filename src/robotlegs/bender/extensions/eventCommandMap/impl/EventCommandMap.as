@@ -80,19 +80,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * TODO: document
 		 */
-		protected function createMapping( trigger : EventCommandTrigger ):ICommandMapping
-		{
-			return new CommandMapping( trigger );
-		}
-
-		/**
-		 * TODO: document
-		 */
 		protected function createMapper( type : String, eventClass : Class = null):CommandMapper
 		{
 			var trigger : EventCommandTrigger = _strategy.getTrigger( type, eventClass );
-			var mapping : ICommandMapping = createMapping( trigger );
-			return new CommandMapper( _commandCenter, mapping );
+			return new CommandMapper( _commandCenter, trigger );
 		}
 
 	}

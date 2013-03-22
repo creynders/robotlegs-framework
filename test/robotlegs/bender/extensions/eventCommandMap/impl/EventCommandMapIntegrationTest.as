@@ -337,7 +337,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function test_commands_mapped_with_std_eventClass_not_triggered_by_concrete_eventClass() : void{
+		public function test_commands_mapped_with_std_eventClass_triggered_by_concrete_eventClass() : void{
 			var wasTriggered : Boolean = false;
 			injector.map(Function, 'executeCallback').toValue(function():void
 			{
@@ -345,7 +345,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			});
 			eventCommandMap.map( SupportEvent.TYPE1, Event ).toCommand( CallbackCommand );
 			dispatcher.dispatchEvent( new SupportEvent( SupportEvent.TYPE1 ) );
-			assertThat( wasTriggered, equalTo( false ) );
+			assertThat( wasTriggered, equalTo( true ) );
 		}
 
 		/*============================================================================*/

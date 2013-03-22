@@ -1,8 +1,13 @@
+//------------------------------------------------------------------------------
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
+//------------------------------------------------------------------------------
+
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
-	/**
-	 * @author creynder
-	 */
+
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
@@ -13,10 +18,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutionHooks;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutionHooks;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 
+	/**
+	 * @private
+	 */
 	public class EventCommandMapStrategy implements ICommandMapStrategy{
 
 		/*============================================================================*/
@@ -53,17 +62,26 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 * TODO: document
 		 */
 		public function getTrigger( eventType : String, eventClass : Class = null ) : EventCommandTrigger{
-			var trigger : EventCommandTrigger = _triggers[ eventType + eventClass ];
+
+			var trigger : ICommandTrigger = getTriggerFromMap( eventType, eventClass );
 			if( !trigger ){
-				trigger = _triggers[ eventType + eventClass ] = new EventCommandTrigger( eventType, eventClass );
+				trigger = createTrigger( eventType, eventClass );
 			}
+			return trigger as EventCommandTrigger;
+		}
+
+		private function createTrigger(eventType:String, eventClass:Class):ICommandTrigger
+		{
+			eventClass ||= Event;
+			var trigger : ICommandTrigger = new EventCommandTrigger( this, eventType, eventClass );
+			_triggers[ eventType + eventClass ] = trigger;
 			return trigger;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function registerTrigger(trigger:*):void
+		public function registerTrigger(trigger:ICommandTrigger):void
 		{
 			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
 			_dispatcher.addEventListener( eventTrigger.type, handleEvent );
@@ -72,10 +90,18 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function unregisterTrigger(trigger:*):void
+		public function unregisterTrigger(trigger:ICommandTrigger):void
 		{
 			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
 			_dispatcher.removeEventListener( eventTrigger.type, handleEvent );
+		}
+
+		/**
+		 * TODO: document
+		 */
+		public function createMapping( trigger : ICommandTrigger, commandClass : Class ):ICommandMapping
+		{
+			return new CommandMapping( trigger, commandClass );
 		}
 
 		/*============================================================================*/
@@ -90,11 +116,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			var eventConstructor : Class = event["constructor"] as Class;
 			var mappings : Vector.<ICommandMapping> = new Vector.<ICommandMapping>();
 
-			var strictMappings : Vector.<ICommandMapping> = _commandMap.getMappings( getTrigger( event.type, eventConstructor ) );
-			strictMappings && ( mappings = mappings.concat( strictMappings ) );
+			var trigger : ICommandTrigger;
+			trigger = getTriggerFromMap(event.type, eventConstructor);
+			trigger && ( mappings = mappings.concat( trigger.getMappings() ) );
 
-			var looseMappings : Vector.<ICommandMapping> = _commandMap.getMappings( getTrigger( event.type ) );
-			looseMappings && ( mappings = mappings.concat( looseMappings ) );
+			trigger = getTriggerFromMap( event.type );
+			trigger && ( mappings = mappings.concat( trigger.getMappings() ) );
 
 			if( mappings.length <= 0 ){
 				return;
@@ -118,6 +145,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 				}
 			}
 			_commandMap.executeCommands( mappings, hooks );
+		}
+
+		private function getTriggerFromMap(eventType:String, eventClass:Class=null):ICommandTrigger
+		{
+			eventClass ||= Event;
+			return _triggers[ eventType + eventClass ];
 		}
 
 	}

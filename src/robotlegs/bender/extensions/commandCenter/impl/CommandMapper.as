@@ -7,16 +7,17 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	/**
-	 * TODO: document
-	 */
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMappingConfig;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 
+	/**
+	 * @private
+	 */
 	public class CommandMapper implements ICommandMapper, ICommandMappingConfig, ICommandUnmapper
 	{
 
@@ -28,6 +29,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _mapping : ICommandMapping;
 
+		private var _trigger : ICommandTrigger;
+
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
@@ -35,10 +38,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function CommandMapper(commandCenter : ICommandCenter, mapping : ICommandMapping)
+		public function CommandMapper(commandCenter : ICommandCenter, trigger : ICommandTrigger )
 		{
 			_commandCenter = commandCenter;
-			_mapping = mapping;
+			_trigger = trigger;
 		}
 
 		/*============================================================================*/
@@ -50,8 +53,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function toCommand(commandClass:Class):ICommandMappingConfig
 		{
-			_mapping.setCommandClass( commandClass );
-			_commandCenter.map( _mapping );
+			_mapping = _commandCenter.map( _trigger, commandClass );
 			return this;
 		}
 
@@ -87,7 +89,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function fromAll():void
 		{
-			_commandCenter.unmapAll( _mapping.trigger );
+			_commandCenter.unmapAll( _trigger );
 		}
 
 		/**
@@ -95,8 +97,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function fromCommand(commandClass:Class):void
 		{
-			_mapping.setCommandClass( commandClass );
-			_commandCenter.unmap(_mapping);
+
+			_commandCenter.unmap(_trigger, commandClass);
 		}
 	}
 }
