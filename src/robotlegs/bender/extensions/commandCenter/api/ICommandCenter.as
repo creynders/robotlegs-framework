@@ -16,14 +16,35 @@ package robotlegs.bender.extensions.commandCenter.api
 	public interface ICommandCenter
 	{
 
+		/**
+		 * TODO: document
+		 */
 		function get strategy():ICommandMapStrategy;
 		function set strategy(value:ICommandMapStrategy):void;
 
+		/**
+		 * TODO: document
+		 */
 		function getMappings( trigger : * ) : Vector.<ICommandMapping>;
+
+		/**
+		 * TODO: document
+		 */
 		function executeCommands( mappings : Vector.<ICommandMapping>, hooks : ICommandExecutionHooks ) : void;
 
+		/**
+		 * TODO: document
+		 */
 		function map( mapping:ICommandMapping ) : void;
+
+		/**
+		 * TODO: document
+		 */
 		function unmap( mapping:ICommandMapping ) : void;
+
+		/**
+		 * TODO: document
+		 */
 		function unmapAll( trigger : * ) : void;
 
 	}

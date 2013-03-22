@@ -9,10 +9,16 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _mapPayload : Function;
 
+		/**
+		 * @inheritDoc
+		 */
 		public function get mapPayload():Function{
 			return _mapPayload;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function set mapPayload(value:Function):void
 		{
 			_mapPayload = value;
@@ -20,10 +26,16 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _unmapPayload : Function;
 
+		/**
+		 * @inheritDoc
+		 */
 		public function get unmapPayload():Function{
 			return _unmapPayload;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function set unmapPayload(value:Function):void
 		{
 			_unmapPayload = value;
@@ -32,10 +44,16 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _whenExecuted : Function;
 
+		/**
+		 * @inheritDoc
+		 */
 		public function get whenExecuted():Function{
 			return _whenExecuted;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function set whenExecuted(value:Function):void
 		{
 			_whenExecuted = value;

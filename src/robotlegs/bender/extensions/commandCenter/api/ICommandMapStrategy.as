@@ -6,7 +6,15 @@ package robotlegs.bender.extensions.commandCenter.api
 	 * @author creynder
 	 */
 	public interface ICommandMapStrategy{
+
+		/**
+		 * TODO: document and rename [!]
+		 */
 		function registerTrigger( trigger : * ):void;
+
+		/**
+		 * TODO: document and rename [!]
+		 */
 		function unregisterTrigger( trigger : * ):void;
 	}
 }

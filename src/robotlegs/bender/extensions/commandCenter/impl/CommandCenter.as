@@ -32,10 +32,16 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _strategy : ICommandMapStrategy;
 
+		/**
+		 * @inheritDoc
+		 */
 		public function get strategy():ICommandMapStrategy{
 			return _strategy;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function set strategy(value:ICommandMapStrategy):void{
 			_strategy = value;
 		}
@@ -45,8 +51,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
+
+		/**
+		 * TODO: switch to const
+		 */
 		private var _mappings : Dictionary = new Dictionary( false );
+
 		private var _injector : Injector;
+
 		private var _logger:ILogger;
 
 		/*============================================================================*/
@@ -142,8 +154,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 				}
 			}
 		}
+
 		/*============================================================================*/
-		/* Private Functions                                                          */
+		/* Protected Functions                                                        */
 		/*============================================================================*/
 
 		protected function hasMapping(mapping:ICommandMapping):Boolean
@@ -208,7 +221,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 			addMapping(mapping);
 		}
 
-		private function getOrCreateMappings( trigger : * ) : Vector.<ICommandMapping>{
+		/**
+		 * TODO: document
+		 */
+		protected function getOrCreateMappings( trigger : * ) : Vector.<ICommandMapping>{
 			var mappings : Vector.<ICommandMapping> = getMappings( trigger );
 			if( ! mappings ){
 				mappings = _mappings[ trigger ] = new Vector.<ICommandMapping>();

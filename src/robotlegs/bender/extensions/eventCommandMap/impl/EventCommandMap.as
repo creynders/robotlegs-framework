@@ -33,6 +33,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		protected var _commandCenter:ICommandCenter;
+
 		protected var _strategy : EventCommandMapStrategy;
 
 		/*============================================================================*/
@@ -77,23 +78,22 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		/**
-		 * @inheritDoc
+		 * TODO: document
 		 */
 		protected function createMapping( trigger : EventCommandTrigger ):ICommandMapping
 		{
 			return new CommandMapping( trigger );
 		}
 
+		/**
+		 * TODO: document
+		 */
 		protected function createMapper( type : String, eventClass : Class = null):CommandMapper
 		{
 			var trigger : EventCommandTrigger = _strategy.getTrigger( type, eventClass );
 			var mapping : ICommandMapping = createMapping( trigger );
 			return new CommandMapper( _commandCenter, mapping );
 		}
-
-		/*============================================================================*/
-		/* Private Functions                                                          */
-		/*============================================================================*/
 
 	}
 }

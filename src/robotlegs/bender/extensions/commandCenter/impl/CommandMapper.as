@@ -25,6 +25,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		private var _commandCenter:ICommandCenter;
+
 		private var _mapping : ICommandMapping;
 
 		/*============================================================================*/

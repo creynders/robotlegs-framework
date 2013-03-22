@@ -19,11 +19,25 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 	public class EventCommandMapStrategy implements ICommandMapStrategy{
 
+		/*============================================================================*/
+		/* Private Properties                                                         */
+		/*============================================================================*/
+
 		private var _injector : Injector;
+
 		private var _dispatcher : IEventDispatcher;
+
 		private var _commandMap : ICommandCenter;
+
 		private var _triggers : Dictionary = new Dictionary( false );
 
+		/*============================================================================*/
+		/* Constructor                                                                */
+		/*============================================================================*/
+
+		/**
+		 * @private
+		 */
 		public function EventCommandMapStrategy(injector : Injector, dispatcher : IEventDispatcher, commandMap : ICommandCenter)
 		{
 			_injector = injector;
@@ -31,6 +45,13 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			_commandMap = commandMap;
 		}
 
+		/*============================================================================*/
+		/* Public Functions                                                           */
+		/*============================================================================*/
+
+		/**
+		 * TODO: document
+		 */
 		public function getTrigger( eventType : String, eventClass : Class = null ) : EventCommandTrigger{
 			var trigger : EventCommandTrigger = _triggers[ eventType + eventClass ];
 			if( !trigger ){
@@ -39,23 +60,39 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			return trigger;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function registerTrigger(trigger:*):void
 		{
 			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
 			_dispatcher.addEventListener( eventTrigger.type, handleEvent );
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function unregisterTrigger(trigger:*):void
 		{
 			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
 			_dispatcher.removeEventListener( eventTrigger.type, handleEvent );
 		}
 
-		private function handleEvent( event : Event ) : void{
+		/*============================================================================*/
+		/* Protected Functions                                                        */
+		/*============================================================================*/
+
+		/**
+		 * TODO: document
+		 */
+		protected function handleEvent( event : Event ) : void{
+
 			var eventConstructor : Class = event["constructor"] as Class;
 			var mappings : Vector.<ICommandMapping> = new Vector.<ICommandMapping>();
+
 			var strictMappings : Vector.<ICommandMapping> = _commandMap.getMappings( getTrigger( event.type, eventConstructor ) );
 			strictMappings && ( mappings = mappings.concat( strictMappings ) );
+
 			var looseMappings : Vector.<ICommandMapping> = _commandMap.getMappings( getTrigger( event.type ) );
 			looseMappings && ( mappings = mappings.concat( looseMappings ) );
 
