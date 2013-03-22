@@ -57,7 +57,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector = new Injector();
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			dispatcher = new EventDispatcher();
-			eventCommandMap = new EventCommandMap(injector, dispatcher, new CommandCenter());
+			eventCommandMap = new EventCommandMap(injector, dispatcher, new CommandCenter(injector));
 		}
 
 		/*============================================================================*/
@@ -67,7 +67,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		[Test]
 		public function test_command_without_execute_method_is_still_constructed():void
 		{
-			eventCommandMap.map(SupportEvent.TYPE1).toCommand(CommandWithoutExecute);
+			eventCommandMap.map(SupportEvent.TYPE1)
+				.toCommand(CommandWithoutExecute);
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
 			assertThat(reportedExecutions, array(CommandWithoutExecute));
 		}

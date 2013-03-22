@@ -1,122 +1,38 @@
-//------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
-//
-//  NOTICE: You are permitted to use, modify, and distribute this file
-//  in accordance with the terms of the license agreement accompanying it.
-//------------------------------------------------------------------------------
-
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
-	import flash.events.IEventDispatcher;
-	import flash.utils.Dictionary;
-
-	import org.swiftsuspenders.Injector;
-
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingCollection;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
+	import flash.events.Event;
 
 	/**
-	 * @private
+	 * @author creynder
 	 */
-	public class EventCommandTrigger implements ICommandTrigger
-	{
+	public class EventCommandTrigger{
 
-		/*============================================================================*/
-		/* Private Properties                                                         */
-		/*============================================================================*/
+		private var _type : String;
 
-		private const _mappingsByCommandClass:Dictionary = new Dictionary();
+		public function get type():String{
+			return _type;
+		}
 
-		private const _mappingsList:CommandMappingList = new CommandMappingList();
+		public function set type(value:String):void{
+			_type = value;
+		}
 
-		private var _dispatcher:IEventDispatcher;
 
-		private var _type:String;
+		private var _eventClass : Class;
 
-		private var _executor:EventCommandExecutor;
+		public function get eventClass():Class{
+			return _eventClass;
+		}
 
-		private var _eventClass:Class;
+		public function set eventClass(value:Class):void{
+			_eventClass = value;
+		}
 
-		/*============================================================================*/
-		/* Constructor                                                                */
-		/*============================================================================*/
 
-		/**
-		 * @private
-		 */
-		public function EventCommandTrigger(
-			injector:Injector,
-			dispatcher:IEventDispatcher,
-			type:String,
-			eventClass:Class = null)
+		public function EventCommandTrigger( type : String, eventClass : Class = null)
 		{
-			_dispatcher = dispatcher;
 			_type = type;
-			_eventClass = eventClass;
-			_executor = new EventCommandExecutor(this, injector, eventClass);
-		}
-
-		/*============================================================================*/
-		/* Public Functions                                                           */
-		/*============================================================================*/
-
-		/**
-		 * @inheritDoc
-		 */
-		public function addMapping(mapping:ICommandMapping):void
-		{
-			_mappingsByCommandClass[mapping.commandClass] = mapping;
-			_mappingsList.head || addListener();
-			_mappingsList.add(mapping);
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function removeMapping(mapping:ICommandMapping):void
-		{
-			delete _mappingsByCommandClass[mapping.commandClass];
-			_mappingsList.remove(mapping);
-			_mappingsList.head || removeListener();
-			//TODO: determine whether to unmap trigger from commandcenter when mappings.length == 0
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getMappings():ICommandMappingCollection
-		{
-			return _mappingsList;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getMappingFor(commandClass:Class):ICommandMapping
-		{
-			return _mappingsByCommandClass[commandClass];
-		}
-
-		public function toString():String
-		{
-			return _eventClass + " with selector '" + _type + "'";
-		}
-
-		/*============================================================================*/
-		/* Private Functions                                                          */
-		/*============================================================================*/
-
-		private function addListener():void
-		{
-			_dispatcher.addEventListener(_type, _executor.execute);
-		}
-
-		private function removeListener():void
-		{
-			_dispatcher.removeEventListener(_type, _executor.execute);
+			_eventClass = eventClass || Event;
 		}
 	}
 }
-

@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter.impl
@@ -59,6 +59,17 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return _fireOnce;
 		}
 
+		private var _trigger : *;
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get trigger():*
+		{
+			return _trigger;
+		}
+
+
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
@@ -67,9 +78,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 * Creates a Command Mapping
 		 * @param commandClass The concrete Command class
 		 */
-		public function CommandMapping(commandClass:Class)
+		public function CommandMapping(trigger : *)
 		{
-			_commandClass = commandClass;
+			_trigger = trigger;
 		}
 
 		/*============================================================================*/
@@ -112,9 +123,26 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return this;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
+		public function equals(mapping:ICommandMapping):Boolean
+		{
+			return commandClass === mapping.commandClass;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function setTrigger(trigger:*):void
+		{
+			_trigger = trigger;
+		}
+
 		public function toString():String
 		{
 			return 'Command ' + _commandClass;
 		}
+
 	}
 }

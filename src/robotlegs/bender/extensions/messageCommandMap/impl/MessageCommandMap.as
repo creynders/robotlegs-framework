@@ -17,7 +17,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMapperFacade;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.messageCommandMap.api.IMessageCommandMap;
 	import robotlegs.bender.framework.api.IMessageDispatcher;
@@ -101,7 +101,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
         }
         public function createMapper( trigger : ICommandTrigger ):ICommandMapper
         {
-            return new CommandMapperFacade( trigger, this );
+            return new CommandMapper( trigger, this );
         }
 	}
 }

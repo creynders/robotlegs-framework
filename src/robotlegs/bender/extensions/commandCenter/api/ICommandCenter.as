@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2012 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter.api
@@ -15,22 +15,16 @@ package robotlegs.bender.extensions.commandCenter.api
 	 */
 	public interface ICommandCenter
 	{
-		/**
-		 * Maps a trigger to a key
-		 * @param trigger The trigger to map
-		 * @param key The key to map the trigger to
-		 */
-		function map(trigger:ICommandTrigger, key:*):void;
 
-		/**
-		 * Unmaps a trigger mapped to the key
-		 * @param key The key to the trigger to unmap
-		 */
-		function unmap(key:*):void;
+		function get strategy():ICommandMapStrategy;
+		function set strategy(value:ICommandMapStrategy):void;
 
-		/**
-		 * TODO: document
-		 */
-		function getTrigger(key:*):ICommandTrigger;
+		function getMappings( trigger : * ) : Vector.<ICommandMapping>;
+		function executeCommands( mappings : Vector.<ICommandMapping>, hooks : ICommandExecutionHooks ) : void;
+
+		function map( mapping:ICommandMapping ) : void;
+		function unmap( mapping:ICommandMapping ) : void;
+		function unmapAll( trigger : * ) : void;
+
 	}
 }
