@@ -25,11 +25,6 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function getMappings( trigger : ICommandTrigger ) : Vector.<ICommandMapping>;
-
-		/**
-		 * TODO: document
-		 */
 		function executeCommand( mapping : ICommandMapping, hooks: ICommandExecutionHooks ) : void;
 
 		/**

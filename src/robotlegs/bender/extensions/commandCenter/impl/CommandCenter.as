@@ -117,14 +117,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function getMappings(trigger:ICommandTrigger):Vector.<ICommandMapping>
-		{
-			return trigger.getMappings();
-		}
-
-		/**
-		 * @inheritDoc
-		 */
 		public function executeCommands(mappings:Vector.<ICommandMapping>, hooks:ICommandExecutionHooks) : void
 		{
 			//must be immutable list of mappings -> don't forget to clone
