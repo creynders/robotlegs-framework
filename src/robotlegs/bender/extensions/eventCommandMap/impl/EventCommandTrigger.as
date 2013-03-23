@@ -15,6 +15,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandTrigger;
 
 	/**
 	 * @private
@@ -35,18 +36,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			return _eventClass;
 		}
 
-
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		// TODO:change to const
-		private var _mappingsList:Vector.<ICommandMapping> = new Vector.<ICommandMapping>();
-
-		// TODO:change to const
-		private var _mappingsByCommandClass:Dictionary = new Dictionary();
-
-		private var _strategy : ICommandMapStrategy;
+		private var _base : CommandTrigger;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -60,7 +54,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			type:String,
 			eventClass:Class = null)
 		{
-			_strategy = strategy;
+			_base = new CommandTrigger( strategy, this );
 			_type = type;
 			_eventClass = eventClass;
 		}
@@ -74,11 +68,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function addMapping(mapping:ICommandMapping):void
 		{
-			_mappingsByCommandClass[mapping.commandClass] = mapping;
-			_mappingsList.push( mapping );
-			if( _mappingsList.length == 1 ){
-				_strategy.registerTrigger( this );
-			}
+			_base.addMapping( mapping );
 		}
 
 		/**
@@ -86,25 +76,17 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function removeMapping(mapping:ICommandMapping):void
 		{
-			delete _mappingsByCommandClass[mapping.commandClass];
-			const index:int = _mappingsList.indexOf(mapping);
-			if (index != -1)
-			{
-				_mappingsList.splice(index, 1);
-			}
-			if( _mappingsList.length <= 0 ){
-				_strategy.unregisterTrigger( this );
-			}
+			_base.removeMapping( mapping );
 		}
 
 		public function getMappingFor(commandClass:Class):ICommandMapping
 		{
-			return _mappingsByCommandClass[commandClass];
+			return _base.getMappingFor( commandClass );
 		}
 
 		public function getMappings():Vector.<ICommandMapping>
 		{
-			return _mappingsList;
+			return _base.getMappings();
 		}
 
 
