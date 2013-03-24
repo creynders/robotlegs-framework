@@ -59,17 +59,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return _fireOnce;
 		}
 
-		private var _trigger : *;
-
-		/**
-		 * @inheritDoc
-		 */
-		public function get trigger():*
-		{
-			return _trigger;
-		}
-
-
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
@@ -78,9 +67,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 * Creates a Command Mapping
 		 * @param commandClass The concrete Command class
 		 */
-		public function CommandMapping(trigger : *, commandClass : Class = null)
+		public function CommandMapping(commandClass : Class)
 		{
-			_trigger = trigger;
 			_commandClass = commandClass;
 		}
 
@@ -113,31 +101,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			_fireOnce = value;
 			return this;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function setCommandClass(value:Class):ICommandMapping
-		{
-			_commandClass = value;
-			return this;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function equals(mapping:ICommandMapping):Boolean
-		{
-			return commandClass === mapping.commandClass;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function setTrigger(trigger:*):void
-		{
-			_trigger = trigger;
 		}
 
 		public function toString():String

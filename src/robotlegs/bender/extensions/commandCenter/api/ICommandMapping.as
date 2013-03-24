@@ -36,21 +36,6 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function get trigger() : *;
-
-		/**
-		 * TODO: document
-		 */
-		function setCommandClass(commandClass:Class):ICommandMapping;
-
-		/**
-		 * TODO: document
-		 */
-		function setTrigger( trigger : * ) : void;
-
-		/**
-		 * TODO: document
-		 */
 		function addGuards(... guards):ICommandMapping;
 
 		/**
@@ -63,9 +48,5 @@ package robotlegs.bender.extensions.commandCenter.api
 		 */
 		function setFireOnce(value:Boolean):ICommandMapping;
 
-		/**
-		 * TODO: document
-		 */
-		function equals( mapping : ICommandMapping ) : Boolean;
 	}
 }

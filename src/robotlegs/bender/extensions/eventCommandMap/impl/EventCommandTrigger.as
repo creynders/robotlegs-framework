@@ -98,7 +98,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			return _base.createMapping(commandClass );
 		}
 
-
 		public function toString():String
 		{
 			return _eventClass + " with selector '" + _type + "'";

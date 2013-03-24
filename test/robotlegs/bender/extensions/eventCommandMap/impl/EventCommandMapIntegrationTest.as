@@ -411,6 +411,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 }
 
 import flash.events.Event;
+
 import robotlegs.bender.extensions.eventCommandMap.support.SupportEvent;
 
 class SupportEventTriggeredSelfReportingCallbackCommand

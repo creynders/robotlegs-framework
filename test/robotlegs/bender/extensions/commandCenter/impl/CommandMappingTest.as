@@ -12,6 +12,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.isFalse;
 	import org.hamcrest.object.isTrue;
+
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 
 	public class CommandMappingTest
@@ -33,8 +34,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function before():void
 		{
 			commandClass = NullCommand;
-			mapping = new CommandMapping('');
-			mapping.setCommandClass( commandClass );
+			mapping = new CommandMapping( commandClass);
 		}
 
 		/*============================================================================*/

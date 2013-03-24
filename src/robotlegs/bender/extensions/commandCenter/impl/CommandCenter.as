@@ -71,7 +71,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			var mapping : ICommandMapping = trigger.getMappingFor(commandClass);
 			if (mapping)
 			{
-				mapping = overwriteMapping(mapping)
+				mapping = overwriteMapping(trigger, mapping)
 			}
 			else
 			{
@@ -86,7 +86,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function unmap(trigger : ICommandTrigger, commandClass : Class ):void
 		{
 			const mapping:ICommandMapping = trigger.getMappingFor(commandClass);
-			mapping && deleteMapping(mapping);
+			mapping && deleteMapping( trigger, mapping);
 		}
 
 		/**
@@ -98,7 +98,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			if( mappings && mappings.length ){
 				var i : int = mappings.length;
 				while( i-- ){
-					deleteMapping( mappings[ i ] );
+					deleteMapping( trigger, mappings[ i ] );
 				}
 			}
 
@@ -107,41 +107,34 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function executeCommands(mappings:Vector.<ICommandMapping>, hooks:ICommandExecutionHooks) : void
+		public function executeCommands(trigger : ICommandTrigger, hooks:ICommandExecutionHooks) : void
 		{
-			//must be immutable list of mappings -> don't forget to clone
+			var mappings : Vector.<ICommandMapping> = trigger.getMappings().concat();
 			var i : int;
-			var n : int = mappings.length
+			var n : int = mappings.length;
 			for ( i = 0; i<n; i++ ){
 				var mapping : ICommandMapping = mappings[ i ];
-				executeCommand(mapping, hooks);
-			}
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function executeCommand( mapping : ICommandMapping, hooks: ICommandExecutionHooks ) : void{
-			var command:Object = null;
-			hooks.mapPayload && hooks.mapPayload();
-			if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector))
-			{
-
-				mapping.fireOnce && deleteMapping( mapping );
-				const commandClass:Class = mapping.commandClass;
-				command = _injector.instantiateUnmapped(commandClass);
-				if (mapping.hooks.length > 0)
+				var command:Object = null;
+				hooks.mapPayload && hooks.mapPayload();
+				if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector))
 				{
-					_injector.map(commandClass).toValue(command);
-					applyHooks(mapping.hooks, _injector);
-					_injector.unmap(commandClass);
+
+					mapping.fireOnce && deleteMapping( trigger, mapping );
+					const commandClass:Class = mapping.commandClass;
+					command = _injector.instantiateUnmapped(commandClass);
+					if (mapping.hooks.length > 0)
+					{
+						_injector.map(commandClass).toValue(command);
+						applyHooks(mapping.hooks, _injector);
+						_injector.unmap(commandClass);
+					}
 				}
-			}
-			hooks.unmapPayload && hooks.unmapPayload();
-			if (command)
-			{
-				robotlegs.bender.extensions.commandCenter.impl.executeCommand( command );
-				hooks.whenExecuted && hooks.whenExecuted();
+				hooks.unmapPayload && hooks.unmapPayload();
+				if (command)
+				{
+					robotlegs.bender.extensions.commandCenter.impl.executeCommand( command );
+					hooks.whenExecuted && hooks.whenExecuted();
+				}
 			}
 		}
 
@@ -155,7 +148,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 		protected function createMapping( trigger : ICommandTrigger, commandClass : Class ):ICommandMapping
 		{
 			var mapping : ICommandMapping = trigger.createMapping( commandClass );
-			trigger.addMapping( mapping );
 			_logger && _logger.debug('{0} mapped to {1}', [ trigger, mapping]);
 			return mapping;
 		}
@@ -163,9 +155,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * TODO: document
 		 */
-		protected function deleteMapping(mapping:ICommandMapping):void
+		protected function deleteMapping( trigger : ICommandTrigger, mapping:ICommandMapping):void
 		{
-			var trigger : ICommandTrigger =  mapping.trigger;
 			trigger.removeMapping( mapping );
 			_logger && _logger.debug('{0} unmapped from {1}', [trigger, mapping]);
 		}
@@ -173,14 +164,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * TODO: document
 		 */
-		protected function overwriteMapping(mapping:ICommandMapping):ICommandMapping
+		protected function overwriteMapping(trigger : ICommandTrigger, mapping:ICommandMapping):ICommandMapping
 		{
 			_logger && _logger.warn('{0} already mapped to {1}\n' +
 				'If you have overridden this mapping intentionally you can use "unmap()" ' +
 				'prior to your replacement mapping in order to avoid seeing this message.\n',
-				[mapping.trigger, mapping]);
-			deleteMapping(mapping);
-			return createMapping(mapping.trigger, mapping.commandClass);
+				[trigger, mapping]);
+			trigger.removeMapping( mapping );
+			return trigger.createMapping( mapping.commandClass );
 		}
 
 	}

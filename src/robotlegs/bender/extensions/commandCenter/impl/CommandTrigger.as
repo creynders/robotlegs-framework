@@ -75,7 +75,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		public function createMapping(commandClass:Class):ICommandMapping
 		{
-			return new CommandMapping(_decorated, commandClass);
+			var mapping : ICommandMapping = new CommandMapping( commandClass);
+			addMapping( mapping );
+			return mapping;
 		}
 
 
