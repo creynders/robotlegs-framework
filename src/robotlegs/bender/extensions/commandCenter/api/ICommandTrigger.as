@@ -34,5 +34,11 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * TODO: document
 		 */
 		function getMappingFor(commandClass:Class):ICommandMapping;
+
+		/**
+		 * TODO: document
+		 */
+		function createMapping( commandClass : Class ):ICommandMapping;
+
 	}
 }

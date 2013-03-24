@@ -31,22 +31,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 
-		private var _strategy : ICommandMapStrategy;
+		private var _logger:ILogger;
 
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
-		public function get strategy():ICommandMapStrategy{
-			return _strategy;
+		public function set logger(value:ILogger):void{
+			_logger = value;
 		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function set strategy(value:ICommandMapStrategy):void{
-			_strategy = value;
-		}
-
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -54,8 +46,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 
 		private var _injector : Injector;
-
-		private var _logger:ILogger;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -164,7 +154,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		protected function createMapping( trigger : ICommandTrigger, commandClass : Class ):ICommandMapping
 		{
-			var mapping : ICommandMapping = _strategy.createMapping( trigger, commandClass );
+			var mapping : ICommandMapping = trigger.createMapping( commandClass );
 			trigger.addMapping( mapping );
 			_logger && _logger.debug('{0} mapped to {1}', [ trigger, mapping]);
 			return mapping;

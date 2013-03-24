@@ -19,12 +19,6 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function get strategy():ICommandMapStrategy;
-		function set strategy(value:ICommandMapStrategy):void;
-
-		/**
-		 * TODO: document
-		 */
 		function executeCommand( mapping : ICommandMapping, hooks: ICommandExecutionHooks ) : void;
 
 		/**

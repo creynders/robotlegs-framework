@@ -70,14 +70,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			return trigger as EventCommandTrigger;
 		}
 
-		private function createTrigger(eventType:String, eventClass:Class):ICommandTrigger
-		{
-			eventClass ||= Event;
-			var trigger : ICommandTrigger = new EventCommandTrigger( this, eventType, eventClass );
-			_triggers[ eventType + eventClass ] = trigger;
-			return trigger;
-		}
-
 		/**
 		 * @inheritDoc
 		 */
@@ -151,6 +143,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			eventClass ||= Event;
 			return _triggers[ eventType + eventClass ];
+		}
+
+		private function createTrigger(eventType:String, eventClass:Class):ICommandTrigger
+		{
+			eventClass ||= Event;
+			var trigger : ICommandTrigger = new EventCommandTrigger( this, eventType, eventClass );
+			_triggers[ eventType + eventClass ] = trigger;
+			return trigger;
 		}
 
 	}

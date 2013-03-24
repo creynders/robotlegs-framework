@@ -37,6 +37,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 			_decorated = decorated || this;
 		}
 
+		/*============================================================================*/
+		/* Public Functions                                                           */
+		/*============================================================================*/
+
 		public function addMapping(mapping:ICommandMapping):void
 		{
 			_mappingsByCommandClass[mapping.commandClass] = mapping;
@@ -68,5 +72,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			return _mappingsByCommandClass[commandClass];
 		}
+
+		public function createMapping(commandClass:Class):ICommandMapping
+		{
+			return new CommandMapping(_decorated, commandClass);
+		}
+
+
 	}
 }

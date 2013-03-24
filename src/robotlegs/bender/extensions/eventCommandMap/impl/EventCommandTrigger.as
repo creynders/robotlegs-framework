@@ -24,14 +24,18 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	{
 
 		private var _type:String;
-
+		/**
+		 * TODO: document
+		 */
 		public function get type():String{
 			return _type;
 		}
 
 
 		private var _eventClass:Class;
-
+		/**
+		 * TODO: document
+		 */
 		public function get eventClass():Class{
 			return _eventClass;
 		}
@@ -87,6 +91,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function getMappings():Vector.<ICommandMapping>
 		{
 			return _base.getMappings();
+		}
+
+		public function createMapping(commandClass:Class):ICommandMapping
+		{
+			return _base.createMapping(commandClass );
 		}
 
 

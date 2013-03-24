@@ -50,7 +50,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			_commandCenter = commandCenter;
 			_strategy = new EventCommandMapStrategy( injector, dispatcher, commandCenter );
-			_commandCenter.strategy = _strategy;
 		}
 
 		/*============================================================================*/

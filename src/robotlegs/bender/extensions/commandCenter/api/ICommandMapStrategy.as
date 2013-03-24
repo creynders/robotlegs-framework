@@ -17,6 +17,5 @@ package robotlegs.bender.extensions.commandCenter.api
 		 */
 		function unregisterTrigger( trigger : ICommandTrigger ):void;
 
-		function createMapping( trigger : ICommandTrigger, commandClass : Class ):ICommandMapping;
 	}
 }
