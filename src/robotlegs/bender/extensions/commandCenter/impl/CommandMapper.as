@@ -25,11 +25,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _commandCenter:ICommandCenter;
+		private var _mapping:ICommandMapping;
 
-		private var _mapping : ICommandMapping;
-
-		private var _trigger : ICommandTrigger;
+		private var _trigger:ICommandTrigger;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -38,9 +36,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @private
 		 */
-		public function CommandMapper(commandCenter : ICommandCenter, trigger : ICommandTrigger )
+		public function CommandMapper(trigger:ICommandTrigger)
 		{
-			_commandCenter = commandCenter;
 			_trigger = trigger;
 		}
 
@@ -53,7 +50,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function toCommand(commandClass:Class):ICommandMappingConfig
 		{
-			_mapping = _commandCenter.map( _trigger, commandClass );
+			_mapping = _trigger.map(commandClass);
 			return this;
 		}
 
@@ -89,7 +86,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function fromAll():void
 		{
-			_commandCenter.unmapAll( _trigger );
+			_trigger.unmapAll();
 		}
 
 		/**
@@ -98,7 +95,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function fromCommand(commandClass:Class):void
 		{
 
-			_commandCenter.unmap(_trigger, commandClass);
+			_trigger.unmap(commandClass);
 		}
 	}
 }

@@ -153,7 +153,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 				hooks && mapping.addHooks.apply(mapping, hooks);
 			}
 
-			commandCenter.executeCommands( mappingsVector, new NullCommandExecutionHooks() );
+			commandCenter.executeTrigger( mappingsVector, new NullCommandExecutionHooks() );
 			injector.unmap(Function, 'executeCallback');
 			return executeCount;
 		}

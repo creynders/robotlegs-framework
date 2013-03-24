@@ -47,6 +47,5 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * TODO: document
 		 */
 		function setFireOnce(value:Boolean):ICommandMapping;
-
 	}
 }

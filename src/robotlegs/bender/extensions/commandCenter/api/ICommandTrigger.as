@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved.
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
 //
 //  NOTICE: You are permitted to use, modify, and distribute this file
 //  in accordance with the terms of the license agreement accompanying it.
@@ -14,31 +14,23 @@ package robotlegs.bender.extensions.commandCenter.api
 	public interface ICommandTrigger
 	{
 		/**
-		 * Adds a mapping to this trigger
-		 * @param mapping The Command Mapping to add
+		 * TODO: document
 		 */
-		function addMapping(mapping:ICommandMapping):void;
+		function map(commandClass:Class):ICommandMapping;
 
 		/**
-		 * Removes a mapping from this trigger
-		 * @param mapping The Command Mapping to remove
+		 * TODO: document
 		 */
-		function removeMapping(mapping:ICommandMapping):void;
+		function unmap(commandClass:Class):void;
+
+		/**
+		 * TODO: document
+		 */
+		function unmapAll():void;
 
 		/**
 		 * TODO: document
 		 */
 		function getMappings():Vector.<ICommandMapping>;
-
-		/**
-		 * TODO: document
-		 */
-		function getMappingFor(commandClass:Class):ICommandMapping;
-
-		/**
-		 * TODO: document
-		 */
-		function createMapping( commandClass : Class ):ICommandMapping;
-
 	}
 }

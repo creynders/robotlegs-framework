@@ -11,7 +11,7 @@ package robotlegs.bender.extensions.commandCenter.api
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 
 	/**
-	 * Creates command mappings for triggers
+	 * Executes triggers and commands
 	 */
 	public interface ICommandCenter
 	{
@@ -19,22 +19,12 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function executeCommands( trigger : ICommandTrigger, hooks : ICommandExecutionHooks ) : void;
+		function execute(commandClass:Class, hooks:ICommandExecutionHooks = null):void;
 
 		/**
 		 * TODO: document
 		 */
-		function map( trigger : ICommandTrigger, commandClass : Class ) : ICommandMapping;
-
-		/**
-		 * TODO: document
-		 */
-		function unmap( trigger : ICommandTrigger, commandClass : Class ) : void;
-
-		/**
-		 * TODO: document
-		 */
-		function unmapAll( trigger : ICommandTrigger ) : void;
+		function executeTrigger(trigger:ICommandTrigger, hooks:ICommandExecutionHooks = null):void;
 
 	}
 }

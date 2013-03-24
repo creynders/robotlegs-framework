@@ -28,11 +28,11 @@ package robotlegs.bender.extensions.commandCenter.support
 			return null;
 		}
 		
-		public function set whenExecuted(value:Function):void
+		public function set whenCommandExecuted(value:Function):void
 		{
 		}
 		
-		public function get whenExecuted():Function
+		public function get whenCommandExecuted():Function
 		{
 			return null;
 		}

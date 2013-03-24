@@ -67,7 +67,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 * Creates a Command Mapping
 		 * @param commandClass The concrete Command class
 		 */
-		public function CommandMapping(commandClass : Class)
+		public function CommandMapping(commandClass:Class)
 		{
 			_commandClass = commandClass;
 		}
@@ -107,6 +107,5 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			return 'Command ' + _commandClass;
 		}
-
 	}
 }

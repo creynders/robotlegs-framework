@@ -10,9 +10,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-
 	import org.swiftsuspenders.Injector;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
@@ -34,7 +32,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		protected var _commandCenter:ICommandCenter;
 
-		protected var _strategy : EventCommandMapStrategy;
+		protected var _strategy:EventCommandMapStrategy;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -46,10 +44,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function EventCommandMap(
 			injector:Injector,
 			dispatcher:IEventDispatcher,
-			commandCenter : ICommandCenter )
+			commandCenter:ICommandCenter)
 		{
 			_commandCenter = commandCenter;
-			_strategy = new EventCommandMapStrategy( injector, dispatcher, commandCenter );
+			_strategy = new EventCommandMapStrategy(injector, dispatcher, commandCenter);
 		}
 
 		/*============================================================================*/
@@ -61,7 +59,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function map(type:String, eventClass:Class = null):ICommandMapper
 		{
-			return createMapper( type, eventClass );
+			return createMapper(type, eventClass);
 		}
 
 		/**
@@ -69,7 +67,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function unmap(type:String, eventClass:Class = null):ICommandUnmapper
 		{
-			return createMapper( type, eventClass );
+			return createMapper(type, eventClass);
 		}
 
 		/*============================================================================*/
@@ -79,11 +77,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * TODO: document
 		 */
-		protected function createMapper( type : String, eventClass : Class = null):CommandMapper
+		protected function createMapper(type:String, eventClass:Class = null):CommandMapper
 		{
-			var trigger : EventCommandTrigger = _strategy.getTrigger( type, eventClass );
-			return new CommandMapper( _commandCenter, trigger );
+			var trigger:EventCommandTrigger = _strategy.getTrigger(type, eventClass);
+			return new CommandMapper(trigger);
 		}
-
 	}
 }

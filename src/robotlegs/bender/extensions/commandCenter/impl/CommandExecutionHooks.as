@@ -7,20 +7,25 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutionHooks;
 
 	/**
 	 * @private
 	 */
-	public class CommandExecutionHooks implements ICommandExecutionHooks{
+	public class CommandExecutionHooks implements ICommandExecutionHooks
+	{
 
-		private var _mapPayload : Function;
+		/*============================================================================*/
+		/* Public Properties                                                          */
+		/*============================================================================*/
+
+		private var _mapPayload:Function;
 
 		/**
 		 * @inheritDoc
 		 */
-		public function get mapPayload():Function{
+		public function get mapPayload():Function
+		{
 			return _mapPayload;
 		}
 
@@ -32,12 +37,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 			_mapPayload = value;
 		}
 
-		private var _unmapPayload : Function;
+		private var _unmapPayload:Function;
 
 		/**
 		 * @inheritDoc
 		 */
-		public function get unmapPayload():Function{
+		public function get unmapPayload():Function
+		{
 			return _unmapPayload;
 		}
 
@@ -49,22 +55,22 @@ package robotlegs.bender.extensions.commandCenter.impl
 			_unmapPayload = value;
 		}
 
-
-		private var _whenExecuted : Function;
+		private var _whenCommandExecuted:Function;
 
 		/**
 		 * @inheritDoc
 		 */
-		public function get whenExecuted():Function{
-			return _whenExecuted;
+		public function get whenCommandExecuted():Function
+		{
+			return _whenCommandExecuted;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function set whenExecuted(value:Function):void
+		public function set whenCommandExecuted(value:Function):void
 		{
-			_whenExecuted = value;
+			_whenCommandExecuted = value;
 		}
 	}
 }

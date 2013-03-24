@@ -7,13 +7,10 @@
 
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
-
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-
 	import org.swiftsuspenders.Injector;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutionHooks;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
@@ -26,21 +23,24 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	/**
 	 * @private
 	 */
-	public class EventCommandMapStrategy implements ICommandMapStrategy{
+	public class EventCommandMapStrategy implements ICommandMapStrategy
+	{
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _injector : Injector;
+		private var _injector:Injector;
 
-		private var _dispatcher : IEventDispatcher;
+		private var _dispatcher:IEventDispatcher;
 
-		private var _commandMap : ICommandCenter;
+		private var _commandMap:ICommandCenter;
 
-		//todo: const
-		private var _triggers : Dictionary = new Dictionary( false );
-		private var _handlers : Dictionary = new Dictionary( false );
+		//TODO: const
+		private var _triggers:Dictionary = new Dictionary(false);
+
+		//TODO: const
+		private var _handlers:Dictionary = new Dictionary(false);
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -49,7 +49,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @private
 		 */
-		public function EventCommandMapStrategy(injector : Injector, dispatcher : IEventDispatcher, commandMap : ICommandCenter)
+		public function EventCommandMapStrategy(
+			injector:Injector,
+			dispatcher:IEventDispatcher,
+			commandMap:ICommandCenter)
 		{
 			_injector = injector;
 			_dispatcher = dispatcher;
@@ -61,13 +64,15 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		/**
-		 * TODO: document
+		 * TODO: decide whether this should be declared in a IEventCommandMapStrategy
+		 * & document
 		 */
-		public function getTrigger( eventType : String, eventClass : Class = null ) : EventCommandTrigger{
-
-			var trigger : ICommandTrigger = _triggers[ eventType + eventClass ];
-			if( !trigger ){
-				trigger = createTrigger( eventType, eventClass );
+		public function getTrigger(eventType:String, eventClass:Class = null):EventCommandTrigger
+		{
+			var trigger:ICommandTrigger = _triggers[eventType + eventClass];
+			if (!trigger)
+			{
+				trigger = createTrigger(eventType, eventClass);
 			}
 			return trigger as EventCommandTrigger;
 		}
@@ -77,12 +82,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function registerTrigger(trigger:ICommandTrigger):void
 		{
-			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
-			var handler : Function = function( event : Event ) : void{
-				handleEvent( eventTrigger, event );
+			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
+			var handler:Function = function(event:Event):void {
+				handleEvent(eventTrigger, event);
 			}
-			_handlers[ eventTrigger ] = handler;
-			_dispatcher.addEventListener( eventTrigger.type, handler );
+			_handlers[eventTrigger] = handler;
+			_dispatcher.addEventListener(eventTrigger.type, handler);
 		}
 
 		/**
@@ -90,10 +95,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function unregisterTrigger(trigger:ICommandTrigger):void
 		{
-			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
-			var handler : Function = _handlers[ eventTrigger ];
-			delete _handlers[ eventTrigger ];
-			_dispatcher.removeEventListener( eventTrigger.type, handler );
+			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
+			var handler:Function = _handlers[eventTrigger];
+			delete _handlers[eventTrigger];
+			_dispatcher.removeEventListener(eventTrigger.type, handler);
 		}
 
 		/*============================================================================*/
@@ -103,39 +108,44 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * TODO: document
 		 */
-		protected function handleEvent( trigger : EventCommandTrigger, event : Event ) : void{
+		protected function handleEvent(trigger:EventCommandTrigger, event:Event):void
+		{
 
-			var eventConstructor : Class = event["constructor"] as Class;
-			if( trigger.eventClass != Event && trigger.eventClass != eventConstructor ){
+			var eventConstructor:Class = event["constructor"] as Class;
+			if (trigger.eventClass != Event && trigger.eventClass != eventConstructor)
+			{
 				return;
 			}
-			var hooks : ICommandExecutionHooks = new CommandExecutionHooks();
+			var hooks:ICommandExecutionHooks = new CommandExecutionHooks();
 
-			hooks.mapPayload = function() : void{
+			hooks.mapPayload = function():void {
 				_injector.map(Event).toValue(event);
 				if (eventConstructor != Event)
 				{
-					_injector.map( eventConstructor ).toValue(event);
+					_injector.map(eventConstructor).toValue(event);
 				}
 			}
 
-			hooks.unmapPayload = function() : void{
+			hooks.unmapPayload = function():void {
 				_injector.unmap(Event);
 				if (eventConstructor != Event)
 				{
-					_injector.unmap( eventConstructor );
+					_injector.unmap(eventConstructor);
 				}
 			}
-			_commandMap.executeCommands( trigger, hooks );
+			_commandMap.executeTrigger(trigger, hooks);
 		}
+
+		/*============================================================================*/
+		/* Private Functions                                                          */
+		/*============================================================================*/
 
 		private function createTrigger(eventType:String, eventClass:Class):ICommandTrigger
 		{
 			eventClass ||= Event;
-			var trigger : ICommandTrigger = new EventCommandTrigger( this, eventType, eventClass );
-			_triggers[ eventType + eventClass ] = trigger;
+			var trigger:ICommandTrigger = new EventCommandTrigger(this, eventType, eventClass);
+			_triggers[eventType + eventClass] = trigger;
 			return trigger;
 		}
-
 	}
 }
