@@ -11,14 +11,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutionHooks;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutionHooks;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 
 	/**
 	 * @private
@@ -33,8 +30,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		private var _injector:Injector;
 
 		private var _dispatcher:IEventDispatcher;
-
-		private var _commandMap:ICommandCenter;
 
 		//TODO: const
 		private var _triggers:Dictionary = new Dictionary(false);
@@ -51,12 +46,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function EventCommandMapStrategy(
 			injector:Injector,
-			dispatcher:IEventDispatcher,
-			commandMap:ICommandCenter)
+			dispatcher:IEventDispatcher)
 		{
-			_injector = injector;
+			_injector = injector.createChildInjector();
 			_dispatcher = dispatcher;
-			_commandMap = commandMap;
 		}
 
 		/*============================================================================*/
@@ -80,7 +73,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function registerTrigger(trigger:ICommandTrigger):void
+		public function activate(trigger:ICommandTrigger):void
 		{
 			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
 			var handler:Function = function(event:Event):void {
@@ -93,7 +86,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function unregisterTrigger(trigger:ICommandTrigger):void
+		public function deactivate(trigger:ICommandTrigger):void
 		{
 			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
 			var handler:Function = _handlers[eventTrigger];
@@ -110,30 +103,29 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		protected function handleEvent(trigger:EventCommandTrigger, event:Event):void
 		{
-
+			var executor:ICommandExecutor = new CommandExecutor(_injector, trigger);
 			var eventConstructor:Class = event["constructor"] as Class;
 			if (trigger.eventClass != Event && trigger.eventClass != eventConstructor)
 			{
 				return;
 			}
-			var hooks:ICommandExecutionHooks = new CommandExecutionHooks();
-
-			hooks.mapPayload = function():void {
+			executor.withPayloadMapper(function():void {
 				_injector.map(Event).toValue(event);
 				if (eventConstructor != Event)
 				{
 					_injector.map(eventConstructor).toValue(event);
 				}
-			}
+			});
 
-			hooks.unmapPayload = function():void {
+			executor.withPayloadUnmapper(function():void {
 				_injector.unmap(Event);
 				if (eventConstructor != Event)
 				{
 					_injector.unmap(eventConstructor);
 				}
-			}
-			_commandMap.executeTrigger(trigger, hooks);
+			});
+
+			executor.executeCommands(trigger.getMappings().concat());
 		}
 
 		/*============================================================================*/

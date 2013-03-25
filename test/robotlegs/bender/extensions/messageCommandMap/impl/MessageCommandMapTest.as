@@ -13,7 +13,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	import org.hamcrest.object.instanceOf;
 	import org.swiftsuspenders.Injector;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.messageCommandMap.api.IMessageCommandMap;
 	import robotlegs.bender.framework.impl.MessageDispatcher;
 
@@ -43,7 +43,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			reportedExecutions = [];
 			dispatcher = new MessageDispatcher();
-			messageCommandMap = new MessageCommandMap(injector, dispatcher, new CommandCenter());
+			messageCommandMap = new MessageCommandMap(injector, dispatcher, new CommandExecutor());
 			message = {};
 		}
 

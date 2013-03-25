@@ -13,18 +13,17 @@ package robotlegs.bender.extensions.commandCenter.api
 	/**
 	 * Executes triggers and commands
 	 */
-	public interface ICommandCenter
+	public interface ICommandExecutor
 	{
 
-		/**
-		 * TODO: document
-		 */
-		function execute(commandClass:Class, hooks:ICommandExecutionHooks = null):void;
+		function withPayloadMapper(mapPayload:Function):ICommandExecutor;
+
+		function withPayloadUnmapper(unmapPayload:Function):ICommandExecutor;
 
 		/**
 		 * TODO: document
 		 */
-		function executeTrigger(trigger:ICommandTrigger, hooks:ICommandExecutionHooks = null):void;
+		function executeCommands(mappings:Vector.<ICommandMapping>):void;
 
 	}
 }

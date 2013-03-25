@@ -15,7 +15,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import org.hamcrest.object.nullValue;
 	import org.swiftsuspenders.Injector;
 
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -43,7 +43,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var commandCenter:ICommandCenter;
+		private var commandCenter:ICommandExecutor;
 
 		private var reportedExecutions:Array;
 
@@ -65,7 +65,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			reportedExecutions = [];
 			mappings = [];
-			commandCenter = new CommandCenter( injector );
+			commandCenter = new CommandExecutor( injector );
 			commandCenter.strategy = strategy;
 		}
 
@@ -153,7 +153,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 				hooks && mapping.addHooks.apply(mapping, hooks);
 			}
 
-			commandCenter.executeTrigger( mappingsVector, new NullCommandExecutionHooks() );
+			commandCenter.executeCommands( mappingsVector, new NullCommandExecutionHooks() );
 			injector.unmap(Function, 'executeCallback');
 			return executeCount;
 		}

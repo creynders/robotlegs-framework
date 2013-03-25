@@ -8,18 +8,17 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutionHooks;
+
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.framework.api.ILogger;
 	import robotlegs.bender.framework.impl.applyHooks;
 	import robotlegs.bender.framework.impl.guardsApprove;
 
 	/**
 	 * @private
 	 */
-	public class CommandCenter implements ICommandCenter
+	public class CommandExecutor implements ICommandExecutor
 	{
 
 		/*============================================================================*/
@@ -28,43 +27,52 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _injector:Injector;
 
+		private var _trigger : ICommandTrigger;
+
+		private var _mapPayload:Function;
+
+		private var _unmapPayload:Function;
+
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 
 		/**
-		 * @private
+		 * TODO: document
 		 */
-		public function CommandCenter(injector:Injector):void
+		public function CommandExecutor(injector:Injector, trigger : ICommandTrigger):void
 		{
 			_injector = injector;
+			_trigger = trigger;
 		}
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
-		/**
-		 * @inheritDoc
-		 */
-		public function execute(commandClass:Class, hooks:ICommandExecutionHooks = null):void
+		public function withPayloadMapper(mapPayload:Function):ICommandExecutor
 		{
-			var mapping:ICommandMapping = new CommandMapping(commandClass);
-			executeMapping(mapping, hooks);
+			_mapPayload = mapPayload;
+			return this;
+		}
+
+		public function withPayloadUnmapper(unmapPayload:Function):ICommandExecutor
+		{
+			_unmapPayload = unmapPayload;
+			return this;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function executeTrigger(trigger:ICommandTrigger, hooks:ICommandExecutionHooks = null):void
+		public function executeCommands(mappings:Vector.<ICommandMapping>):void
 		{
-			var mappings:Vector.<ICommandMapping> = trigger.getMappings().concat();
 			var i:int;
 			var n:int = mappings.length;
 			for (i = 0; i < n; i++)
 			{
 				var mapping:ICommandMapping = mappings[i];
-				executeMapping(mapping, hooks, trigger);
+				executeMapping(mapping);
 			}
 		}
 
@@ -72,14 +80,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private function executeMapping(mapping:ICommandMapping, hooks:ICommandExecutionHooks = null, trigger:ICommandTrigger = null):void
+		private function executeMapping(mapping:ICommandMapping):void
 		{
 			var command:Object = null;
-			hooks && hooks.mapPayload && hooks.mapPayload();
+			_mapPayload && _mapPayload();
 			if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector))
 			{
-
-				trigger && mapping.fireOnce && trigger.unmap(mapping.commandClass);
+				mapping.fireOnce && _trigger.unmap( mapping.commandClass );
 				const commandClass:Class = mapping.commandClass;
 				command = _injector.instantiateUnmapped(commandClass);
 				if (mapping.hooks.length > 0)
@@ -89,11 +96,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 					_injector.unmap(commandClass);
 				}
 			}
-			hooks && hooks.unmapPayload && hooks.unmapPayload();
+			_unmapPayload && _unmapPayload(mapping);
 			if (command)
 			{
 				"execute" in command && command.execute();
-				hooks && hooks.whenCommandExecuted && hooks.whenCommandExecuted();
 			}
 		}
 	}

@@ -11,7 +11,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	
 	import org.swiftsuspenders.Injector;
 	
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -38,7 +38,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 
 		private var _dispatcher:IMessageDispatcher;
 
-		private var _commandCenter:ICommandCenter;
+		private var _commandCenter:ICommandExecutor;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -50,7 +50,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		public function MessageCommandMap(
 			injector:Injector,
 			dispatcher:IMessageDispatcher,
-			commandCenter:ICommandCenter)
+			commandCenter:ICommandExecutor)
 		{
 			_injector = injector;
 			_dispatcher = dispatcher;

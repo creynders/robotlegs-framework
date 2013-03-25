@@ -11,7 +11,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
@@ -30,8 +30,6 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Protected Properties                                                       */
 		/*============================================================================*/
 
-		protected var _commandCenter:ICommandCenter;
-
 		protected var _strategy:EventCommandMapStrategy;
 
 		/*============================================================================*/
@@ -43,11 +41,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function EventCommandMap(
 			injector:Injector,
-			dispatcher:IEventDispatcher,
-			commandCenter:ICommandCenter)
+			dispatcher:IEventDispatcher)
 		{
-			_commandCenter = commandCenter;
-			_strategy = new EventCommandMapStrategy(injector, dispatcher, commandCenter);
+			_strategy = new EventCommandMapStrategy(injector, dispatcher);
 		}
 
 		/*============================================================================*/

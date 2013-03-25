@@ -18,11 +18,11 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document and rename [!]
 		 */
-		function registerTrigger(trigger:ICommandTrigger):void;
+		function activate(trigger:ICommandTrigger):void;
 
 		/**
 		 * TODO: document and rename [!]
 		 */
-		function unregisterTrigger(trigger:ICommandTrigger):void;
+		function deactivate(trigger:ICommandTrigger):void;
 	}
 }

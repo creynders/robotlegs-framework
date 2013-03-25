@@ -14,7 +14,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 	import org.swiftsuspenders.Injector;
 	import robotlegs.bender.framework.api.IMessageDispatcher;
 	import robotlegs.bender.framework.impl.MessageDispatcher;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
 	import robotlegs.bender.extensions.commandCenter.support.SelfReportingCallbackCommand;
@@ -48,7 +48,7 @@ package robotlegs.bender.extensions.messageCommandMap.impl
 		{
 			injector = new Injector();
 			dispatcher = new MessageDispatcher();
-			messageCommandMap = new MessageCommandMap(injector, dispatcher, new CommandCenter());
+			messageCommandMap = new MessageCommandMap(injector, dispatcher, new CommandExecutor());
 		}
 
 		/*============================================================================*/

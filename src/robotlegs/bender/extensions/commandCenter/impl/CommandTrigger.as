@@ -168,7 +168,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			_mappingsList.push(mapping);
 			if (_mappingsList.length == 1)
 			{
-				_strategy.registerTrigger(_decorated);
+				_strategy.activate(_decorated);
 			}
 		}
 
@@ -182,7 +182,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			if (_mappingsList.length <= 0)
 			{
-				_strategy.unregisterTrigger(_decorated);
+				_strategy.deactivate(_decorated);
 			}
 		}
 	}
