@@ -10,11 +10,15 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
+
 	import org.swiftsuspenders.Injector;
+
+	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 
 	/**
@@ -31,11 +35,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var _dispatcher:IEventDispatcher;
 
-		//TODO: const
-		private var _triggers:Dictionary = new Dictionary(false);
-
-		//TODO: const
-		private var _handlers:Dictionary = new Dictionary(false);
+		private var _commandCenter : ICommandCenter;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -50,6 +50,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			_injector = injector.createChildInjector();
 			_dispatcher = dispatcher;
+			_commandCenter = new CommandCenter()
+				.withTriggerFactory( createTrigger )
+				.withKeyFactory( getKey );
 		}
 
 		/*============================================================================*/
@@ -62,11 +65,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function getTrigger(eventType:String, eventClass:Class = null):EventCommandTrigger
 		{
-			var trigger:ICommandTrigger = _triggers[eventType + eventClass];
-			if (!trigger)
-			{
-				trigger = createTrigger(eventType, eventClass);
-			}
+			var trigger:ICommandTrigger = _commandCenter.getTriggerByKey( eventType, eventClass );
 			return trigger as EventCommandTrigger;
 		}
 
@@ -76,11 +75,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function activate(trigger:ICommandTrigger):void
 		{
 			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
-			var handler:Function = function(event:Event):void {
-				handleEvent(eventTrigger, event);
-			}
-			_handlers[eventTrigger] = handler;
-			_dispatcher.addEventListener(eventTrigger.type, handler);
+			var callback : Function = _commandCenter.createCallback( eventTrigger, handleEvent );
+			_dispatcher.addEventListener(eventTrigger.type, callback );
 		}
 
 		/**
@@ -89,9 +85,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function deactivate(trigger:ICommandTrigger):void
 		{
 			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
-			var handler:Function = _handlers[eventTrigger];
-			delete _handlers[eventTrigger];
-			_dispatcher.removeEventListener(eventTrigger.type, handler);
+			var callback : Function = _commandCenter.removeCallback( eventTrigger );
+			_dispatcher.removeEventListener(eventTrigger.type, callback );
 		}
 
 		/*============================================================================*/
@@ -101,11 +96,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * TODO: document
 		 */
-		protected function handleEvent(trigger:EventCommandTrigger, event:Event):void
+		protected function handleEvent(trigger : ICommandTrigger, event:Event):void
 		{
-			var executor:ICommandExecutor = new CommandExecutor(_injector, trigger);
+			var eventTrigger : EventCommandTrigger = trigger as EventCommandTrigger;
+			var executor:ICommandExecutor = new CommandExecutor(_injector, eventTrigger);
 			var eventConstructor:Class = event["constructor"] as Class;
-			if (trigger.eventClass != Event && trigger.eventClass != eventConstructor)
+			if (eventTrigger.eventClass && eventTrigger.eventClass != eventConstructor)
 			{
 				return;
 			}
@@ -132,12 +128,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private function createTrigger(eventType:String, eventClass:Class):ICommandTrigger
+		private function createTrigger(eventType:String, eventClass:Class=null):ICommandTrigger
 		{
+			return new EventCommandTrigger(this, eventType, eventClass);
+		}
+
+		private function getKey( eventType : String, eventClass : Class = null ) : Object{
 			eventClass ||= Event;
-			var trigger:ICommandTrigger = new EventCommandTrigger(this, eventType, eventClass);
-			_triggers[eventType + eventClass] = trigger;
-			return trigger;
+			return eventType + eventClass;
 		}
 	}
 }

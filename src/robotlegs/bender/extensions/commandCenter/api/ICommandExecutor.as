@@ -16,8 +16,14 @@ package robotlegs.bender.extensions.commandCenter.api
 	public interface ICommandExecutor
 	{
 
+		/**
+		 * TODO: document
+		 */
 		function withPayloadMapper(mapPayload:Function):ICommandExecutor;
 
+		/**
+		 * TODO: document
+		 */
 		function withPayloadUnmapper(unmapPayload:Function):ICommandExecutor;
 
 		/**
