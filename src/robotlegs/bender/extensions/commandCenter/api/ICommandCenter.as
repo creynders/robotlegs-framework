@@ -16,23 +16,34 @@ package robotlegs.bender.extensions.commandCenter.api
 	public interface ICommandCenter
 	{
 
-		function withTriggerFactory( triggerFactory : Function ) : ICommandCenter;
-
-		function withKeyFactory( keyFactory : Function ) : ICommandCenter;
-
-		function createCallback( trigger : ICommandTrigger, handler : Function ) : Function;
-
-		function removeCallback( trigger : ICommandTrigger ) : Function;
-
 		/**
-		 * Unmaps a trigger mapped to the key
-		 * @param key The key to the trigger to unmap
+		 * TODO: document
 		 */
-		function unmapTriggerFromKey(...key):void;
+		function withTriggerFactory(triggerFactory:Function):ICommandCenter;
 
 		/**
 		 * TODO: document
 		 */
-		function getTriggerByKey( ...key ):ICommandTrigger;
+		function withKeyFactory(keyFactory:Function):ICommandCenter;
+
+		/**
+		 * TODO: document
+		 */
+		function createCallback(trigger:ICommandTrigger, handler:Function):Function;
+
+		/**
+		 * TODO: document
+		 */
+		function removeCallback(trigger:ICommandTrigger):Function;
+
+		/**
+		 * TODO: document
+		 */
+		function unmapTriggerFromKey(... key):void;
+
+		/**
+		 * TODO: document
+		 */
+		function getTriggerByKey(... key):ICommandTrigger;
 	}
 }
