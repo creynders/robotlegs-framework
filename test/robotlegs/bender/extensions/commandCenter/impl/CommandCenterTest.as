@@ -7,20 +7,28 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
+	import mockolate.expect;
+	import mockolate.mock;
+	import mockolate.received;
 	import mockolate.runner.MockolateRule;
+	import mockolate.stub;
+	import mockolate.verify;
 
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
+	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.nullValue;
 	import org.swiftsuspenders.Injector;
 
+	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
+	import robotlegs.bender.extensions.commandCenter.support.CommandMapStub;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommandExecutionHooks;
 
 	public class CommandCenterTest
@@ -31,29 +39,22 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Rule]
-		public var mockolateRule : MockolateRule = new MockolateRule();
+		public var mockolateRule:MockolateRule = new MockolateRule();
 
 		[Mock]
-		public var strategy : ICommandMapStrategy;
+		public var trigger:ICommandTrigger;
 
 		[Mock]
-		public var trigger : ICommandTrigger;
+		public var host:CommandMapStub;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var commandCenter:ICommandExecutor;
+		private var commandCenter:ICommandCenter;
 
-		private var reportedExecutions:Array;
+		private var injector:Injector;
 
-		private var mappings : Array;
-
-		private var injector : Injector;
-
-		private function get mappingsVector() : Vector.<ICommandMapping>{
-			return Vector.<ICommandMapping>( mappings );
-		}
 		/*============================================================================*/
 		/* Test Setup and Teardown                                                    */
 		/*============================================================================*/
@@ -62,11 +63,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function before():void
 		{
 			injector = new Injector();
-			injector.map(Function, "reportingFunction").toValue(reportingFunction);
-			reportedExecutions = [];
-			mappings = [];
-			commandCenter = new CommandExecutor( injector );
-			commandCenter.strategy = strategy;
+			commandCenter = new CommandCenter()
+				.withKeyFactory(host.createKey)
+				.withTriggerFactory(host.createTrigger);
+
 		}
 
 		/*============================================================================*/
@@ -74,132 +74,93 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function test_map_stores_mapping():void
+		public function test_keyFactory_is_called_with_params():void
 		{
-			commandCenter.map( trigger,);
-			assertThat(commandCenter.getMappings( trigger ), array( mapping ) );
+			const foo:String = 'foo';
+			const bar:Object = {};
+			mock(host).method('createKey').args(foo, bar).once();
+			commandCenter.getOrCreateNewTrigger(foo, bar);
 		}
 
 		[Test]
-		public function test_unmap_removes_mapping():void
+		public function test_triggerFactory_is_called_with_params():void
 		{
-			var mapping : CommandMapping = new CommandMapping( trigger );
-			commandCenter.map( mapping );
-			commandCenter.unmap( mapping );
-			assertThat(commandCenter.getMappings( trigger ), nullValue() );
+			const foo:String = 'foo';
+			const bar:Object = {};
+			mock(host).method('createTrigger').args(foo, bar).once();
+			commandCenter.getOrCreateNewTrigger(foo, bar);
 		}
 
 		[Test]
-		public function test_getMappings_returns_mappings() : void{
-			mapCommands( CallbackCommand, CallbackCommand2 );
-			assertThat( commandCenter.getMappings( trigger ), array( mappings ) );
+		public function test_getTriggerByKey_returns_identical_trigger_when_identical_key():void
+		{
+			const foo:String = 'foo';
+			const bar:Object = {};
+			stub(host).method('createKey').returns('aKey');
+			stub(host).method('createTrigger').args(foo, bar).returns(trigger).once();
+			var oldTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger(foo, bar);
+			var newTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger(foo, bar);
+			assertThat(newTrigger, equalTo(oldTrigger));
 		}
 
 		[Test]
-		public function test_unmapAll_unmaps_all() : void{
-			mapCommands( CallbackCommand, CallbackCommand2 );
-			commandCenter.unmapAll( trigger );
-			//TODO: determine whether this should be nullValue() instead??
-			assertThat( commandCenter.getMappings( trigger ), array() );
+		public function test_unMapTriggerFromKey_removes_trigger():void
+		{
+			const foo:String = 'foo';
+			const bar:Object = {};
+			stub(host).method('createKey').returns('aKey');
+			mock(host).method('createTrigger').args(foo, bar).returns(trigger).twice();
+			var oldTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger(foo, bar);
+			commandCenter.removeTrigger(foo, bar);
+			var newTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger(foo, bar);
 		}
 
 		[Test]
-		public function test_command_without_execute_method_is_still_constructed():void
+		public function test_createCallback_returns_callback():void
 		{
+			var called:Boolean = false;
+			var handler:Function = function(... params):void {
+				called = true;
+			};
+			var callback:Function = commandCenter.createCallback(trigger, handler);
+			callback();
 
-			commandCenter.executeCommand( addMapping( trigger, CommandWithoutExecute ), new NullCommandExecutionHooks() );
-			assertThat( reportedExecutions, array( CommandWithoutExecute ) );
+			assertThat(called, equalTo(true));
 		}
 
 		[Test]
-		public function test_command_executes_successfully():void
+		public function test_created_callback_passes_trigger():void
 		{
-			assertThat(commandExecutionCount(1), equalTo(1));
+			var passed:ICommandTrigger;
+			var handler:Function = function(... params):void {
+				passed = params.shift();
+			};
+			var callback:Function = commandCenter.createCallback(trigger, handler);
+			callback();
+
+			assertThat(passed, equalTo(trigger));
 		}
 
 		[Test]
-		public function test_command_executes_repeatedly():void
+		public function test_created_callback_passes_parameters():void
 		{
-			assertThat(commandExecutionCount(5), equalTo(5));
+			const foo:String = 'foo';
+			const bar:Object = {};
+			var actual:Array;
+			var handler:Function = function(... params):void {
+				actual = params;
+			};
+			var callback:Function = commandCenter.createCallback(trigger, handler);
+			callback( foo, bar );
+			var expected : Array= [ trigger, foo, bar ];
+			assertThat( actual, array(expected));
 		}
 
 		[Test]
-		public function test_fireOnce_command_removes_mapping():void
-		{
-			assertThat(commandExecutionCountFireOnce());
-			assertThat( commandCenter.getMappings( trigger ), array() );
+		public function test_removeCallBack_returns_removed_callback() : void{
+			var created:Function = commandCenter.createCallback(trigger, function() : void{});
+			var removed : Function = commandCenter.removeCallback(trigger);
+			assertThat( removed, equalTo(created));
 		}
-
-		/*============================================================================*/
-		/* Private Functions                                                          */
-		/*============================================================================*/
-		private function commandExecutionCountFireOnce(totalEvents:uint = 1):uint
-		{
-			return commandExecutionCount(totalEvents, true);
-		}
-
-		private function commandExecutionCount(totalEvents:int = 1, oneShot:Boolean = false, guards:Array = null, hooks:Array = null):uint
-		{
-			var executeCount:uint = 0;
-			injector.map(Function, 'executeCallback').toValue(function():void
-			{
-				executeCount++;
-			});
-			while (totalEvents--)
-			{
-				var mapping:ICommandMapping = addMapping(trigger + totalEvents, CallbackCommand);
-				mapping.setFireOnce(oneShot);
-				guards && mapping.addGuards.apply(mapping, guards);
-				hooks && mapping.addHooks.apply(mapping, hooks);
-			}
-
-			commandCenter.executeCommands( mappingsVector, new NullCommandExecutionHooks() );
-			injector.unmap(Function, 'executeCallback');
-			return executeCount;
-		}
-
-
-		private function mapCommands( ...commandClasses ) : void{
-			while( commandClasses.length > 0 ){
-				addMapping( trigger, commandClasses.shift() );
-			}
-		}
-
-		private function addMapping( trigger: String, commandClass:Class):ICommandMapping
-		{
-
-			var mapping:CommandMapping = new CommandMapping(trigger, commandClass);
-			commandCenter.map( mapping );
-			mappings.push(mapping);
-			return mapping;
-		}
-
-		private function reportingFunction(item:Object):void
-		{
-			reportedExecutions.push(item);
-		}
-
 	}
 }
-
-class CommandWithoutExecute
-{
-
-	/*============================================================================*/
-	/* Public Properties                                                          */
-	/*============================================================================*/
-
-	[Inject(name="reportingFunction")]
-	public var reportingFunc:Function;
-
-	/*============================================================================*/
-	/* Public Functions                                                           */
-	/*============================================================================*/
-
-	[PostConstruct]
-	public function init():void
-	{
-		reportingFunc(CommandWithoutExecute);
-	}
-}
-

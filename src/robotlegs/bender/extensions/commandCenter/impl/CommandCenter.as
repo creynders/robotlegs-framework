@@ -24,8 +24,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private const _triggersByKey:Dictionary = new Dictionary(false);
 
-		private const _callbackByTrigger:Dictionary = new Dictionary();
-
 		private var _triggerFactory:Function;
 
 		private var _keyFactory:Function;
@@ -55,44 +53,22 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * @inheritDoc
 		 */
-		public function createCallback(trigger:ICommandTrigger, handler:Function):Function
+		public function removeTrigger(... key):void
 		{
-			const callback:Function = function(... args):void {
-				const p:Array = [trigger].concat(args);
-				handler.apply(null, p);
-			}
-			_callbackByTrigger[trigger] = callback;
-			return callback;
+			delete _triggersByKey[serializeKey(key)];
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function removeCallback(trigger:ICommandTrigger):Function
+		public function getOrCreateNewTrigger(... key):ICommandTrigger
 		{
-			const callback:Function = _callbackByTrigger[trigger];
-			delete _callbackByTrigger[trigger];
-			return callback;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function unmapTriggerFromKey(... key):void
-		{
-			delete _triggersByKey[createKey(key)];
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getTriggerByKey(... key):ICommandTrigger
-		{
-			var trigger:ICommandTrigger = _triggersByKey[createKey(key)];
+			var serializedKey : Object = serializeKey(key)
+			var trigger:ICommandTrigger = _triggersByKey[serializedKey];
 			if (!trigger)
 			{
 				trigger = _triggerFactory.apply(null, key);
-				mapTriggerToKey(trigger, key);
+				_triggersByKey[serializedKey] = trigger
 			}
 			return trigger;
 		}
@@ -101,12 +77,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private function mapTriggerToKey(trigger:ICommandTrigger, key:Array):void
-		{
-			_triggersByKey[createKey(key)] = trigger;
-		}
-
-		private function createKey(args:Array):Object
+		private function serializeKey(args:Array):Object
 		{
 			return _keyFactory.apply(null, args);
 		}

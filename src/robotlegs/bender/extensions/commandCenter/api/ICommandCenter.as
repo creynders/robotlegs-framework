@@ -29,21 +29,11 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
-		function createCallback(trigger:ICommandTrigger, handler:Function):Function;
+		function removeTrigger(... key):void;
 
 		/**
 		 * TODO: document
 		 */
-		function removeCallback(trigger:ICommandTrigger):Function;
-
-		/**
-		 * TODO: document
-		 */
-		function unmapTriggerFromKey(... key):void;
-
-		/**
-		 * TODO: document
-		 */
-		function getTriggerByKey(... key):ICommandTrigger;
+		function getOrCreateNewTrigger(... key):ICommandTrigger;
 	}
 }

@@ -7,8 +7,6 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;

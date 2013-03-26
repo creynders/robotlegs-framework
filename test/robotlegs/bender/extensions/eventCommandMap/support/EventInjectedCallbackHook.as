@@ -5,28 +5,28 @@
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.commandCenter
+package robotlegs.bender.extensions.eventCommandMap.support
 {
-	import robotlegs.bender.extensions.commandCenter.impl.CommandCenterTest;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingTest;
+	import flash.events.Event;
 
-	[RunWith("org.flexunit.runners.Suite")]
-	[Suite]
-	public class CommandCenterExtensionTestSuite
-	{
-
+	public class EventInjectedCallbackHook{
 		/*============================================================================*/
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-//		public var commandCenter:CommandCenterTest;
+		[Inject]
+		public var event:Event;
 
-		public var commandMappingTest:CommandMappingTest;
+		[Inject(name="hookCallback")]
+		public var callback:Function;
 
-//		public var commandMappingListTest:CommandMappingListTest;
+		/*============================================================================*/
+		/* Public Functions                                                           */
+		/*============================================================================*/
 
-//		public var commandMapperTest:CommandMapperTest;
-
-//		public var commandExecutorTest:AbstractCommandExecutorTest;
+		public function hook():void
+		{
+			callback(this);
+		}
 	}
 }

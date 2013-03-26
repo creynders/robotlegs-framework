@@ -32,5 +32,15 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * TODO: document
 		 */
 		function getMappings():Vector.<ICommandMapping>;
+
+		/**
+		 * TODO: document and rename [!]
+		 */
+		function activate():void;
+
+		/**
+		 * TODO: document and rename [!]
+		 */
+		function deactivate():void;
 	}
 }

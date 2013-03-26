@@ -29,7 +29,17 @@ package robotlegs.bender.extensions.commandCenter.api
 		/**
 		 * TODO: document
 		 */
+		function withCommandClassUnmapper(unmapCommandClass:Function) : ICommandExecutor;
+
+		/**
+		 * TODO: document
+		 */
 		function executeCommands(mappings:Vector.<ICommandMapping>):void;
+
+		/**
+		 * TODO: document
+		 */
+		function executeCommand(mapping:ICommandMapping):void;
 
 	}
 }

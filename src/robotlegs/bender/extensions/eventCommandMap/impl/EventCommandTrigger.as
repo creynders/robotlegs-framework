@@ -7,12 +7,15 @@
 
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	import flash.utils.Dictionary;
+
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
+
+	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandTrigger;
 
 	/**
@@ -49,7 +52,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _base:CommandTrigger;
+		private var _decorated:CommandTrigger;
+
+		private var _dispatcher : IEventDispatcher;
+
+		private var _injector : Injector;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -59,25 +66,40 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 * @private
 		 */
 		public function EventCommandTrigger(
-			strategy:ICommandMapStrategy,
+			injector : Injector,
+			dispatcher : IEventDispatcher,
 			type:String,
 			eventClass:Class = null)
 		{
-			_base = new CommandTrigger(strategy, this);
+			_injector = injector.createChildInjector();
+			_dispatcher = dispatcher;
 			_type = type;
 			_eventClass = eventClass;
+			_decorated = new CommandTrigger( this );
 		}
+
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
+
+		public function activate():void
+		{
+			_dispatcher.addEventListener( type, handleEvent );
+		}
+
+		public function deactivate():void
+		{
+			_dispatcher.removeEventListener( type, handleEvent );
+		}
+
 
 		/**
 		 * @inheritDoc
 		 */
 		public function getMappings():Vector.<ICommandMapping>
 		{
-			return _base.getMappings();
+			return _decorated.getMappings();
 		}
 
 		/**
@@ -85,7 +107,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function map(commandClass:Class):ICommandMapping
 		{
-			return _base.map(commandClass);
+			return _decorated.map(commandClass);
 		}
 
 		/**
@@ -93,7 +115,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function unmap(commandClass:Class):void
 		{
-			_base.unmap(commandClass);
+			_decorated.unmap(commandClass);
 		}
 
 		/**
@@ -101,13 +123,44 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function unmapAll():void
 		{
-			_base.unmapAll();
+			_decorated.unmapAll();
 		}
 
 		public function toString():String
 		{
 			return _eventClass + " with selector '" + _type + "'";
 		}
+
+		/*============================================================================*/
+		/* Private Functions                                                          */
+		/*============================================================================*/
+
+		protected function handleEvent(event:Event):void
+		{
+			const eventConstructor:Class = event["constructor"] as Class;
+			if ( _eventClass && _eventClass != eventConstructor)
+			{
+				return;
+			}
+			const executor:ICommandExecutor = new CommandExecutor(_injector)
+				.withPayloadMapper(function():void {
+					_injector.map(Event).toValue(event);
+					if (eventConstructor != Event)
+					{
+						_injector.map(eventConstructor).toValue(event);
+					}
+				})
+				.withPayloadUnmapper(function():void {
+					_injector.unmap(Event);
+					if (eventConstructor != Event)
+					{
+						_injector.unmap(eventConstructor);
+					}
+				})
+				.withCommandClassUnmapper( unmap );
+			executor.executeCommands(getMappings().concat());
+		}
+
 	}
 }
 

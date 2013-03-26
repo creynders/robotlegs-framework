@@ -9,16 +9,15 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	import flash.utils.Dictionary;
+
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+
+	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 
 	/**
@@ -31,7 +30,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Protected Properties                                                       */
 		/*============================================================================*/
 
-		protected var _strategy:EventCommandMapStrategy;
+		protected var _injector : Injector;
+
+		protected var _dispatcher : IEventDispatcher;
+
+		protected var _commandCenter : ICommandCenter;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -44,7 +47,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector:Injector,
 			dispatcher:IEventDispatcher)
 		{
-			_strategy = new EventCommandMapStrategy(injector, dispatcher);
+			_injector = injector;
+			_dispatcher = dispatcher;
+			_commandCenter = new CommandCenter()
+				.withTriggerFactory(createTrigger)
+				.withKeyFactory(getKey);
 		}
 
 		/*============================================================================*/
@@ -71,13 +78,29 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Protected Functions                                                        */
 		/*============================================================================*/
 
+		protected function getTrigger(eventType:String, eventClass:Class = null):ICommandTrigger
+		{
+			return _commandCenter.getOrCreateNewTrigger(eventType, eventClass);
+		}
+
 		/**
 		 * TODO: document
 		 */
 		protected function createMapper(type:String, eventClass:Class = null):CommandMapper
 		{
-			const trigger:ICommandTrigger = _strategy.getTrigger(type, eventClass);
+			const trigger:ICommandTrigger = getTrigger(type, eventClass);
 			return new CommandMapper(trigger);
+		}
+
+		protected function createTrigger(eventType:String, eventClass:Class = null):ICommandTrigger
+		{
+			return new EventCommandTrigger(_injector, _dispatcher, eventType, eventClass);
+		}
+
+		protected function getKey(eventType:String, eventClass:Class = null):Object
+		{
+			eventClass ||= Event;
+			return eventType + eventClass;
 		}
 	}
 }

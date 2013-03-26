@@ -8,7 +8,6 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import org.swiftsuspenders.Injector;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -27,11 +26,11 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _injector:Injector;
 
-		private var _trigger : ICommandTrigger;
-
 		private var _mapPayload:Function;
 
 		private var _unmapPayload:Function;
+
+		private var _unmapCommandClass:Function;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -40,27 +39,39 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * TODO: document
 		 */
-		public function CommandExecutor(
-			injector:Injector,
-			trigger : ICommandTrigger)
+		public function CommandExecutor(injector:Injector)
 		{
 			_injector = injector;
-			_trigger = trigger;
 		}
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
+		/**
+		 * @inheritDoc
+		 */
 		public function withPayloadMapper(mapPayload:Function):ICommandExecutor
 		{
 			_mapPayload = mapPayload;
 			return this;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function withPayloadUnmapper(unmapPayload:Function):ICommandExecutor
 		{
 			_unmapPayload = unmapPayload;
+			return this;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function withCommandClassUnmapper(unmapCommandClass:Function):ICommandExecutor
+		{
+			_unmapCommandClass = unmapCommandClass;
 			return this;
 		}
 
@@ -73,21 +84,20 @@ package robotlegs.bender.extensions.commandCenter.impl
 			var i:int;
 			for (i = 0; i < n; i++)
 			{
-				executeMapping( mappings[i] );
+				executeCommand(mappings[i]);
 			}
 		}
 
-		/*============================================================================*/
-		/* Private Functions                                                          */
-		/*============================================================================*/
-
-		private function executeMapping(mapping:ICommandMapping):void
+		/**
+		 * @inheritDoc
+		 */
+		public function executeCommand(mapping:ICommandMapping):void
 		{
 			var command:Object = null;
 			_mapPayload && _mapPayload();
 			if (mapping.guards.length == 0 || guardsApprove(mapping.guards, _injector))
 			{
-				mapping.fireOnce && _trigger.unmap( mapping.commandClass );
+				mapping.fireOnce && _unmapCommandClass && _unmapCommandClass(mapping.commandClass);
 				const commandClass:Class = mapping.commandClass;
 				command = _injector.instantiateUnmapped(commandClass);
 				if (mapping.hooks.length > 0)
@@ -103,5 +113,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 				"execute" in command && command.execute();
 			}
 		}
+
 	}
 }

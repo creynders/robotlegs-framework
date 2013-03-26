@@ -11,7 +11,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 	 * TODO: document
 	 */
 	import flash.utils.Dictionary;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMapStrategy;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.framework.api.ILogger;
@@ -39,8 +38,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private const _mappingsByCommandClass:Dictionary = new Dictionary();
 
-		private var _strategy:ICommandMapStrategy;
-
 		private var _decorated:ICommandTrigger;
 
 		/*============================================================================*/
@@ -50,17 +47,30 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * TODO: document
 		 */
-		public function CommandTrigger(
-			strategy:ICommandMapStrategy,
-			decorated:ICommandTrigger = null)
+		public function CommandTrigger(decorator:ICommandTrigger = null)
 		{
-			_strategy = strategy;
-			_decorated = decorated || this;
+			_decorated = decorator || this;
 		}
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
+
+		/**
+		 * @inheritDoc
+		 */
+		public function activate():void
+		{
+			//abstract, only implemented in decorators
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function deactivate():void
+		{
+			//abstract, only implemented in decorators
+		}
 
 		/**
 		 * @inheritDoc
@@ -168,7 +178,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			_mappingsList.push(mapping);
 			if (_mappingsList.length == 1)
 			{
-				_strategy.activate(_decorated);
+				_decorated.activate();
 			}
 		}
 
@@ -182,7 +192,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			if (_mappingsList.length <= 0)
 			{
-				_strategy.deactivate(_decorated);
+				_decorated.deactivate();
 			}
 		}
 	}

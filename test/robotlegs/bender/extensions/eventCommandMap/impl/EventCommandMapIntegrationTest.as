@@ -15,8 +15,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.hamcrest.collection.array;
 	import org.hamcrest.object.equalTo;
 	import org.swiftsuspenders.Injector;
-
-	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
@@ -27,6 +26,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.eventCommandMap.support.CascadingCommand;
 	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackCommand;
 	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackGuard;
+	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackHook;
 	import robotlegs.bender.extensions.eventCommandMap.support.SupportEvent;
 	import robotlegs.bender.framework.impl.guardSupport.GrumpyGuard;
 	import robotlegs.bender.framework.impl.guardSupport.HappyGuard;
@@ -301,12 +301,24 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			assertThat(injectedEvent, equalTo(event));
 		}
 
-		/**
-		 * TODO: test event is injected into hook
-		 */
+		[Test]
+		public function test_event_is_injected_into_hook() : void{
+			var injectedEvent:Event = null;
+			injector.map(Function, 'hookCallback').toValue(function(hook:EventInjectedCallbackHook):void
+			{
+				injectedEvent = hook.event;
+			});
+			eventCommandMap
+				.map(SupportEvent.TYPE1)
+				.toCommand(NullCommand)
+				.withHooks( EventInjectedCallbackHook );
+			const event:SupportEvent = new SupportEvent(SupportEvent.TYPE1);
+			dispatcher.dispatchEvent(event);
+			assertThat(injectedEvent, equalTo(event));
+		}
 
 		[Test]
-		public function test_cascading_events_do_not_throw_unmap_errors():void
+		public function cascading_events_do_not_throw_unmap_errors():void
 		{
 			injector.map(IEventDispatcher).toValue(dispatcher);
 			injector.map(IEventCommandMap).toValue(eventCommandMap);
@@ -335,6 +347,19 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			const expectedOrder:Array = [CommandA];
 			assertThat(reportedExecutions, array(expectedOrder));
 		}
+
+		[Test]
+		public function test_events_do_not_leak_outside_the_EventCommandMap() : void{
+			var hasLeaked:Boolean;
+			var callback : Function = function() : void{
+				hasLeaked = injector.hasMapping(Event);
+			};
+			injector.map( Function, 'postConstructCallback' ).toValue(callback);
+			eventCommandMap.map(SupportEvent.TYPE1).toCommand(PostConstructCommand);
+			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
+			assertThat( hasLeaked, equalTo( false ) );
+		}
+
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
@@ -548,5 +573,23 @@ class CommandWithoutExecute
 	public function init():void
 	{
 		reportingFunc(CommandWithoutExecute);
+	}
+}
+class PostConstructCommand{
+
+	/*============================================================================*/
+	/* Public Properties                                                          */
+	/*============================================================================*/
+
+	[Inject(name="postConstructCallback")]
+	public var callback : Function;
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	[PostConstruct]
+	public function handleCallback() : void{
+		callback();
 	}
 }
