@@ -76,7 +76,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		protected function createMapper(type:String, eventClass:Class = null):CommandMapper
 		{
-			var trigger:ICommandTrigger = _strategy.getTrigger(type, eventClass);
+			const trigger:ICommandTrigger = _strategy.getTrigger(type, eventClass);
 			return new CommandMapper(trigger);
 		}
 	}

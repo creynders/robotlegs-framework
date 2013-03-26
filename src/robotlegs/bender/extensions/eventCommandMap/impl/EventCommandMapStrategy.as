@@ -62,8 +62,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function activate(trigger:ICommandTrigger):void
 		{
-			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
-			var callback:Function = _commandCenter.createCallback(eventTrigger, handleEvent);
+			const eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
+			const callback:Function = _commandCenter.createCallback(eventTrigger, handleEvent);
 			_dispatcher.addEventListener(eventTrigger.type, callback);
 		}
 
@@ -72,8 +72,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function deactivate(trigger:ICommandTrigger):void
 		{
-			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
-			var callback:Function = _commandCenter.removeCallback(eventTrigger);
+			const eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
+			const callback:Function = _commandCenter.removeCallback(eventTrigger);
 			_dispatcher.removeEventListener(eventTrigger.type, callback);
 		}
 
@@ -86,13 +86,13 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		protected function handleEvent(trigger:ICommandTrigger, event:Event):void
 		{
-			var eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
-			var eventConstructor:Class = event["constructor"] as Class;
+			const eventTrigger:EventCommandTrigger = trigger as EventCommandTrigger;
+			const eventConstructor:Class = event["constructor"] as Class;
 			if (eventTrigger.eventClass && eventTrigger.eventClass != eventConstructor)
 			{
 				return;
 			}
-			var executor:ICommandExecutor = new CommandExecutor(_injector, eventTrigger)
+			const executor:ICommandExecutor = new CommandExecutor(_injector, eventTrigger)
 				.withPayloadMapper(function():void {
 					_injector.map(Event).toValue(event);
 					if (eventConstructor != Event)

@@ -40,7 +40,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * TODO: document
 		 */
-		public function CommandExecutor(injector:Injector, trigger : ICommandTrigger):void
+		public function CommandExecutor(
+			injector:Injector,
+			trigger : ICommandTrigger)
 		{
 			_injector = injector;
 			_trigger = trigger;
@@ -67,12 +69,11 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function executeCommands(mappings:Vector.<ICommandMapping>):void
 		{
+			const n:int = mappings.length;
 			var i:int;
-			var n:int = mappings.length;
 			for (i = 0; i < n; i++)
 			{
-				var mapping:ICommandMapping = mappings[i];
-				executeMapping(mapping);
+				executeMapping( mappings[i] );
 			}
 		}
 

@@ -22,11 +22,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		// TODO:const
-		private var _triggersByKey:Dictionary = new Dictionary(false);
+		private const _triggersByKey:Dictionary = new Dictionary(false);
 
-		// TODO:const
-		private var _callbackByTrigger:Dictionary = new Dictionary();
+		private const _callbackByTrigger:Dictionary = new Dictionary();
 
 		private var _triggerFactory:Function;
 
@@ -59,8 +57,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function createCallback(trigger:ICommandTrigger, handler:Function):Function
 		{
-			var callback:Function = function(... args):void {
-				var p:Array = [trigger].concat(args);
+			const callback:Function = function(... args):void {
+				const p:Array = [trigger].concat(args);
 				handler.apply(null, p);
 			}
 			_callbackByTrigger[trigger] = callback;
@@ -72,7 +70,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function removeCallback(trigger:ICommandTrigger):Function
 		{
-			var callback:Function = _callbackByTrigger[trigger];
+			const callback:Function = _callbackByTrigger[trigger];
 			delete _callbackByTrigger[trigger];
 			return callback;
 		}

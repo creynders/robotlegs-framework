@@ -35,11 +35,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		// TODO:change to const
-		private var _mappingsList:Vector.<ICommandMapping> = new Vector.<ICommandMapping>();
+		private const _mappingsList:Vector.<ICommandMapping> = new Vector.<ICommandMapping>();
 
-		// TODO:change to const
-		private var _mappingsByCommandClass:Dictionary = new Dictionary();
+		private const _mappingsByCommandClass:Dictionary = new Dictionary();
 
 		private var _strategy:ICommandMapStrategy;
 
@@ -52,7 +50,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/**
 		 * TODO: document
 		 */
-		public function CommandTrigger(strategy:ICommandMapStrategy, decorated:ICommandTrigger = null)
+		public function CommandTrigger(
+			strategy:ICommandMapStrategy,
+			decorated:ICommandTrigger = null)
 		{
 			_strategy = strategy;
 			_decorated = decorated || this;
@@ -93,7 +93,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function unmapAll():void
 		{
-			var mappings:Vector.<ICommandMapping> = getMappings();
+			const mappings:Vector.<ICommandMapping> = getMappings();
 			if (mappings && mappings.length)
 			{
 				var i:int = mappings.length;
@@ -130,7 +130,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		protected function createMapping(commandClass:Class):ICommandMapping
 		{
-			var mapping:ICommandMapping = new CommandMapping(commandClass);
+			const mapping:ICommandMapping = new CommandMapping(commandClass);
 			addMapping(mapping);
 			_logger && _logger.debug('{0} mapped to {1}', [_decorated, mapping]);
 			return mapping;
