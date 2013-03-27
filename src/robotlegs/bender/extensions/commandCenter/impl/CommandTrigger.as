@@ -84,7 +84,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			else
 			{
-				mapping = createMapping(commandClass);
+				mapping = _decorated.createMapping(commandClass);
 			}
 			return mapping;
 		}
@@ -131,20 +131,20 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return _mappingsByCommandClass[commandClass];
 		}
 
-		/*============================================================================*/
-		/* Protected Functions                                                        */
-		/*============================================================================*/
-
 		/**
 		 * TODO: document
 		 */
-		protected function createMapping(commandClass:Class):ICommandMapping
+		public function createMapping(commandClass:Class):ICommandMapping
 		{
 			const mapping:ICommandMapping = new CommandMapping(commandClass);
 			addMapping(mapping);
 			_logger && _logger.debug('{0} mapped to {1}', [_decorated, mapping]);
 			return mapping;
 		}
+
+		/*============================================================================*/
+		/* Protected Functions                                                        */
+		/*============================================================================*/
 
 		/**
 		 * TODO: document

@@ -69,13 +69,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector : Injector,
 			dispatcher : IEventDispatcher,
 			type:String,
-			eventClass:Class = null)
+			eventClass:Class,
+			decorated : ICommandTrigger = null)
 		{
 			_injector = injector.createChildInjector();
 			_dispatcher = dispatcher;
 			_type = type;
 			_eventClass = eventClass;
-			_decorated = new CommandTrigger( this );
+			_decorated = new CommandTrigger( decorated || this );
 		}
 
 
@@ -125,6 +126,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		{
 			_decorated.unmapAll();
 		}
+
+		public function createMapping(commandClass:Class):ICommandMapping
+		{
+			return _decorated.createMapping( commandClass );
+		}
+
 
 		public function toString():String
 		{

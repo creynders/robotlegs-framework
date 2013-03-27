@@ -13,6 +13,8 @@ package robotlegs.bender.extensions.commandCenter.api
 	 */
 	public interface ICommandTrigger
 	{
+		function createMapping(commandClass:Class):ICommandMapping;
+
 		/**
 		 * TODO: document
 		 */
