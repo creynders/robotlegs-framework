@@ -165,7 +165,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 				'prior to your replacement mapping in order to avoid seeing this message.\n',
 				[_decorated, mapping]);
 			removeMapping(mapping);
-			return createMapping(mapping.commandClass);
+			return _decorated.createMapping(mapping.commandClass);
 		}
 
 		/*============================================================================*/
