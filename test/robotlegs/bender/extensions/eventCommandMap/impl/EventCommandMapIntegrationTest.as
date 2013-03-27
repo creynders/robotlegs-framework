@@ -15,6 +15,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.hamcrest.collection.array;
 	import org.hamcrest.object.equalTo;
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
@@ -57,7 +58,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector = new Injector();
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			dispatcher = new EventDispatcher();
-			eventCommandMap = new EventCommandMap(injector, dispatcher);
+			eventCommandMap = new EventCommandMap(injector, dispatcher, new CommandCenter() );
 		}
 
 		/*============================================================================*/

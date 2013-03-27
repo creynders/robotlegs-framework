@@ -45,11 +45,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function EventCommandMap(
 			injector:Injector,
-			dispatcher:IEventDispatcher)
+			dispatcher:IEventDispatcher,
+			commandCenter : ICommandCenter)
 		{
 			_injector = injector;
 			_dispatcher = dispatcher;
-			_commandCenter = new CommandCenter()
+			_commandCenter = commandCenter
 				.withTriggerFactory(createTrigger)
 				.withKeyFactory(getKey);
 		}
