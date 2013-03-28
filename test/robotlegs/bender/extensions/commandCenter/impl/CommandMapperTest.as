@@ -12,14 +12,11 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import mockolate.received;
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
-	import org.hamcrest.core.anything;
+	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingFactory;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand2;
@@ -41,14 +38,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Mock]
 		public var logger:ILogger;
 
-		[Mock]
-		public var componentFactory:ICommandMappingFactory;
-
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
 		private var mapper:CommandMapper;
+
+		private var mapping:ICommandMapping;
 
 		/*============================================================================*/
 		/* Test Setup and Teardown                                                    */
@@ -57,7 +53,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Before]
 		public function before():void
 		{
-			mapper = new CommandMapper( trigger, componentFactory, logger );
+			mapper = new CommandMapper(trigger);
 		}
 
 		/*============================================================================*/
@@ -65,57 +61,111 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function test_toCommand_registers_mappingConfig_with_trigger():void
+		public function test_toCommand_registers_commandClass_with_trigger():void
 		{
-			const mapping:ICommandMapping = new CommandMapping(NullCommand);
-			expect(componentFactory.createMapping(NullCommand)).returns(mapping);
-			mapper.mapCommand(NullCommand);
-			assertThat(trigger, received().method('addMapping').arg(mapping).once());
+			mapper.toCommand(NullCommand);
+			assertThat(trigger, received().method('map').arg(NullCommand).once());
 		}
 
 		[Test]
-		public function test_fromCommand_passes_retrieved_mapping_to_trigger_for_removal():void
+		public function test_fromCommand_passes_commandClass_to_trigger_for_removal():void
 		{
-			const mapping:ICommandMapping = new CommandMapping(NullCommand);
-			expect(trigger.getMappingFor(arg(NullCommand))).returns(mapping);
-			mapper.unmapCommand(NullCommand);
-			assertThat(trigger, received().method('removeMapping').arg(mapping).once());
+			mapper.fromCommand(NullCommand);
+			assertThat(trigger, received().method('unmap').arg(NullCommand).once());
 		}
 
 		[Test]
-		public function test_fromAll_removes_all_mappingConfigs_from_trigger():void
+		public function test_fromAll_calls_unmapAll_of_trigger():void
 		{
-			const mapping1:ICommandMapping = new CommandMapping(NullCommand);
-			const mapping2:ICommandMapping = new CommandMapping(NullCommand2);
-			var list:CommandMappingList = new CommandMappingList();
-			list.add(mapping1);
-			list.add(mapping2);
-			expect(trigger.getMappings()).returns(list);
-			mapper.unmapAll();
-			assertThat(trigger, received().method('removeMapping').arg(mapping1).once());
-			assertThat(trigger, received().method('removeMapping').arg(mapping2).once());
+			mapper.fromAll();
+			assertThat(trigger, received().method('unmapAll').once());
 		}
 
 		[Test]
-		public function test_toCommand_unregisters_old_mappingConfig_and_registers_new_one_when_overwritten():void
+		public function test_once_sets_once_in_mapping():void
 		{
-			const mapping1:ICommandMapping = new CommandMapping(NullCommand);
-			const mapping2:ICommandMapping = new CommandMapping(NullCommand);
-			expect(trigger.getMappingFor(NullCommand)).returns(mapping1);
-			expect(componentFactory.createMapping(NullCommand)).returns(mapping2);
-			mapper.mapCommand(NullCommand);
-			assertThat(trigger, received().method('removeMapping').arg(mapping1).once());
-			assertThat(trigger, received().method('addMapping').arg(mapping2).once());
+			injectMapping();
+			mapper.once(false);
+			assertThat(mapping.fireOnce, equalTo(false));
 		}
 
 		[Test]
-		public function test_toCommand_warns_when_overwritten():void
+		public function test_withGuards_adds_guards_to_mapping():void
 		{
-			const mapping:ICommandMapping = new CommandMapping(NullCommand);
-			expect(trigger.getMappingFor(NullCommand)).returns(mapping);
-			mapper.mapCommand(NullCommand);
-			assertThat(logger, received().method('warn')
-				.args(instanceOf(String), array(trigger, mapping)).once());
+			injectMapping();
+			mapper.withGuards(GuardA, GuardB);
+			assertThat(mapping.guards, array(GuardA, GuardB));
 		}
+
+		[Test]
+		public function test_withHooks_adds_hooks_to_mapping():void
+		{
+			injectMapping();
+			mapper.withHooks(HookA, HookB);
+			assertThat(mapping.hooks, array(HookA, HookB));
+		}
+
+		/*============================================================================*/
+		/* Private Functions                                                          */
+		/*============================================================================*/
+
+		private function injectMapping():void
+		{
+			mapping = new CommandMapping(NullCommand);
+			stub(trigger).method('map').returns(mapping);
+			mapper.toCommand(NullCommand);
+		}
+	}
+}
+
+class GuardA
+{
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	public function approve():Boolean
+	{
+		return true;
+	}
+}
+
+class GuardB
+{
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	public function approve():Boolean
+	{
+		return true;
+	}
+}
+
+class HookA
+{
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	public function hook():void
+	{
+
+	}
+}
+
+class HookB
+{
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	public function hook():void
+	{
+
 	}
 }

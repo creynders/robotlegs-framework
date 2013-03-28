@@ -24,7 +24,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _logger:ILogger;
 
-		[PostConstruct]
+		public function get logger():ILogger
+		{
+			return _logger;
+		}
+
+		[Inject]
 		public function set logger(value:ILogger):void
 		{
 			_logger = value;
@@ -40,7 +45,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private const _mappingsByCommandClass:Dictionary = new Dictionary();
+		private var _mappingsByCommandClass:Dictionary = new Dictionary();
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
@@ -74,6 +79,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			else
 			{
+				!(_mappingsList.length) && activate();
 				mapping = addNewMapping(commandClass);
 			}
 			return mapping;
@@ -86,6 +92,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		{
 			const mapping:ICommandMapping = getMappingFor(commandClass);
 			mapping && deleteMapping(mapping);
+			!(_mappingsList.length) && deactivate();
 		}
 
 		/**
@@ -96,13 +103,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 			const mappings:Vector.<ICommandMapping> = getMappings();
 			if (mappings && mappings.length)
 			{
-				var i:int = mappings.length;
-				while (i--)
-				{
-					deleteMapping(mappings[i]);
-				}
+				deleteAll();
+				deactivate();
 			}
-
 		}
 
 		/**
@@ -133,45 +136,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return new CommandMapping(commandClass);
 		}
 
-		/**
-		 * TODO: document
-		 */
-		protected function addMapping(mapping:ICommandMapping):void
-		{
-			_mappingsByCommandClass[mapping.commandClass] = mapping;
-			_mappingsList.push(mapping);
-			if (_mappingsList.length == 1)
-			{
-				activate();
-			}
-		}
-
-		/**
-		 * TODO: document
-		 */
-		protected function removeMapping(mapping:ICommandMapping):void
-		{
-			const index:int = _mappingsList.indexOf(mapping);
-			if (index != -1)
-			{
-				delete _mappingsByCommandClass[mapping.commandClass];
-				_mappingsList.splice(index, 1);
-			}
-			if (_mappingsList.length <= 0)
-			{
-				deactivate();
-			}
-		}
-
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
-
-		private function deleteMapping(mapping:ICommandMapping):void
-		{
-			removeMapping(mapping);
-			_logger && _logger.debug('{0} unmapped from {1}', [this, mapping]);
-		}
 
 		private function overwriteMapping(mapping:ICommandMapping):ICommandMapping
 		{
@@ -180,15 +147,59 @@ package robotlegs.bender.extensions.commandCenter.impl
 				'prior to your replacement mapping in order to avoid seeing this message.\n',
 				[this, mapping]);
 			removeMapping(mapping);
-			return addNewMapping(mapping.commandClass);
+			return addMapping(mapping.commandClass);
 		}
 
 		private function addNewMapping(commandClass:Class):ICommandMapping
 		{
-			var mapping:ICommandMapping = createMapping(commandClass);
-			addMapping(mapping);
+			var mapping:ICommandMapping = addMapping(commandClass);
 			_logger && _logger.debug('{0} mapped to {1}', [this, mapping]);
 			return mapping;
+		}
+
+		private function deleteMapping(mapping:ICommandMapping):void
+		{
+			removeMapping(mapping);
+			_logger && _logger.debug('{0} unmapped from {1}', [this, mapping]);
+		}
+
+		private function deleteAll():void
+		{
+			if (_logger)
+			{
+				var i:int = _mappingsList.length;
+				while (i--)
+				{
+					var mapping:ICommandMapping = _mappingsList[i];
+					delete _mappingsByCommandClass[mapping.commandClass];
+					_mappingsList.splice(i, 1);
+					_logger && _logger.debug('{0} unmapped from {1}', [this, mapping]);
+				}
+			}
+			else
+			{
+				_mappingsList = new Vector.<ICommandMapping>();
+				_mappingsByCommandClass = new Dictionary();
+			}
+		}
+
+		private function addMapping(commandClass:Class):ICommandMapping
+		{
+			var mapping:ICommandMapping = createMapping(commandClass);
+			_mappingsByCommandClass[mapping.commandClass] = mapping;
+			_mappingsList.push(mapping);
+			return mapping;
+		}
+
+		private function removeMapping(mapping:ICommandMapping):void
+		{
+			const index:int = _mappingsList.indexOf(mapping);
+			if (index > -1)
+			{
+				var mapping:ICommandMapping = _mappingsList[index];
+				delete _mappingsByCommandClass[mapping.commandClass];
+				_mappingsList.splice(index, 1);
+			}
 		}
 	}
 }
