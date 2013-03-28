@@ -9,9 +9,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-
 	import org.swiftsuspenders.Injector;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -21,21 +19,21 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	/**
 	 * @private
 	 */
-	public class EventCommandTrigger implements ICommandTrigger
+	public class EventCommandTrigger extends CommandTrigger implements ICommandTrigger
 	{
 
 		/*============================================================================*/
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-		private var _type:String;
+		private var _eventType:String;
 
 		/**
 		 * TODO: document
 		 */
-		public function get type():String
+		public function get eventType():String
 		{
-			return _type;
+			return _eventType;
 		}
 
 		private var _eventClass:Class;
@@ -52,11 +50,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var _decorated:CommandTrigger;
+		private var _dispatcher:IEventDispatcher;
 
-		private var _dispatcher : IEventDispatcher;
-
-		private var _injector : Injector;
+		private var _injector:Injector;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -66,86 +62,44 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 * @private
 		 */
 		public function EventCommandTrigger(
-			injector : Injector,
-			dispatcher : IEventDispatcher,
-			type:String,
-			eventClass:Class,
-			decorated : ICommandTrigger = null)
+			injector:Injector,
+			dispatcher:IEventDispatcher,
+			eventType:String,
+			eventClass:Class)
 		{
 			_injector = injector.createChildInjector();
 			_dispatcher = dispatcher;
-			_type = type;
+			_eventType = eventType;
 			_eventClass = eventClass;
-			_decorated = new CommandTrigger( decorated || this );
 		}
-
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
-		public function activate():void
+		override public function activate():void
 		{
-			_dispatcher.addEventListener( type, handleEvent );
+			_dispatcher.addEventListener(eventType, handleEvent);
 		}
 
-		public function deactivate():void
+		override public function deactivate():void
 		{
-			_dispatcher.removeEventListener( type, handleEvent );
+			_dispatcher.removeEventListener(eventType, handleEvent);
 		}
-
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getMappings():Vector.<ICommandMapping>
-		{
-			return _decorated.getMappings();
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function map(commandClass:Class):ICommandMapping
-		{
-			return _decorated.map(commandClass);
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function unmap(commandClass:Class):void
-		{
-			_decorated.unmap(commandClass);
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function unmapAll():void
-		{
-			_decorated.unmapAll();
-		}
-
-		public function createMapping(commandClass:Class):ICommandMapping
-		{
-			return _decorated.createMapping( commandClass );
-		}
-
 
 		public function toString():String
 		{
-			return _eventClass + " with selector '" + _type + "'";
+			return _eventClass + " with selector '" + _eventType + "'";
 		}
 
 		/*============================================================================*/
-		/* Private Functions                                                          */
+		/* Protected Functions                                                        */
 		/*============================================================================*/
 
 		protected function handleEvent(event:Event):void
 		{
 			const eventConstructor:Class = event["constructor"] as Class;
-			if ( _eventClass && _eventClass != eventConstructor)
+			if (_eventClass && _eventClass != eventConstructor)
 			{
 				return;
 			}
@@ -164,10 +118,9 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 						_injector.unmap(eventConstructor);
 					}
 				})
-				.withCommandClassUnmapper( unmap );
+				.withCommandClassUnmapper(unmap);
 			executor.executeCommands(getMappings().concat());
 		}
-
 	}
 }
 

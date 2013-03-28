@@ -17,18 +17,18 @@ package robotlegs.bender.extensions.eventCommandMap.api
 	{
 		/**
 		 * Creates a mapping for an Event based trigger
-		 * @param type The Event type
+		 * @param eventType The Event type
 		 * @param eventClass The concrete Event class
 		 * @return Command Mapper
 		 */
-		function map(type:String, eventClass:Class = null):ICommandMapper;
+		function map(eventType:String, eventClass:Class = null):ICommandMapper;
 
 		/**
 		 * Unmaps an Event based trigger from a Command
-		 * @param type The Event type
+		 * @param eventType The Event type
 		 * @param eventClass The concrete Event class
 		 * @return Command Unmapper
 		 */
-		function unmap(type:String, eventClass:Class = null):ICommandUnmapper;
+		function unmap(eventType:String, eventClass:Class = null):ICommandUnmapper;
 	}
 }

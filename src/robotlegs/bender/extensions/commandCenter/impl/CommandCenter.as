@@ -63,7 +63,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function getOrCreateNewTrigger(... key):ICommandTrigger
 		{
-			var serializedKey : Object = serializeKey(key)
+			var serializedKey:Object = serializeKey(key)
 			var trigger:ICommandTrigger = _triggersByKey[serializedKey];
 			if (!trigger)
 			{
