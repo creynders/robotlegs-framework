@@ -7,14 +7,12 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	import flash.utils.Dictionary;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.framework.api.ILogger;
-
 	/**
-	 * @private
+	 * @author creynder
 	 */
+	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
+	import robotlegs.bender.framework.api.IContext;
+
 	public class CommandCenter implements ICommandCenter
 	{
 
@@ -22,73 +20,35 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private const _triggersByKey:Dictionary = new Dictionary(false);
+		private var _context:IContext;
 
-		private var _triggerFactory:Function;
+		/*============================================================================*/
+		/* Constructor                                                                */
+		/*============================================================================*/
 
-		private var _keyFactory:Function;
-
-		private var _logger:ILogger;
+		public function CommandCenter(context:IContext)
+		{
+			_context = context;
+		}
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
-		/**
-		 * @inheritDoc
-		 */
-		public function withTriggerFactory(triggerFactory:Function):ICommandCenter
+		public function execute(commandClass:Class):void
 		{
-			_triggerFactory = triggerFactory;
-			return this;
+			const command:Object = _context.injector.instantiateUnmapped(commandClass);
+			"execute" in command && command.execute();
 		}
 
-		/**
-		 * @inheritDoc
-		 */
-		public function withKeyFactory(keyFactory:Function):ICommandCenter
+		public function detain(command:Object):void
 		{
-			_keyFactory = keyFactory;
-			return this;
+			_context.detain(command);
 		}
 
-		public function withLogger(logger:ILogger):ICommandCenter
+		public function release(command:Object):void
 		{
-			_logger = logger;
-			return this;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function removeTrigger(... key):void
-		{
-			delete _triggersByKey[serializeKey(key)];
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getOrCreateNewTrigger(... key):ICommandTrigger
-		{
-			var serializedKey:Object = serializeKey(key)
-			var trigger:ICommandTrigger = _triggersByKey[serializedKey];
-			if (!trigger)
-			{
-				trigger = _triggerFactory.apply(null, key);
-				_logger && trigger.withLogger(_logger);
-				_triggersByKey[serializedKey] = trigger;
-			}
-			return trigger;
-		}
-
-		/*============================================================================*/
-		/* Private Functions                                                          */
-		/*============================================================================*/
-
-		private function serializeKey(args:Array):Object
-		{
-			return _keyFactory.apply(null, args);
+			_context.release(command);
 		}
 	}
 }

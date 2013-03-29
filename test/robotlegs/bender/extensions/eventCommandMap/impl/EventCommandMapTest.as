@@ -15,7 +15,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.hamcrest.object.instanceOf;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandTriggerMap;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 	import robotlegs.bender.extensions.eventCommandMap.support.SupportEvent;
@@ -41,7 +41,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function before():void
 		{
 			var context:IContext = new Context();
-			eventCommandMap = new EventCommandMap(context, new EventDispatcher(), new CommandCenter());
+			eventCommandMap = new EventCommandMap(context, new EventDispatcher());
 		}
 
 		/*============================================================================*/

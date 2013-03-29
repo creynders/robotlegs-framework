@@ -9,13 +9,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
+	import robotlegs.bender.extensions.commandCenter.impl.CommandTriggerMap;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 	import robotlegs.bender.framework.api.IContext;
 
@@ -33,7 +34,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var _dispatcher:IEventDispatcher;
 
-		private var _commandCenter:ICommandCenter;
+		private var _triggerMap:CommandTriggerMap;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -44,12 +45,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 */
 		public function EventCommandMap(
 			context:IContext,
-			dispatcher:IEventDispatcher,
-			commandCenter:ICommandCenter)
+			dispatcher:IEventDispatcher)
 		{
 			_injector = context.injector;
 			_dispatcher = dispatcher;
-			_commandCenter = commandCenter
+			_triggerMap = new CommandTriggerMap()
 				.withTriggerFactory(createTrigger)
 				.withKeyFactory(getKey)
 				.withLogger(context.getLogger(this));
@@ -81,7 +81,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private function createMapper(eventType:String, eventClass:Class = null):CommandMapper
 		{
-			const trigger:ICommandTrigger = _commandCenter.getOrCreateNewTrigger(eventType, eventClass);
+			const trigger:ICommandTrigger = _triggerMap.getOrCreateNewTrigger(eventType, eventClass);
 			return new CommandMapper(trigger);
 		}
 

@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
@@ -49,37 +49,16 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 
 		[Test]
-		public function test_adding_the_first_mapping_adds_a_listener():void
+		public function test_activate_adds_a_listener():void
 		{
-			trigger.addMapping(new CommandMapping(NullCommand));
+			trigger.activate();
 			assertThat(dispatcher, received().method('addEventListener').once());
 		}
 
 		[Test]
-		public function test_adding_another_mapping_does_not_add_listener_again():void
-		{
-			trigger.addMapping(new CommandMapping(NullCommand));
-			trigger.addMapping(new CommandMapping(NullCommand));
-			assertThat(dispatcher, received().method('addEventListener').once());
-		}
-
-		[Test]
-		public function test_removing_the_last_mapping_removes_the_listener():void
-		{
-			const mapping:CommandMapping = new CommandMapping(NullCommand);
-			trigger.addMapping(mapping);
-			trigger.removeMapping(mapping);
+		public function test_deactivate_removes_a_listener() : void{
+			trigger.deactivate();
 			assertThat(dispatcher, received().method('removeEventListener').once());
-		}
-
-		[Test]
-		public function test_removing_a_mapping_does_NOT_remove_the_listener_when_other_mappings_still_exist():void
-		{
-			const mapping:CommandMapping = new CommandMapping(NullCommand);
-			trigger.addMapping(mapping);
-			trigger.addMapping(new CommandMapping(NullCommand));
-			trigger.removeMapping(mapping);
-			assertThat(dispatcher, received().method('removeEventListener').never());
 		}
 	}
 }

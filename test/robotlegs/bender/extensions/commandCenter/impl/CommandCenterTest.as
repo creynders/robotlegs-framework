@@ -8,16 +8,14 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import mockolate.mock;
+	import mockolate.received;
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
 	import org.hamcrest.assertThat;
-	import org.hamcrest.collection.array;
-	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
 	import org.swiftsuspenders.Injector;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
-	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.support.CommandMapStub;
+	import robotlegs.bender.framework.api.IContext;
+	import robotlegs.bender.framework.impl.Context;
 
 	public class CommandCenterTest
 	{
@@ -30,16 +28,13 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public var mockolateRule:MockolateRule = new MockolateRule();
 
 		[Mock]
-		public var trigger:ICommandTrigger;
-
-		[Mock]
-		public var host:CommandMapStub;
+		public var context:IContext;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private var commandCenter:ICommandCenter;
+		private var subject:CommandCenter;
 
 		private var injector:Injector;
 
@@ -51,10 +46,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function before():void
 		{
 			injector = new Injector();
-			commandCenter = new CommandCenter()
-				.withKeyFactory(host.createKey)
-				.withTriggerFactory(host.createTrigger);
-
+			stub(context).getter('injector').returns(injector);
+			subject = new CommandCenter(context);
 		}
 
 		/*============================================================================*/
@@ -62,53 +55,57 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/*============================================================================*/
 
 		[Test]
-		public function test_keyFactory_is_called_with_params():void
+		public function test_executes_command_successfully():void
 		{
-			const foo:String = 'foo';
-			const bar:Object = {};
-			mock(host).method('createKey').args(foo, bar).once();
-			commandCenter.getOrCreateNewTrigger(foo, bar);
+			var wasExecuted:Boolean = false;
+			var callback:Function = function(item:Object):void {
+				wasExecuted = true;
+			};
+			injector.map(Function, 'reportingFunction').toValue(callback);
+
+			subject.execute(CommandA);
+
+			assertThat(wasExecuted, equalTo(true));
 		}
 
 		[Test]
-		public function test_triggerFactory_is_called_with_params():void
+		public function test_detains_command():void
 		{
-			const foo:String = 'foo';
-			const bar:Object = {};
-			mock(host).method('createTrigger').args(foo, bar).once();
-			commandCenter.getOrCreateNewTrigger(foo, bar);
+			var command:CommandA = new CommandA();
+
+			subject.detain(command);
+
+			assertThat(context, received().method('detain').arg(equalTo(command)).once());
 		}
 
 		[Test]
-		public function test_getOrCreateNewTrigger_calls_createTrigger_for_every_key():void
+		public function test_releases_command():void
 		{
-			stub(host).method('createKey').returns('a', 'b');
-			mock(host).method('createTrigger').returns(trigger)
-				.twice(); //N.B.
-			commandCenter.getOrCreateNewTrigger();
-			commandCenter.getOrCreateNewTrigger();
-		}
+			var command:CommandA = new CommandA();
 
-		[Test]
-		public function test_trigger_is_stored_for_key():void
-		{
-			stub(host).method('createKey').returns('aKey');
-			stub(host).method('createTrigger').returns(trigger)
-				.once(); //N.B.
-			var oldTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger();
-			var newTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger();
-			assertThat(newTrigger, equalTo(oldTrigger));
-		}
+			subject.release(command);
 
-		[Test]
-		public function test_removeTrigger_removes_trigger():void
-		{
-			stub(host).method('createKey').returns('aKey');
-			mock(host).method('createTrigger').returns(trigger)
-				.twice(); //N.B.
-			var oldTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger();
-			commandCenter.removeTrigger();
-			var newTrigger:ICommandTrigger = commandCenter.getOrCreateNewTrigger();
+			assertThat(context, received().method('release').arg(equalTo(command)).once());
 		}
+	}
+}
+
+class CommandA
+{
+
+	/*============================================================================*/
+	/* Public Properties                                                          */
+	/*============================================================================*/
+
+	[Inject(name="reportingFunction")]
+	public var reportingFunction:Function;
+
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+
+	public function execute():void
+	{
+		reportingFunction(CommandA);
 	}
 }
