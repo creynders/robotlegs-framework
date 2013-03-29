@@ -9,21 +9,18 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
-	import org.swiftsuspenders.Injector;
-
-	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
-	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 	import robotlegs.bender.extensions.eventCommandMap.support.SupportEvent;
+	import robotlegs.bender.framework.api.IContext;
+	import robotlegs.bender.framework.impl.Context;
 
 	public class EventCommandMapTest
 	{
@@ -43,8 +40,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		[Before]
 		public function before():void
 		{
-			var injector : Injector = new Injector();
-			eventCommandMap = new EventCommandMap( injector, new EventDispatcher(), new CommandCenter());
+			var context:IContext = new Context();
+			eventCommandMap = new EventCommandMap(context, new EventDispatcher(), new CommandCenter());
 		}
 
 		/*============================================================================*/

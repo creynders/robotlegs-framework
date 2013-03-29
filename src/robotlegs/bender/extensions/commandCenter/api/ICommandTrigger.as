@@ -7,12 +7,19 @@
 
 package robotlegs.bender.extensions.commandCenter.api
 {
+	import robotlegs.bender.framework.api.ILogger;
 
 	/**
 	 * Represents a command trigger
 	 */
 	public interface ICommandTrigger
 	{
+
+		/**
+		 * @private
+		 */
+		function withLogger(logger:ILogger):void;
+
 		/**
 		 * TODO: document
 		 */

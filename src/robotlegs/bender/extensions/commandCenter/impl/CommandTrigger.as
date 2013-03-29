@@ -19,23 +19,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 	{
 
 		/*============================================================================*/
-		/* Public Properties                                                          */
-		/*============================================================================*/
-
-		private var _logger:ILogger;
-
-		public function get logger():ILogger
-		{
-			return _logger;
-		}
-
-		[Inject]
-		public function set logger(value:ILogger):void
-		{
-			_logger = value;
-		}
-
-		/*============================================================================*/
 		/* Protected Properties                                                       */
 		/*============================================================================*/
 
@@ -45,11 +28,21 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
+		private var _logger:ILogger;
+
 		private var _mappingsByCommandClass:Dictionary = new Dictionary();
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
+
+		/**
+		 * @inheritDoc
+		 */
+		public function withLogger(value:ILogger):void
+		{
+			_logger = value;
+		}
 
 		/**
 		 * @inheritDoc

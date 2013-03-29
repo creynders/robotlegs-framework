@@ -60,8 +60,6 @@ package robotlegs.bender.extensions.commandCenter.impl
 			injector = new Injector();
 			injector.map(Function, 'reportingFunction')
 				.toValue(reportingFunction);
-			injector.map(ILogger)
-				.toValue(logger);
 			subject = injector.instantiateUnmapped(ReportingCommandTrigger);
 		}
 
@@ -152,7 +150,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Test]
 		public function warning_logged_when_mapping_overwritten():void
 		{
+			subject.withLogger(logger);
 			subject.map(NullCommand);
+
 			subject.map(NullCommand);
 
 			assertThat( logger, received().method( 'warn' ).args(containsString("already mapped"), notNullValue()).once() );

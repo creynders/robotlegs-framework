@@ -28,6 +28,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _keyFactory:Function;
 
+		private var _logger:ILogger;
+
 		/*============================================================================*/
 		/* Public Functions                                                           */
 		/*============================================================================*/
@@ -50,6 +52,12 @@ package robotlegs.bender.extensions.commandCenter.impl
 			return this;
 		}
 
+		public function withLogger(logger:ILogger):ICommandCenter
+		{
+			_logger = logger;
+			return this;
+		}
+
 		/**
 		 * @inheritDoc
 		 */
@@ -68,7 +76,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 			if (!trigger)
 			{
 				trigger = _triggerFactory.apply(null, key);
-				_triggersByKey[serializedKey] = trigger
+				_logger && trigger.withLogger(_logger);
+				_triggersByKey[serializedKey] = trigger;
 			}
 			return trigger;
 		}

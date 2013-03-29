@@ -9,6 +9,7 @@ package robotlegs.bender.extensions.commandCenter.api
 {
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
+	import robotlegs.bender.framework.api.ILogger;
 
 	/**
 	 * Creates command mappings for triggers
@@ -25,6 +26,11 @@ package robotlegs.bender.extensions.commandCenter.api
 		 * TODO: document
 		 */
 		function withKeyFactory(keyFactory:Function):ICommandCenter;
+
+		/**
+		 * TODO: document
+		 */
+		function withLogger(logger:ILogger):ICommandCenter
 
 		/**
 		 * TODO: document

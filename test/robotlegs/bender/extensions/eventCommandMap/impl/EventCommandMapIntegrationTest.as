@@ -29,6 +29,8 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackGuard;
 	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackHook;
 	import robotlegs.bender.extensions.eventCommandMap.support.SupportEvent;
+	import robotlegs.bender.framework.api.IContext;
+	import robotlegs.bender.framework.impl.Context;
 	import robotlegs.bender.framework.impl.guardSupport.GrumpyGuard;
 	import robotlegs.bender.framework.impl.guardSupport.HappyGuard;
 
@@ -55,10 +57,11 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function before():void
 		{
 			reportedExecutions = [];
-			injector = new Injector();
+			var context : IContext = new Context();
+			injector = context.injector;
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			dispatcher = new EventDispatcher();
-			eventCommandMap = new EventCommandMap(injector, dispatcher, new CommandCenter() );
+			eventCommandMap = new EventCommandMap(context, dispatcher, new CommandCenter() );
 		}
 
 		/*============================================================================*/

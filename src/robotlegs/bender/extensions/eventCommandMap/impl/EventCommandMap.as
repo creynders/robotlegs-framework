@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
@@ -17,6 +17,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.impl.CommandCenter;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
+	import robotlegs.bender.framework.api.IContext;
 
 	/**
 	 * @private
@@ -42,15 +43,16 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		 * @private
 		 */
 		public function EventCommandMap(
-			injector:Injector,
+			context:IContext,
 			dispatcher:IEventDispatcher,
 			commandCenter:ICommandCenter)
 		{
-			_injector = injector;
+			_injector = context.injector;
 			_dispatcher = dispatcher;
 			_commandCenter = commandCenter
 				.withTriggerFactory(createTrigger)
-				.withKeyFactory(getKey);
+				.withKeyFactory(getKey)
+				.withLogger(context.getLogger(this));
 		}
 
 		/*============================================================================*/
