@@ -7,9 +7,6 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	/**
-	 * @author creynder
-	 */
 	import robotlegs.bender.extensions.commandCenter.api.ICommandCenter;
 	import robotlegs.bender.framework.api.IContext;
 
@@ -26,6 +23,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Constructor                                                                */
 		/*============================================================================*/
 
+		/**
+		 * @private
+		 */
 		public function CommandCenter(context:IContext)
 		{
 			_context = context;
@@ -35,17 +35,26 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
+		/**
+		 * @inheritDoc
+		 */
 		public function execute(commandClass:Class):void
 		{
 			const command:Object = _context.injector.instantiateUnmapped(commandClass);
 			"execute" in command && command.execute();
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function detain(command:Object):void
 		{
 			_context.detain(command);
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function release(command:Object):void
 		{
 			_context.release(command);

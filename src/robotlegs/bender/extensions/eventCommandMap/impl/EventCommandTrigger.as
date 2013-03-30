@@ -47,12 +47,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		/*============================================================================*/
-		/* Private Properties                                                         */
+		/* Protected Properties                                                       */
 		/*============================================================================*/
 
-		private var _dispatcher:IEventDispatcher;
+		protected var _dispatcher:IEventDispatcher;
 
-		private var _injector:Injector;
+		protected var _injector:Injector;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
