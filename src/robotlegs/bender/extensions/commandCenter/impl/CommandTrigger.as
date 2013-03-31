@@ -49,7 +49,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function activate():void
 		{
-			//abstract, only implemented in decorators
+			//abstract
 		}
 
 		/**
@@ -57,7 +57,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		 */
 		public function deactivate():void
 		{
-			//abstract, only implemented in decorators
+			//abstract
 		}
 
 		/**
@@ -73,7 +73,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 			else
 			{
 				!(_mappingsList.length) && activate();
-				mapping = addNewMapping(commandClass);
+				mapping = addMapping(commandClass);
 			}
 			return mapping;
 		}
@@ -96,7 +96,11 @@ package robotlegs.bender.extensions.commandCenter.impl
 			const mappings:Vector.<ICommandMapping> = getMappings();
 			if (mappings && mappings.length)
 			{
-				deleteAll();
+				var i:int = mappings.length;
+				while (i--)
+				{
+					deleteMapping(mappings[i]);
+				}
 				deactivate();
 			}
 		}
@@ -139,52 +143,10 @@ package robotlegs.bender.extensions.commandCenter.impl
 				'If you have overridden this mapping intentionally you can use "unmap()" ' +
 				'prior to your replacement mapping in order to avoid seeing this message.\n',
 				[this, mapping]);
-			removeMapping(mapping);
+			deleteMapping(mapping);
 			return addMapping(mapping.commandClass);
 		}
-
-		private function addNewMapping(commandClass:Class):ICommandMapping
-		{
-			var mapping:ICommandMapping = addMapping(commandClass);
-			_logger && _logger.debug('{0} mapped to {1}', [this, mapping]);
-			return mapping;
-		}
-
 		private function deleteMapping(mapping:ICommandMapping):void
-		{
-			removeMapping(mapping);
-			_logger && _logger.debug('{0} unmapped from {1}', [this, mapping]);
-		}
-
-		private function deleteAll():void
-		{
-			if (_logger)
-			{
-				var i:int = _mappingsList.length;
-				while (i--)
-				{
-					var mapping:ICommandMapping = _mappingsList[i];
-					delete _mappingsByCommandClass[mapping.commandClass];
-					_mappingsList.splice(i, 1);
-					_logger && _logger.debug('{0} unmapped from {1}', [this, mapping]);
-				}
-			}
-			else
-			{
-				_mappingsList = new Vector.<ICommandMapping>();
-				_mappingsByCommandClass = new Dictionary();
-			}
-		}
-
-		private function addMapping(commandClass:Class):ICommandMapping
-		{
-			var mapping:ICommandMapping = createMapping(commandClass);
-			_mappingsByCommandClass[mapping.commandClass] = mapping;
-			_mappingsList.push(mapping);
-			return mapping;
-		}
-
-		private function removeMapping(mapping:ICommandMapping):void
 		{
 			const index:int = _mappingsList.indexOf(mapping);
 			if (index > -1)
@@ -193,6 +155,16 @@ package robotlegs.bender.extensions.commandCenter.impl
 				delete _mappingsByCommandClass[mapping.commandClass];
 				_mappingsList.splice(index, 1);
 			}
+			_logger && _logger.debug('{0} unmapped from {1}', [this, mapping]);
+		}
+
+		private function addMapping(commandClass:Class):ICommandMapping
+		{
+			var mapping:ICommandMapping = createMapping(commandClass);
+			_mappingsByCommandClass[mapping.commandClass] = mapping;
+			_mappingsList.push(mapping);
+			_logger && _logger.debug('{0} mapped to {1}', [this, mapping]);
+			return mapping;
 		}
 	}
 }
