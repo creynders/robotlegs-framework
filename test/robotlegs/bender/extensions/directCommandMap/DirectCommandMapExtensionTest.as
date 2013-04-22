@@ -9,6 +9,8 @@ package robotlegs.bender.extensions.directCommandMap
 {
 	import org.flexunit.assertThat;
 	import org.hamcrest.object.instanceOf;
+
+	import robotlegs.bender.extensions.commandCenter.CommandCenterExtension;
 	import robotlegs.bender.extensions.directCommandMap.api.IDirectCommandMap;
 	import robotlegs.bender.extensions.eventDispatcher.EventDispatcherExtension;
 	import robotlegs.bender.framework.impl.Context;
@@ -30,7 +32,7 @@ package robotlegs.bender.extensions.directCommandMap
 		public function before():void
 		{
 			context = new Context();
-			context.install(DirectCommandMapExtension);
+			context.install(CommandCenterExtension, DirectCommandMapExtension);
 		}
 
 		/*============================================================================*/

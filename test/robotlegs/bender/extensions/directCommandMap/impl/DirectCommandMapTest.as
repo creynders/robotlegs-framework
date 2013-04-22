@@ -14,6 +14,8 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import org.hamcrest.object.isTrue;
 	import org.hamcrest.object.strictlyEqualTo;
 	import org.swiftsuspenders.Injector;
+
+	import robotlegs.bender.extensions.commandCenter.CommandCenterExtension;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
@@ -44,6 +46,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		public function before():void
 		{
 			context = new Context();
+			context.install(CommandCenterExtension);
 			injector = context.injector;
 			injector.map(IDirectCommandMap).toType(DirectCommandMap);
 			subject = injector.getInstance(IDirectCommandMap);

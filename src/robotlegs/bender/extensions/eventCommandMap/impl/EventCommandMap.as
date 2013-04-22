@@ -1,14 +1,17 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.IEventDispatcher;
+
 	import org.swiftsuspenders.Injector;
+
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandTriggerMap;
@@ -37,15 +40,17 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
+		private var _executeMethodMap:IExecuteMethodMap;
 
 		/**
 		 * @private
 		 */
-		public function EventCommandMap(context:IContext, dispatcher:IEventDispatcher)
+		public function EventCommandMap(context:IContext, dispatcher:IEventDispatcher, executeMethodMap : IExecuteMethodMap)
 		{
 			_injector = context.injector;
 			_logger = context.getLogger(this);
 			_dispatcher = dispatcher;
+			_executeMethodMap =  executeMethodMap;
 			_triggerMap = new CommandTriggerMap(getKey, createTrigger);
 		}
 
@@ -80,7 +85,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private function createTrigger(type:String, eventClass:Class):EventCommandTrigger
 		{
-			return new EventCommandTrigger(_injector, _dispatcher, type, eventClass, _logger);
+			return new EventCommandTrigger(_injector, _dispatcher, _executeMethodMap, type, eventClass, _logger);
 		}
 
 		private function getTrigger(type:String, eventClass:Class):EventCommandTrigger

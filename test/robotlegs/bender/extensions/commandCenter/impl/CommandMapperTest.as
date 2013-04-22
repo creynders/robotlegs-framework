@@ -1,20 +1,22 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2012 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import mockolate.mock;
 	import mockolate.runner.MockolateRule;
+
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.instanceOf;
 
-	import robotlegs.bender.extensions.commandCenter.dsl.ICommandConfigurator;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.dsl.ICommandConfigurator;
 
 	public class CommandMapperTest
 	{
@@ -29,6 +31,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Mock]
 		public var mappings:ICommandMappingList;
 
+		[Mock]
+		public var executeMethodMap : IExecuteMethodMap;
+
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
@@ -42,7 +47,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		[Before]
 		public function before():void
 		{
-			subject = new CommandMapper(mappings);
+			subject = new CommandMapper(mappings, executeMethodMap);
 		}
 
 		/*============================================================================*/

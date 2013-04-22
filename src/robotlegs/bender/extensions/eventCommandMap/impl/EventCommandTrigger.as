@@ -13,10 +13,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandPayload;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadDescription;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadReflector;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.createPayloadFromDescription;
 	import robotlegs.bender.framework.api.ILogger;
 
 	/**
@@ -39,6 +43,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var _executor:ICommandExecutor;
 
+		private var _extractionDescription:PayloadDescription;
+
+		private var _payloadReflector:PayloadReflector;
+
+		private var _executeMethodMap:IExecuteMethodMap;
+
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
@@ -49,15 +59,19 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function EventCommandTrigger(
 			injector:Injector,
 			dispatcher:IEventDispatcher,
+			executeMethodMap:IExecuteMethodMap,
 			type:String,
 			eventClass:Class = null,
 			logger:ILogger = null)
 		{
 			_dispatcher = dispatcher;
+			_executeMethodMap = executeMethodMap;
 			_type = type;
 			_eventClass = eventClass;
 			_mappings = new CommandMappingList(this, logger);
 			_executor = new CommandExecutor(injector, _mappings.removeMapping);
+			_payloadReflector = new PayloadReflector(logger);
+			eventClass && (_extractionDescription = _payloadReflector.describeExtractionsForClass(_eventClass));
 		}
 
 		/*============================================================================*/
@@ -66,7 +80,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		public function createMapper():CommandMapper
 		{
-			return new CommandMapper(_mappings);
+			return new CommandMapper(_mappings, _executeMethodMap);
 		}
 
 		public function activate():void
@@ -91,21 +105,20 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		private function eventHandler(event:Event):void
 		{
 			const eventConstructor:Class = event["constructor"] as Class;
-			var payloadEventClass:Class;
-			//not pretty, but optimized to avoid duplicate checks and shortest paths
-			if (eventConstructor == _eventClass || (!_eventClass))
-			{
-				payloadEventClass = eventConstructor;
-			}
-			else if (_eventClass == Event)
-			{
-				payloadEventClass = _eventClass;
-			}
-			else
-			{
+
+			if (_eventClass && _eventClass != Event && _eventClass != eventConstructor)
 				return;
+
+			_extractionDescription ||= _payloadReflector.describeExtractionsForInstance(event);
+			var payload:CommandPayload = createPayloadFromDescription(_extractionDescription, event);
+			if (!payload)
+			{
+				var payloadEventClass:Class = (eventConstructor == _eventClass || (!_eventClass))
+					? eventConstructor
+					: Event;
+				payload = new CommandPayload([event], [payloadEventClass]);
 			}
-			_executor.executeCommands(_mappings.getList(), new CommandPayload([event], [payloadEventClass]));
+			_executor.executeCommands(_mappings.getList(), payload);
 		}
 	}
 }

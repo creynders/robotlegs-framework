@@ -1,14 +1,15 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandConfigurator;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
@@ -24,13 +25,16 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _mapping:ICommandMapping;
 
+		private var _executeMethodMap:IExecuteMethodMap;
+
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 
-		public function CommandMapper(mappings:ICommandMappingList)
+		public function CommandMapper(mappings:ICommandMappingList, executeMethodMap:IExecuteMethodMap)
 		{
 			_mappings = mappings;
+			_executeMethodMap = executeMethodMap;
 		}
 
 		/*============================================================================*/
@@ -43,6 +47,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function toCommand(commandClass:Class):ICommandConfigurator
 		{
 			_mapping = new CommandMapping(commandClass);
+			const executeMethod:String = _executeMethodMap.getExecuteMethodForCommandClass(commandClass);
+			executeMethod && _mapping.setExecuteMethod(executeMethod);
 			_mappings.addMapping(_mapping);
 			return this;
 		}

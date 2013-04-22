@@ -10,14 +10,17 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
+
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
+	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecuteMethodMap;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackCommand;
@@ -25,11 +28,15 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackGuard;
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackGuard2;
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackHook;
+	import robotlegs.bender.extensions.commandCenter.support.ExecuteTaggedClassReportingMethodCommand;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 	import robotlegs.bender.extensions.eventCommandMap.support.CascadingCommand;
 	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackCommand;
 	import robotlegs.bender.extensions.eventCommandMap.support.EventInjectedCallbackGuard;
+	import robotlegs.bender.extensions.eventCommandMap.support.ExecuteWithParametersCommand;
+	import robotlegs.bender.extensions.eventCommandMap.support.InjectionPointsCommand;
+	import robotlegs.bender.extensions.eventCommandMap.support.OrderedExtractionPointsEvent;
 	import robotlegs.bender.extensions.eventCommandMap.support.SupportEvent;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.impl.Context;
@@ -47,7 +54,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var mapper:ICommandMapper;
 
-		private var reportedExecutions:Array;
+		private var reported:Array;
 
 		private var injector:Injector;
 
@@ -60,12 +67,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		[Before]
 		public function before():void
 		{
-			reportedExecutions = [];
+			reported = [];
 			const context:IContext = new Context();
 			injector = context.injector;
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			dispatcher = new EventDispatcher();
-			subject = new EventCommandMap(context, dispatcher);
+			subject = new EventCommandMap(context, dispatcher, new ExecuteMethodMap());
 		}
 
 		/*============================================================================*/
@@ -316,7 +323,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			subject.map(SupportEvent.TYPE1).toCommand(ClassReportingCallbackCommand);
 			subject.map(SupportEvent.TYPE1).toCommand(ClassReportingCallbackCommand2);
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
-			assertThat(reportedExecutions, array(ClassReportingCallbackCommand, ClassReportingCallbackCommand2));
+			assertThat(reported, array(ClassReportingCallbackCommand, ClassReportingCallbackCommand2));
 		}
 
 		[Test]
@@ -390,7 +397,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			subject.map(SupportEvent.TYPE1).toCommand(ClassReportingCallbackCommand2).withGuards(ClassReportingCallbackGuard2);
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
 			const expectedOrder:Array = [ClassReportingCallbackGuard, ClassReportingCallbackCommand, ClassReportingCallbackGuard2, ClassReportingCallbackCommand2];
-			assertThat(reportedExecutions, array(expectedOrder));
+			assertThat(reported, array(expectedOrder));
 		}
 
 		[Test]
@@ -400,7 +407,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			subject.map(SupportEvent.TYPE1).toCommand(ClassReportingCallbackCommand2).withGuards(GrumpyGuard);
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
 			const expectedOrder:Array = [ClassReportingCallbackCommand];
-			assertThat(reportedExecutions, array(expectedOrder));
+			assertThat(reported, array(expectedOrder));
 		}
 
 		[Test]
@@ -411,7 +418,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			subject.map(SupportEvent.TYPE1, Event)
 				.toCommand(CommandMappingCommand).once();
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
-			assertThat(reportedExecutions, array());
+			assertThat(reported, array());
 		}
 
 		[Test]
@@ -424,7 +431,52 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			subject.map(SupportEvent.TYPE1, Event)
 				.toCommand(ClassReportingCallbackCommand).once();
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
-			assertThat(reportedExecutions, array(ClassReportingCallbackCommand));
+			assertThat(reported, array(ClassReportingCallbackCommand));
+		}
+
+		[Test]
+		public function execute_tagged_commands_are_executed() : void{
+			subject.map(SupportEvent.TYPE1).toCommand(ExecuteTaggedClassReportingMethodCommand);
+
+			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
+
+			assertThat(reported,array(ExecuteTaggedClassReportingMethodCommand));
+		}
+
+		[Test]
+		public function payload_tagged_values_are_injected() : void{
+			subject.map(OrderedExtractionPointsEvent.TYPE,OrderedExtractionPointsEvent).toCommand(InjectionPointsCommand);
+			const event : OrderedExtractionPointsEvent = new OrderedExtractionPointsEvent();
+
+			dispatcher.dispatchEvent(event);
+
+			assertThat(reported,array(
+				event.extractTaggedProperty,event.extractTaggedGetter,event.extractTaggedMethod()));
+		}
+
+		[Test]
+		public function payload_is_passed_to_execute_in_order() : void{
+			subject.map(OrderedExtractionPointsEvent.TYPE,OrderedExtractionPointsEvent).toCommand(ExecuteWithParametersCommand);
+			const event : OrderedExtractionPointsEvent = new OrderedExtractionPointsEvent();
+
+			dispatcher.dispatchEvent(event);
+
+			assertThat(reported,array(
+				event.extractTaggedProperty,event.extractTaggedMethod(),event.extractTaggedGetter));
+		}
+
+		[Test]
+		public function event_is_injected_when_no_payload_dispatched() : void{
+			var actual : EventInjectedCallbackCommand;
+			injector.map(Function, 'executeCallback').toValue(function(command : EventInjectedCallbackCommand):void{
+				actual = command;
+			});
+			subject.map(SupportEvent.TYPE1, Event).toCommand(EventInjectedCallbackCommand);
+			var event:Event = new SupportEvent(SupportEvent.TYPE1);
+
+			dispatcher.dispatchEvent(event);
+
+			assertThat(actual.event, equalTo(event));
 		}
 
 		/*============================================================================*/
@@ -483,7 +535,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private function reportingFunction(item:Object):void
 		{
-			reportedExecutions.push(item);
+			reported.push(item);
 		}
 	}
 }

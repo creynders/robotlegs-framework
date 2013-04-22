@@ -5,24 +5,17 @@
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.directCommandMap
+package robotlegs.bender.extensions.commandCenter.support
 {
-	import robotlegs.bender.extensions.directCommandMap.impl.DirectCommandMapTest;
-	import robotlegs.bender.extensions.directCommandMap.impl.DirectCommandMapperTest;
 
-	[RunWith("org.flexunit.runners.Suite")]
-	[Suite]
-	public class DirectCommandMapExtensionTestSuite
+	public class ExtractablePropertyObject
 	{
 
 		/*============================================================================*/
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-		public var directCommandMapExtension:DirectCommandMapExtensionTest;
-
-		public var directCommandMapper:DirectCommandMapperTest;
-
-		public var directCommandMap:DirectCommandMapTest;
+		[Payload]
+		public var extractTaggedProperty:String;
 	}
 }

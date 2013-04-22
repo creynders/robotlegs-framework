@@ -10,8 +10,10 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import mockolate.capture;
 	import mockolate.ingredients.Capture;
 	import mockolate.mock;
+	import mockolate.received;
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
+
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.core.not;
@@ -20,9 +22,11 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import org.hamcrest.object.isFalse;
 	import org.hamcrest.object.isTrue;
 	import org.hamcrest.object.nullValue;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackHook;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand2;
@@ -45,6 +49,9 @@ package robotlegs.bender.extensions.directCommandMap.impl
 
 		[Mock]
 		public var mappings:ICommandMappingList;
+
+		[Mock]
+		public var executeMethodMap : IExecuteMethodMap;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -152,13 +159,19 @@ package robotlegs.bender.extensions.directCommandMap.impl
 			assertThat(newMapper, not(equalTo(subject)));
 		}
 
+		[Test]
+		public function retrieves_execute_method_name_from_executeMethodMap() : void{
+			createMapper(NullCommand);
+			assertThat(executeMethodMap, received().method( 'getExecuteMethodForCommandClass' ).arg(NullCommand).once());
+		}
+
 		/*============================================================================*/
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
 		private function createMapper(commandClass:Class):DirectCommandMapper
 		{
-			subject = new DirectCommandMapper(executor, mappings, commandClass);
+			subject = new DirectCommandMapper(executor, mappings, executeMethodMap, commandClass);
 			return subject;
 		}
 

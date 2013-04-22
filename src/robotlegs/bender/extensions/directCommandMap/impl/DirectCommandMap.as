@@ -8,7 +8,9 @@
 package robotlegs.bender.extensions.directCommandMap.impl
 {
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandPayload;
@@ -33,13 +35,15 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
+		private var _executeMethodMap:IExecuteMethodMap;
 
 		/**
 		 * @private
 		 */
-		public function DirectCommandMap(context:IContext)
+		public function DirectCommandMap(context:IContext, executeMethodMap : IExecuteMethodMap)
 		{
 			_context = context;
+			_executeMethodMap = executeMethodMap;
 			var sandboxedInjector:Injector = context.injector.createChildInjector();
 			//allow access to this specific instance in the commands
 			sandboxedInjector.map(IDirectCommandMap).toValue(this);
@@ -56,7 +60,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		 */
 		public function map(commandClass:Class):IDirectCommandConfigurator
 		{
-			return new DirectCommandMapper(_executor, _mappings, commandClass);
+			return new DirectCommandMapper(_executor, _mappings, _executeMethodMap, commandClass);
 		}
 
 		/**
