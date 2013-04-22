@@ -18,9 +18,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandPayload;
-	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadDescription;
-	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadReflector;
-	import robotlegs.bender.extensions.commandCenter.impl.payload.createPayloadFromDescription;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadCollector;
 	import robotlegs.bender.framework.api.ILogger;
 
 	/**
@@ -43,9 +41,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var _executor:ICommandExecutor;
 
-		private var _extractionDescription:PayloadDescription;
-
-		private var _payloadReflector:PayloadReflector;
+		private var _payloadCollector:PayloadCollector;
 
 		private var _executeMethodMap:IExecuteMethodMap;
 
@@ -70,8 +66,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			_eventClass = eventClass;
 			_mappings = new CommandMappingList(this, logger);
 			_executor = new CommandExecutor(injector, _mappings.removeMapping);
-			_payloadReflector = new PayloadReflector(logger);
-			eventClass && (_extractionDescription = _payloadReflector.describeExtractionsForClass(_eventClass));
+			_payloadCollector = new PayloadCollector(eventClass);
 		}
 
 		/*============================================================================*/
@@ -109,8 +104,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			if (_eventClass && _eventClass != Event && _eventClass != eventConstructor)
 				return;
 
-			_extractionDescription ||= _payloadReflector.describeExtractionsForInstance(event);
-			var payload:CommandPayload = createPayloadFromDescription(_extractionDescription, event);
+			var payload:CommandPayload = _payloadCollector.collectPayload(event);
 			if (!payload)
 			{
 				var payloadEventClass:Class = (eventConstructor == _eventClass || (!_eventClass))

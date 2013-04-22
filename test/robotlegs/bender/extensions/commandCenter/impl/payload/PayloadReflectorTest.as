@@ -28,9 +28,6 @@ package robotlegs.bender.extensions.commandCenter.impl.payload
 		[Rule]
 		public var mocks:MockolateRule = new MockolateRule();
 
-		[Mock]
-		public var logger:ILogger;
-
 		/*============================================================================*/
 		/* Private Properties                                                         */
 		/*============================================================================*/
@@ -50,7 +47,7 @@ package robotlegs.bender.extensions.commandCenter.impl.payload
 		[Before]
 		public function setup():void
 		{
-			subject = new PayloadReflector(logger);
+			subject = new PayloadReflector();
 		}
 
 		/*============================================================================*/
