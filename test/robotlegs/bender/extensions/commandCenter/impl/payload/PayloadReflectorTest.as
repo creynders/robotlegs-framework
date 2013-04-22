@@ -8,12 +8,9 @@
 package robotlegs.bender.extensions.commandCenter.impl.payload
 {
 	import mockolate.runner.MockolateRule;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
-
-	import robotlegs.bender.extensions.commandCenter.impl.payload.IPayloadExtractionPoint;
 	import robotlegs.bender.extensions.commandCenter.support.ExtractableGetterObject;
 	import robotlegs.bender.extensions.commandCenter.support.ExtractableMethodObject;
 	import robotlegs.bender.extensions.commandCenter.support.ExtractablePropertyObject;
@@ -118,7 +115,8 @@ package robotlegs.bender.extensions.commandCenter.impl.payload
 		}
 
 		[Test]
-		public function points_are_ordered_when_tagged_with_order() : void{
+		public function points_are_ordered_when_tagged_with_order():void
+		{
 			const description:PayloadDescription = subject.describeExtractionsForInstance(new OrderedExtractionPointsEvent());
 			const p0:IPayloadExtractionPoint = description.extractionPoints[0];
 			const p1:IPayloadExtractionPoint = description.extractionPoints[1];
@@ -160,7 +158,6 @@ class ExtractMethodWithParametersObject
 
 class ExtractMethodWithVoidReturnTypeObject
 {
-
 
 	/*============================================================================*/
 	/* Public Functions                                                           */

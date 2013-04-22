@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved.
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
 //
 //  NOTICE: You are permitted to use, modify, and distribute this file
 //  in accordance with the terms of the license agreement accompanying it.
@@ -9,10 +9,8 @@ package robotlegs.bender.extensions.commandCenter.impl
 {
 	import mockolate.mock;
 	import mockolate.runner.MockolateRule;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.instanceOf;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
@@ -32,7 +30,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public var mappings:ICommandMappingList;
 
 		[Mock]
-		public var executeMethodMap : IExecuteMethodMap;
+		public var executeMethodMap:IExecuteMethodMap;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */

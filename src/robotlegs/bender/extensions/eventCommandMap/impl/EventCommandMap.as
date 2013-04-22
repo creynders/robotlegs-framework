@@ -45,7 +45,10 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/**
 		 * @private
 		 */
-		public function EventCommandMap(context:IContext, dispatcher:IEventDispatcher, executeMethodMap : IExecuteMethodMap)
+		public function EventCommandMap(
+			context:IContext,
+			dispatcher:IEventDispatcher,
+			executeMethodMap : IExecuteMethodMap)
 		{
 			_injector = context.injector;
 			_logger = context.getLogger(this);

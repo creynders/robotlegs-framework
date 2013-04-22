@@ -10,14 +10,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.core.not;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 	import org.swiftsuspenders.Injector;
-
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecuteMethodMap;
@@ -435,40 +433,44 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		}
 
 		[Test]
-		public function execute_tagged_commands_are_executed() : void{
+		public function execute_tagged_commands_are_executed():void
+		{
 			subject.map(SupportEvent.TYPE1).toCommand(ExecuteTaggedClassReportingMethodCommand);
 
 			dispatcher.dispatchEvent(new SupportEvent(SupportEvent.TYPE1));
 
-			assertThat(reported,array(ExecuteTaggedClassReportingMethodCommand));
+			assertThat(reported, array(ExecuteTaggedClassReportingMethodCommand));
 		}
 
 		[Test]
-		public function payload_tagged_values_are_injected() : void{
-			subject.map(OrderedExtractionPointsEvent.TYPE,OrderedExtractionPointsEvent).toCommand(InjectionPointsCommand);
-			const event : OrderedExtractionPointsEvent = new OrderedExtractionPointsEvent();
+		public function payload_tagged_values_are_injected():void
+		{
+			subject.map(OrderedExtractionPointsEvent.TYPE, OrderedExtractionPointsEvent).toCommand(InjectionPointsCommand);
+			const event:OrderedExtractionPointsEvent = new OrderedExtractionPointsEvent();
 
 			dispatcher.dispatchEvent(event);
 
-			assertThat(reported,array(
-				event.extractTaggedProperty,event.extractTaggedGetter,event.extractTaggedMethod()));
+			assertThat(reported, array(
+				event.extractTaggedProperty, event.extractTaggedGetter, event.extractTaggedMethod()));
 		}
 
 		[Test]
-		public function payload_is_passed_to_execute_in_order() : void{
-			subject.map(OrderedExtractionPointsEvent.TYPE,OrderedExtractionPointsEvent).toCommand(ExecuteWithParametersCommand);
-			const event : OrderedExtractionPointsEvent = new OrderedExtractionPointsEvent();
+		public function payload_is_passed_to_execute_in_order():void
+		{
+			subject.map(OrderedExtractionPointsEvent.TYPE, OrderedExtractionPointsEvent).toCommand(ExecuteWithParametersCommand);
+			const event:OrderedExtractionPointsEvent = new OrderedExtractionPointsEvent();
 
 			dispatcher.dispatchEvent(event);
 
-			assertThat(reported,array(
-				event.extractTaggedProperty,event.extractTaggedMethod(),event.extractTaggedGetter));
+			assertThat(reported, array(
+				event.extractTaggedProperty, event.extractTaggedMethod(), event.extractTaggedGetter));
 		}
 
 		[Test]
-		public function event_is_injected_when_no_payload_dispatched() : void{
-			var actual : EventInjectedCallbackCommand;
-			injector.map(Function, 'executeCallback').toValue(function(command : EventInjectedCallbackCommand):void{
+		public function event_is_injected_when_no_payload_dispatched():void
+		{
+			var actual:EventInjectedCallbackCommand;
+			injector.map(Function, 'executeCallback').toValue(function(command:EventInjectedCallbackCommand):void {
 				actual = command;
 			});
 			subject.map(SupportEvent.TYPE1, Event).toCommand(EventInjectedCallbackCommand);

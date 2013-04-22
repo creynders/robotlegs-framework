@@ -13,7 +13,6 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import mockolate.received;
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.collection.array;
 	import org.hamcrest.core.not;
@@ -22,7 +21,6 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import org.hamcrest.object.isFalse;
 	import org.hamcrest.object.isTrue;
 	import org.hamcrest.object.nullValue;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
@@ -51,7 +49,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		public var mappings:ICommandMappingList;
 
 		[Mock]
-		public var executeMethodMap : IExecuteMethodMap;
+		public var executeMethodMap:IExecuteMethodMap;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -160,9 +158,10 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		}
 
 		[Test]
-		public function retrieves_execute_method_name_from_executeMethodMap() : void{
+		public function retrieves_execute_method_name_from_executeMethodMap():void
+		{
 			createMapper(NullCommand);
-			assertThat(executeMethodMap, received().method( 'getExecuteMethodForCommandClass' ).arg(NullCommand).once());
+			assertThat(executeMethodMap, received().method('getExecuteMethodForCommandClass').arg(NullCommand).once());
 		}
 
 		/*============================================================================*/
