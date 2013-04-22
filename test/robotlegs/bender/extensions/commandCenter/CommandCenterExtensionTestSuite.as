@@ -13,6 +13,8 @@ package robotlegs.bender.extensions.commandCenter
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingTest;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandPayloadTest;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandTriggerMapTest;
+	import robotlegs.bender.extensions.commandCenter.impl.ExecuteMethodConfiguratorTest;
+	import robotlegs.bender.extensions.commandCenter.impl.PayloadCollectorTest;
 	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecutionReflectorTest;
 	import robotlegs.bender.extensions.commandCenter.impl.payload.FieldPayloadExtractionPointTest;
 	import robotlegs.bender.extensions.commandCenter.impl.payload.MethodPayloadExtractionPointTest;
@@ -48,5 +50,9 @@ package robotlegs.bender.extensions.commandCenter
 		public var methodPayloadExtractionPoint:MethodPayloadExtractionPointTest;
 
 		public var payloadReflector : PayloadReflectorTest;
+
+		public var payloadCollector : PayloadCollectorTest;
+
+		public var executeMethodConfigurator : ExecuteMethodConfiguratorTest;
 	}
 }

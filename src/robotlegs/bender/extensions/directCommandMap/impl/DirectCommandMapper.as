@@ -10,7 +10,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapping;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandPayload;
 	import robotlegs.bender.extensions.directCommandMap.dsl.IDirectCommandConfigurator;
@@ -28,7 +28,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 
 		private var _executor:ICommandExecutor;
 
-		private var _executeMethodMap : IExecuteMethodMap;
+		private var _executeMethodConfigurator : IExecuteMethodConfigurator;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -40,16 +40,15 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		public function DirectCommandMapper(
 			executor:ICommandExecutor,
 			mappings:ICommandMappingList,
-			executeMethodMap : IExecuteMethodMap,
+			executeMethodMap : IExecuteMethodConfigurator,
 			commandClass:Class)
 		{
 			_executor = executor;
 			_mappings = mappings;
-			_executeMethodMap = executeMethodMap;
 			_mapping = new CommandMapping(commandClass);
 			_mapping.setFireOnce(true);
-			const executeMethod:String = _executeMethodMap.getExecuteMethodForCommandClass(_mapping.commandClass);
-			executeMethod && _mapping.setExecuteMethod(executeMethod);
+			_executeMethodConfigurator = executeMethodMap;
+			_executeMethodConfigurator.configureExecuteMethod(_mapping);
 			_mappings.addMapping(_mapping);
 		}
 
@@ -106,7 +105,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		 */
 		public function map(commandClass:Class):IDirectCommandConfigurator
 		{
-			return new DirectCommandMapper(_executor, _mappings, _executeMethodMap, commandClass);
+			return new DirectCommandMapper(_executor, _mappings, _executeMethodConfigurator, commandClass);
 		}
 	}
 }

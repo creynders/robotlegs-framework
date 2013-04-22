@@ -13,7 +13,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import org.hamcrest.object.instanceOf;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandConfigurator;
 
 	public class CommandMapperTest
@@ -30,7 +30,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public var mappings:ICommandMappingList;
 
 		[Mock]
-		public var executeMethodMap:IExecuteMethodMap;
+		public var executeMethodMap:IExecuteMethodConfigurator;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */

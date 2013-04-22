@@ -5,12 +5,15 @@
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.commandCenter.impl.execution
+package robotlegs.bender.extensions.commandCenter.impl
 {
 	import flash.utils.Dictionary;
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
 
-	public class ExecuteMethodMap implements IExecuteMethodMap
+	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
+	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecutionReflector;
+
+	public class ExecuteMethodConfigurator implements IExecuteMethodConfigurator
 	{
 
 		/*============================================================================*/
@@ -25,7 +28,7 @@ package robotlegs.bender.extensions.commandCenter.impl.execution
 		/* Constructor                                                                */
 		/*============================================================================*/
 
-		public function ExecuteMethodMap()
+		public function ExecuteMethodConfigurator()
 		{
 			_executeReflector = new ExecutionReflector();
 		}
@@ -34,7 +37,12 @@ package robotlegs.bender.extensions.commandCenter.impl.execution
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
-		public function getExecuteMethodForCommandClass(commandClass:Class):String
+		public function configureExecuteMethod( mapping : ICommandMapping ) : void{
+			const executeMethod:String = getExecuteMethodForCommandClass(mapping.commandClass);
+			executeMethod && mapping.setExecuteMethod(executeMethod);
+		}
+
+		private function getExecuteMethodForCommandClass(commandClass:Class):String
 		{
 			var executeMethod:String;
 			if (!_executeMethodsByCommandClass.hasOwnProperty(commandClass))

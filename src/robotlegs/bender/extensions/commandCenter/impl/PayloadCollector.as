@@ -5,9 +5,11 @@
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.commandCenter.impl.payload
+package robotlegs.bender.extensions.commandCenter.impl
 {
-	import robotlegs.bender.extensions.commandCenter.impl.CommandPayload;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.IPayloadExtractionPoint;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadDescription;
+	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadReflector;
 
 	public class PayloadCollector
 	{

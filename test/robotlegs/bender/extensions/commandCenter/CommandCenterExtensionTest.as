@@ -3,7 +3,7 @@ package robotlegs.bender.extensions.commandCenter
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.instanceOf;
 
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.framework.impl.Context;
 
 	public class CommandCenterExtensionTest{
@@ -33,10 +33,10 @@ package robotlegs.bender.extensions.commandCenter
 			var actual:Object = null;
 			context.install(CommandCenterExtension);
 			context.whenInitializing( function():void {
-				actual = context.injector.getInstance(IExecuteMethodMap);
+				actual = context.injector.getInstance(IExecuteMethodConfigurator);
 			});
 			context.initialize();
-			assertThat(actual, instanceOf(IExecuteMethodMap));
+			assertThat(actual, instanceOf(IExecuteMethodConfigurator));
 		}
 	}
 }

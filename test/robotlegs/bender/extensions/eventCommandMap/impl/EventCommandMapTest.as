@@ -18,7 +18,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import org.swiftsuspenders.Injector;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
-	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.impl.ExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand;
 	import robotlegs.bender.extensions.commandCenter.support.CallbackCommand2;
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackCommand;
@@ -70,7 +70,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 			injector = context.injector;
 			injector.map(Function, "reportingFunction").toValue(reportingFunction);
 			dispatcher = new EventDispatcher();
-			subject = new EventCommandMap(context, dispatcher, new ExecuteMethodMap());
+			subject = new EventCommandMap(context, dispatcher, new ExecuteMethodConfigurator());
 		}
 
 		/*============================================================================*/

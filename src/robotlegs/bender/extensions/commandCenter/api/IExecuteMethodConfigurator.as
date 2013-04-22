@@ -8,8 +8,8 @@
 package robotlegs.bender.extensions.commandCenter.api
 {
 
-	public interface IExecuteMethodMap
+	public interface IExecuteMethodConfigurator
 	{
-		function getExecuteMethodForCommandClass(commandClass:Class):String;
+		function configureExecuteMethod( mapping : ICommandMapping ) : void;
 	}
 }

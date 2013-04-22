@@ -11,7 +11,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 	import org.swiftsuspenders.Injector;
 
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandTriggerMap;
@@ -40,7 +40,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
-		private var _executeMethodMap:IExecuteMethodMap;
+		private var _executeMethodConfigurator:IExecuteMethodConfigurator;
 
 		/**
 		 * @private
@@ -48,12 +48,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function EventCommandMap(
 			context:IContext,
 			dispatcher:IEventDispatcher,
-			executeMethodMap : IExecuteMethodMap)
+			executeMethodConfigurator : IExecuteMethodConfigurator)
 		{
 			_injector = context.injector;
 			_logger = context.getLogger(this);
 			_dispatcher = dispatcher;
-			_executeMethodMap =  executeMethodMap;
+			_executeMethodConfigurator =  executeMethodConfigurator;
 			_triggerMap = new CommandTriggerMap(getKey, createTrigger);
 		}
 
@@ -88,7 +88,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private function createTrigger(type:String, eventClass:Class):EventCommandTrigger
 		{
-			return new EventCommandTrigger(_injector, _dispatcher, _executeMethodMap, type, eventClass, _logger);
+			return new EventCommandTrigger(_injector, _dispatcher, _executeMethodConfigurator, type, eventClass, _logger);
 		}
 
 		private function getTrigger(type:String, eventClass:Class):EventCommandTrigger

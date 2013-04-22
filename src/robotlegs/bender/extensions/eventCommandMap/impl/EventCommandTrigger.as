@@ -13,12 +13,12 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandPayload;
-	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadCollector;
+	import robotlegs.bender.extensions.commandCenter.impl.PayloadCollector;
 	import robotlegs.bender.framework.api.ILogger;
 
 	/**
@@ -43,7 +43,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var _payloadCollector:PayloadCollector;
 
-		private var _executeMethodMap:IExecuteMethodMap;
+		private var _executeMethodConfigurator:IExecuteMethodConfigurator;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
@@ -55,13 +55,13 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 		public function EventCommandTrigger(
 			injector:Injector,
 			dispatcher:IEventDispatcher,
-			executeMethodMap:IExecuteMethodMap,
+			executeMethodMap:IExecuteMethodConfigurator,
 			type:String,
 			eventClass:Class = null,
 			logger:ILogger = null)
 		{
 			_dispatcher = dispatcher;
-			_executeMethodMap = executeMethodMap;
+			_executeMethodConfigurator = executeMethodMap;
 			_type = type;
 			_eventClass = eventClass;
 			_mappings = new CommandMappingList(this, logger);
@@ -75,7 +75,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		public function createMapper():CommandMapper
 		{
-			return new CommandMapper(_mappings, _executeMethodMap);
+			return new CommandMapper(_mappings, _executeMethodConfigurator);
 		}
 
 		public function activate():void

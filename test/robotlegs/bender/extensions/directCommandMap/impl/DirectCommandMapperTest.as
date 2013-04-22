@@ -10,7 +10,6 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import mockolate.capture;
 	import mockolate.ingredients.Capture;
 	import mockolate.mock;
-	import mockolate.received;
 	import mockolate.runner.MockolateRule;
 	import mockolate.stub;
 	import org.hamcrest.assertThat;
@@ -24,7 +23,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.support.ClassReportingCallbackHook;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand;
 	import robotlegs.bender.extensions.commandCenter.support.NullCommand2;
@@ -49,7 +48,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		public var mappings:ICommandMappingList;
 
 		[Mock]
-		public var executeMethodMap:IExecuteMethodMap;
+		public var executeMethodConfigurator:IExecuteMethodConfigurator;
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -158,10 +157,14 @@ package robotlegs.bender.extensions.directCommandMap.impl
 		}
 
 		[Test]
-		public function retrieves_execute_method_name_from_executeMethodMap():void
+		public function configures_execute_method_name_with_configurator():void
 		{
+			var actual:Object;
+			mock(executeMethodConfigurator).method('configureExecuteMethod').callsWithArguments(function(mapping:ICommandMapping):void {
+				actual = mapping.commandClass;
+			}).once();
 			createMapper(NullCommand);
-			assertThat(executeMethodMap, received().method('getExecuteMethodForCommandClass').arg(NullCommand).once());
+			assertThat(actual, equalTo(NullCommand));
 		}
 
 		/*============================================================================*/
@@ -170,7 +173,7 @@ package robotlegs.bender.extensions.directCommandMap.impl
 
 		private function createMapper(commandClass:Class):DirectCommandMapper
 		{
-			subject = new DirectCommandMapper(executor, mappings, executeMethodMap, commandClass);
+			subject = new DirectCommandMapper(executor, mappings, executeMethodConfigurator, commandClass);
 			return subject;
 		}
 

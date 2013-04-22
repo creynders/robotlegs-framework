@@ -9,7 +9,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 {
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandConfigurator;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandMapper;
 	import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
@@ -25,16 +25,18 @@ package robotlegs.bender.extensions.commandCenter.impl
 
 		private var _mapping:ICommandMapping;
 
-		private var _executeMethodMap:IExecuteMethodMap;
+		private var _executeMethodConfigurator:IExecuteMethodConfigurator;
 
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 
-		public function CommandMapper(mappings:ICommandMappingList, executeMethodMap:IExecuteMethodMap)
+		public function CommandMapper(
+			mappings:ICommandMappingList,
+			executeMethodMap:IExecuteMethodConfigurator)
 		{
 			_mappings = mappings;
-			_executeMethodMap = executeMethodMap;
+			_executeMethodConfigurator = executeMethodMap;
 		}
 
 		/*============================================================================*/
@@ -47,8 +49,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		public function toCommand(commandClass:Class):ICommandConfigurator
 		{
 			_mapping = new CommandMapping(commandClass);
-			const executeMethod:String = _executeMethodMap.getExecuteMethodForCommandClass(commandClass);
-			executeMethod && _mapping.setExecuteMethod(executeMethod);
+			_executeMethodConfigurator.configureExecuteMethod(_mapping);
 			_mappings.addMapping(_mapping);
 			return this;
 		}

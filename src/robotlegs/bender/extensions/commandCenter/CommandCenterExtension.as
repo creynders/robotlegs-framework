@@ -7,8 +7,8 @@
 
 package robotlegs.bender.extensions.commandCenter
 {
-	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodMap;
-	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecuteMethodMap;
+	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
+	import robotlegs.bender.extensions.commandCenter.impl.ExecuteMethodConfigurator;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.IExtension;
 
@@ -21,7 +21,7 @@ package robotlegs.bender.extensions.commandCenter
 
 		public function extend(context:IContext):void
 		{
-			context.injector.map(IExecuteMethodMap).toSingleton(ExecuteMethodMap);
+			context.injector.map(IExecuteMethodConfigurator).toSingleton(ExecuteMethodConfigurator);
 		}
 	}
 }
