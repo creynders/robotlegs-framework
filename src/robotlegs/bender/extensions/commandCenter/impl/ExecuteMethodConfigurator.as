@@ -8,7 +8,6 @@
 package robotlegs.bender.extensions.commandCenter.impl
 {
 	import flash.utils.Dictionary;
-
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
 	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecutionReflector;
@@ -37,10 +36,18 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
-		public function configureExecuteMethod( mapping : ICommandMapping ) : void{
+		/**
+		 * @inheritDoc
+		 */
+		public function configureExecuteMethod(mapping:ICommandMapping):void
+		{
 			const executeMethod:String = getExecuteMethodForCommandClass(mapping.commandClass);
 			executeMethod && mapping.setExecuteMethod(executeMethod);
 		}
+
+		/*============================================================================*/
+		/* Private Functions                                                          */
+		/*============================================================================*/
 
 		private function getExecuteMethodForCommandClass(commandClass:Class):String
 		{

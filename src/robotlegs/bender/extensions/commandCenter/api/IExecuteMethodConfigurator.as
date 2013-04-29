@@ -10,6 +10,11 @@ package robotlegs.bender.extensions.commandCenter.api
 
 	public interface IExecuteMethodConfigurator
 	{
+
+		/**
+		 * Configures the execute method for a given mapping
+		 * @param mapping The Command mapping
+		 */
 		function configureExecuteMethod( mapping : ICommandMapping ) : void;
 	}
 }
