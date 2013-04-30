@@ -9,9 +9,11 @@ package robotlegs.bender.extensions.commandCenter.impl
 {
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
+	import org.hamcrest.object.nullValue;
 
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.support.ExecuteTaggedClassReportingMethodCommand;
+	import robotlegs.bender.extensions.commandCenter.support.MultipleExecuteTaggedMethodsCommand;
 
 	public class ExecuteMethodConfiguratorTest
 	{
@@ -37,6 +39,23 @@ package robotlegs.bender.extensions.commandCenter.impl
 			const mapping : ICommandMapping = new CommandMapping(ExecuteTaggedClassReportingMethodCommand);
 			subject.configureExecuteMethod(mapping);
 			assertThat(mapping.executeMethod, equalTo('report'));
+		}
+		[Test]
+		public function describes_execution_method_as_null_when_tag_not_found():void
+		{
+			assertThat(subject.describeExecutionMethodForClass(Class), nullValue());
+		}
+
+		[Test]
+		public function describes_execution_method_when_tag_found():void
+		{
+			assertThat(subject.describeExecutionMethodForClass(ExecuteTaggedClassReportingMethodCommand), equalTo('report'));
+		}
+
+		[Test(expects="robotlegs.bender.extensions.commandCenter.api.ExecuteMethodConfiguratorError")]
+		public function error_is_thrown_when_multiple_execute_tags_found():void
+		{
+			subject.describeExecutionMethodForClass(MultipleExecuteTaggedMethodsCommand);
 		}
 	}
 }

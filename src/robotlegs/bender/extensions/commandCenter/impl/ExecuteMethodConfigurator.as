@@ -7,10 +7,11 @@
 
 package robotlegs.bender.extensions.commandCenter.impl
 {
-	import flash.utils.Dictionary;
+	import flash.utils.describeType;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
-	import robotlegs.bender.extensions.commandCenter.impl.execution.ExecutionReflector;
+	import robotlegs.bender.extensions.commandCenter.api.ExecuteMethodConfiguratorError;
 
 	public class ExecuteMethodConfigurator implements IExecuteMethodConfigurator
 	{
@@ -19,18 +20,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private const _executeMethodsByCommandClass:Dictionary = new Dictionary();
-
-		private var _executeReflector:ExecutionReflector;
-
-		/*============================================================================*/
-		/* Constructor                                                                */
-		/*============================================================================*/
-
-		public function ExecuteMethodConfigurator()
-		{
-			_executeReflector = new ExecutionReflector();
-		}
+		private const _executeMethodsByCommandClass:Object = {};
 
 		/*============================================================================*/
 		/* Public Functions                                                           */
@@ -54,8 +44,9 @@ package robotlegs.bender.extensions.commandCenter.impl
 			var executeMethod:String;
 			if (!_executeMethodsByCommandClass.hasOwnProperty(commandClass))
 			{
-				executeMethod = _executeReflector.describeExecutionMethodForClass(commandClass);
-				_executeMethodsByCommandClass[commandClass] = executeMethod;
+				executeMethod = describeExecutionMethodForClass(commandClass);
+				//caches possible `null` values to indicate the commandClass has been processed
+				_executeMethodsByCommandClass[String(commandClass)] = executeMethod;
 			}
 			else
 			{
@@ -63,5 +54,22 @@ package robotlegs.bender.extensions.commandCenter.impl
 			}
 			return executeMethod;
 		}
+
+		public function describeExecutionMethodForClass(type:Class):String
+		{
+			var factoryDescription:XML = describeType(type).factory[0];
+			var list:XMLList = factoryDescription.method.metadata.(@name == 'Execute');
+			switch (list.length())
+			{
+				case 1:
+					var memberDescription:XML = list[0].parent();
+					return memberDescription.attribute('name');
+				case 0:
+					return null;
+				default:
+					throw new ExecuteMethodConfiguratorError('Only one Execute-tagged method allowed');
+			}
+		}
+
 	}
 }

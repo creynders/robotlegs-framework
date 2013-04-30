@@ -5,17 +5,17 @@
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.commandCenter.impl.execution
+package robotlegs.bender.extensions.commandCenter.api
 {
 
-	public class ExecutionReflectorError extends Error
+	public class ExecuteMethodConfiguratorError extends Error
 	{
 
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 
-		public function ExecutionReflectorError(message:* = "", id:* = 0)
+		public function ExecuteMethodConfiguratorError(message:* = "", id:* = 0)
 		{
 			super(message, id);
 		}
