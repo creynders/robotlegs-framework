@@ -15,10 +15,10 @@ package robotlegs.bender.extensions.commandCenter.support
 		/* Public Properties                                                          */
 		/*============================================================================*/
 
-		[Payload]
+		[Payload(order=1)]
 		public var payload1:String;
 
-		[Payload]
+		[Payload(order=2)]
 		public var payload2:Object;
 
 		/*============================================================================*/

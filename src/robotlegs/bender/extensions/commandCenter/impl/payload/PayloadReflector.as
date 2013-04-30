@@ -10,6 +10,7 @@ package robotlegs.bender.extensions.commandCenter.impl.payload
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
 	import robotlegs.bender.framework.api.ILogger;
+	import robotlegs.bender.extensions.commandCenter.api.PayloadCollectorError;
 
 	public class PayloadReflector
 	{
@@ -57,12 +58,12 @@ package robotlegs.bender.extensions.commandCenter.impl.payload
 				const memberName:String = memberDescription.attribute('name');
 
 				if (memberDescription.parameter.length() > 0)
-					throw new PayloadReflectorError('Methods with parameters are not extractable '
+					throw new PayloadCollectorError('Methods with parameters are not extractable '
 						+ rawDescription.attribute('name') + '#' + memberName);
 
 				const valueType:String = memberDescription.attribute('returnType');
 				if (valueType == 'void')
-					throw new PayloadReflectorError('Methods without return type are not extractable '
+					throw new PayloadCollectorError('Methods without return type are not extractable '
 						+ rawDescription.attribute('name') + '#' + memberName);
 
 				payloadDescription.addExtractionPoint(new MethodPayloadExtractionPoint(
@@ -80,7 +81,7 @@ package robotlegs.bender.extensions.commandCenter.impl.payload
 				const memberName:String = memberDescription.attribute('name');
 
 				if (memberDescription.hasOwnProperty('@access') && memberDescription.attribute('access') == 'writeonly')
-					throw new PayloadReflectorError('Setters are not extractable '
+					throw new PayloadCollectorError('Setters are not extractable '
 						+ rawDescription.attribute('name') + '#' + memberName);
 
 				payloadDescription.addExtractionPoint(new FieldPayloadExtractionPoint(

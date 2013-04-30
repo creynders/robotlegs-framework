@@ -5,17 +5,17 @@
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
-package robotlegs.bender.extensions.commandCenter.impl.payload
+package robotlegs.bender.extensions.commandCenter.api
 {
 
-	public class PayloadReflectorError extends Error
+	public class PayloadCollectorError extends Error
 	{
 
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
 
-		public function PayloadReflectorError(message:* = '', id:* = 0)
+		public function PayloadCollectorError(message:* = '', id:* = 0)
 		{
 			super(message, id);
 		}
