@@ -26,6 +26,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import robotlegs.bender.extensions.commandCenter.support.UnmapperStub;
 	import robotlegs.bender.framework.impl.guardSupport.GrumpyGuard;
 	import robotlegs.bender.framework.impl.guardSupport.HappyGuard;
+	import robotlegs.bender.extensions.commandCenter.api.CommandPayload;
 
 	public class CommandExecutorTest
 	{

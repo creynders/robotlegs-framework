@@ -12,6 +12,7 @@ package robotlegs.bender.extensions.commandCenter.impl
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMapping;
 	import robotlegs.bender.framework.impl.applyHooks;
 	import robotlegs.bender.framework.impl.guardsApprove;
+	import robotlegs.bender.extensions.commandCenter.api.CommandPayload;
 
 	public class CommandExecutor implements ICommandExecutor
 	{
