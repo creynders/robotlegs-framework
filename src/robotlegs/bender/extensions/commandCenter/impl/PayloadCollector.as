@@ -9,13 +9,14 @@ package robotlegs.bender.extensions.commandCenter.impl
 {
 	import flash.utils.describeType;
 	import flash.utils.getDefinitionByName;
+	import robotlegs.bender.extensions.commandCenter.api.IPayloadCollector;
+	import robotlegs.bender.extensions.commandCenter.api.PayloadCollectorError;
 	import robotlegs.bender.extensions.commandCenter.impl.payload.FieldPayloadExtractionPoint;
 	import robotlegs.bender.extensions.commandCenter.impl.payload.IPayloadExtractionPoint;
 	import robotlegs.bender.extensions.commandCenter.impl.payload.MethodPayloadExtractionPoint;
 	import robotlegs.bender.extensions.commandCenter.impl.payload.PayloadDescription;
-	import robotlegs.bender.extensions.commandCenter.api.PayloadCollectorError;
 
-	public class PayloadCollector
+	public class PayloadCollector implements IPayloadCollector
 	{
 
 		/*============================================================================*/

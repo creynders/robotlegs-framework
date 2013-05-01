@@ -9,11 +9,14 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+
 	import org.swiftsuspenders.Injector;
+
 	import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandMappingList;
 	import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
 	import robotlegs.bender.extensions.commandCenter.api.IExecuteMethodConfigurator;
+	import robotlegs.bender.extensions.commandCenter.api.IPayloadCollector;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandExecutor;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMapper;
 	import robotlegs.bender.extensions.commandCenter.impl.CommandMappingList;
@@ -41,7 +44,7 @@ package robotlegs.bender.extensions.eventCommandMap.impl
 
 		private var _executor:ICommandExecutor;
 
-		private var _payloadCollector:PayloadCollector;
+		private var _payloadCollector:IPayloadCollector;
 
 		private var _executeMethodConfigurator:IExecuteMethodConfigurator;
 
