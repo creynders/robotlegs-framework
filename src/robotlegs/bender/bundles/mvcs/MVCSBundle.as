@@ -1,12 +1,13 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2012 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2012 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.bundles.mvcs
 {
+	import robotlegs.bender.extensions.commandCenter.CommandCenterExtension;
 	import robotlegs.bender.extensions.contextView.ContextViewExtension;
 	import robotlegs.bender.extensions.contextView.ContextViewListenerConfig;
 	import robotlegs.bender.extensions.enhancedLogging.InjectableLoggerExtension;
@@ -53,6 +54,7 @@ package robotlegs.bender.bundles.mvcs
 				ContextViewExtension,
 				EventDispatcherExtension,
 				ModularityExtension,
+				CommandCenterExtension,
 				EventCommandMapExtension,
 				LocalEventMapExtension,
 				ViewManagerExtension,
