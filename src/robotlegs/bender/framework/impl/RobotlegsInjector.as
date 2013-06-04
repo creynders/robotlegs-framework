@@ -1,14 +1,17 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.framework.impl
 {
 	import flash.system.ApplicationDomain;
+
 	import org.swiftsuspenders.Injector;
+	import org.swiftsuspenders.dependencyproviders.DependencyProvider;
+
 	import robotlegs.bender.framework.api.IInjector;
 
 	/**
@@ -51,5 +54,14 @@ package robotlegs.bender.framework.impl
 			childInjector.parent = this;
 			return childInjector;
 		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function getProviderFor(type:Class, name:String=''):DependencyProvider
+		{
+			return this.getMapping(type,name).getProvider();
+		}
+
 	}
 }

@@ -1,14 +1,16 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.framework.api
 {
 	import flash.events.IEventDispatcher;
 	import flash.system.ApplicationDomain;
+
+	import org.swiftsuspenders.dependencyproviders.DependencyProvider;
 	import org.swiftsuspenders.dependencyproviders.FallbackDependencyProvider;
 	import org.swiftsuspenders.mapping.InjectionMapping;
 	import org.swiftsuspenders.typedescriptions.TypeDescription;
@@ -396,5 +398,17 @@ package robotlegs.bender.framework.api
 		 * @see #parent
 		 */
 		function createChild(applicationDomain:ApplicationDomain = null):IInjector;
+
+		/**
+		 * Retrieves the dependency provider for a given type
+		 *
+		 * @param type The type of the dependency to return the dependency provider for
+		 * @param name The name of the dependency to return the dependency provider for
+		 * @return The requested dependency provider
+		 *
+		 * @throws org.swiftsuspenders.errors.InjectorMissingMappingError if no mapping is found
+		 * for one of the type's dependencies and no <code>fallbackProvider</code> is set
+ 		 */
+		function getProviderFor(type:Class, name:String = ''):DependencyProvider;
 	}
 }

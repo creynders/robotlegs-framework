@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved. 
-// 
-//  NOTICE: You are permitted to use, modify, and distribute this file 
-//  in accordance with the terms of the license agreement accompanying it. 
+//  Copyright (c) 2009-2013 the original author or authors. All Rights Reserved.
+//
+//  NOTICE: You are permitted to use, modify, and distribute this file
+//  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
 
 package robotlegs.bender.framework
@@ -19,6 +19,7 @@ package robotlegs.bender.framework
 	import robotlegs.bender.framework.impl.MessageDispatcherTest;
 	import robotlegs.bender.framework.impl.ObjectProcessorTest;
 	import robotlegs.bender.framework.impl.PinTest;
+	import robotlegs.bender.framework.impl.RobotlegsInjectorTest;
 	import robotlegs.bender.framework.impl.SafelyCallBackTest;
 
 	[RunWith("org.flexunit.runners.Suite")]
@@ -55,5 +56,7 @@ package robotlegs.bender.framework
 		public var safelyCallBack:SafelyCallBackTest;
 
 		public var pin:PinTest;
+
+		public var robotlegsInjector:RobotlegsInjectorTest;
 	}
 }
